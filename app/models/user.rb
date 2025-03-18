@@ -1,11 +1,11 @@
 class User < ApplicationRecord
-  self.primary_key = "user_id" # ใช้ user_id เป็น Primary Key
+  self.primary_key = "user_id"
 
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable
 
-  # กำหนด role ให้ User (ต้องตรงกับ database)
-  enum role: { super_admin: "super_admin", admin: "admin", user: "user" }
+
+  enum :role, { super_admin: 0, admin: 1, user: 2 }
 
   has_many :timesheets
 end

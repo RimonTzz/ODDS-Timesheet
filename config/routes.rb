@@ -14,7 +14,6 @@
 #   # Defines the root path route ("/")
 #   # root "posts#index"
 # end
-
 Rails.application.routes.draw do
   devise_for :users
   resources :timesheets do
@@ -24,3 +23,4 @@ Rails.application.routes.draw do
   end
   root "timesheets#index"
 end
+
