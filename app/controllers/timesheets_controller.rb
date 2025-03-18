@@ -31,6 +31,6 @@ class TimesheetsController < ApplicationController
   private
 
   def timesheet_params
-    params.require(:timesheet).permit(:date, :clock_in, :clock_out, :notes)
+    params.require(:timesheet).permit(:site_id, :project_id, :position, :work_date, :hours_worked, :work_description, :signature, :submitted_at)
   end
 end
