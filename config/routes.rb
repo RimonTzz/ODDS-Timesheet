@@ -1,5 +1,6 @@
 
 Rails.application.routes.draw do
+  resources :sites
   devise_for :users
   resources :timesheets do
     collection do
