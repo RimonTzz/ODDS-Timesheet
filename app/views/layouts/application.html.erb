@@ -27,6 +27,9 @@
       <ul>
         <li><%= link_to "Time Sheets", timesheets_path %></li>
         <li><%= link_to "Site Management", sites_path, class: "nav-link" %> </li>
+        <li><%= link_to "Project Management", projects_path, class: "nav-link" %></li>
+
+        <%= button_to "ออกจากระบบ", destroy_user_session_path, method: :delete %>
 
       </ul>
     <%= yield %>
