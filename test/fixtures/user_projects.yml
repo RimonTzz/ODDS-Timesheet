@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  project: one
+  assigned_at: 2025-03-19 14:52:34
+
+two:
+  user: two
+  project: two
+  assigned_at: 2025-03-19 14:52:34
