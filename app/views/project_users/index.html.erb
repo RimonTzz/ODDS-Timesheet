@@ -1,13 +1,27 @@
 <h1>ผู้ใช้ในโปรเจ็ค <%= @project.project_name %></h1>
 
-<ul>
-  <% @project_users.each do |user| %>
-    <li>
-      <%= user.email %>
-      <%= button_to "ลบ", project_user_path(@project, user), method: :delete, data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
-    </li>
-  <% end %>
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th>อีเมล</th>
+      <th>ตำแหน่ง</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+   <% @project_users.each do |user| %>
+  <tr>
+    <td><%= user.email %></td>
+    <td>
+      <% user_project = UserProject.find_by(user: user, project: @project) %>
+      <%= user_project&.position&.titleize %>
+    </td>
+    <td><%= link_to "แก้ไข", edit_project_user_path(@project, user_project.user), class: "btn btn-sm btn-warning" %></td>
+    <td><%= button_to "ลบ", project_user_path(@project, user), method: :delete, data: { confirm: 'คุณแน่ใจหรือไม่?' } %></td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
 
 <h2>เพิ่มผู้ใช้เข้าโปรเจ็ค</h2>
 <%= link_to "เพิ่มผู้ใช้", new_project_user_path(@project), class: "btn btn-primary" %>

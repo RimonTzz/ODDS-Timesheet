@@ -1,0 +1,26 @@
+<h1>แก้ไขตำแหน่งผู้ใช้ในโปรเจ็ค <%= @project.project_name %></h1>
+
+<%= form_with model: @user_project, url: project_user_path(@project, @user_project.user), method: :patch do |form| %>
+  <% if @user_project.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@user_project.errors.count, "error") %> prohibited this user project from being saved:</h2>
+
+      <ul>
+        <% @user_project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :position, "ตำแหน่ง:" %>
+    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "เลือกตำแหน่ง" } %>
+  </div>
+
+  <div>
+    <%= form.submit "อัปเดตตำแหน่ง", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to "กลับไปที่รายชื่อผู้ใช้", project_users_path(@project) %>

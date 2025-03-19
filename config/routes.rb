@@ -2,7 +2,7 @@
 Rails.application.routes.draw do
   resources :clients
   resources :projects do
-    resources :users, controller: "project_users", only: [ :index, :new, :create, :destroy ]
+    resources :users, controller: "project_users", only: [ :index, :new, :create, :destroy, :edit, :update ]
   end
   resources :sites
   devise_for :users
