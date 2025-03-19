@@ -1,0 +1,14 @@
+<h1>เพิ่มผู้ใช้เข้าโปรเจ็ค <%= @project.project_name %></h1>
+
+<%= form_with url: project_users_path(@project), method: :post do |form| %>
+  <div class="field">
+    <%= form.label :user_id, "เลือกผู้ใช้:" %>
+    <%= form.collection_select :user_id, @available_users, :id, :email, { prompt: "เลือกผู้ใช้" } %>
+  </div>
+
+  <div>
+    <%= form.submit "เพิ่มผู้ใช้", class: "btn btn-success" %>
+  </div>
+<% end %>
+
+<%= link_to "กลับไปที่รายชื่อผู้ใช้", project_users_path(@project) %>

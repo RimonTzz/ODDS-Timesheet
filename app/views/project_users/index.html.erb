@@ -1,0 +1,15 @@
+<h1>ผู้ใช้ในโปรเจ็ค <%= @project.project_name %></h1>
+
+<ul>
+  <% @project_users.each do |user| %>
+    <li>
+      <%= user.email %>
+      <%= button_to "ลบ", project_user_path(@project, user), method: :delete, data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+    </li>
+  <% end %>
+</ul>
+
+<h2>เพิ่มผู้ใช้เข้าโปรเจ็ค</h2>
+<%= link_to "เพิ่มผู้ใช้", new_project_user_path(@project), class: "btn btn-primary" %>
+
+<%= link_to "กลับไปที่โปรเจ็ค", @project %>
