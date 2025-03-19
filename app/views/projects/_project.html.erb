@@ -6,7 +6,12 @@
 
   <p>
     <strong>Site:</strong>
-    <%= project.site_id %>
+    <%= project.site&.site_name%>
+  </p>
+
+  <p>
+    <strong>Client:</strong>
+    <%= project.site.client&.client_name %>
   </p>
 
 </div>
