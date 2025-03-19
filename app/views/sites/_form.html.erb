@@ -23,10 +23,10 @@
     <%= form.text_field :location %>
   </div>
 
-  <div>
-    <%= form.label :client_id, style: "display: block" %>
-    <%= form.text_field :client_id %>
-  </div>
+<div>
+  <%= form.label :client_id, "Client", style: "display: block" %>
+  <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "เลือก Client" } %>
+</div>
 
   <div>
     <%= form.submit %>

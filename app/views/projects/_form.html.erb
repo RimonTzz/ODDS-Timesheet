@@ -17,9 +17,9 @@
   </div>
 
   <div>
-    <%= form.label :site_id, style: "display: block" %>
-    <%= form.text_field :site_id %>
-  </div>
+  <%= form.label :site_id, "Site", style: "display: block" %>
+  <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "เลือก site" } %>
+</div>
 
   <div>
     <%= form.submit %>
