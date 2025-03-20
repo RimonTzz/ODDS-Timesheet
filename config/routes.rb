@@ -1,11 +1,21 @@
 
 Rails.application.routes.draw do
+  devise_for :users do
+    get "profile/edit", to: "devise/registrations#edit", as: :edit_user_profile
+    patch "profile", to: "devise/registrations#update", as: :user_profile
+    put "profile", to: "devise/registrations#update", as: :update_user_profile
+  end
+  resources :users, only: [:edit] do
+    collection do
+      get "profile/edit", to: "users#edit", as: "edit_user_profile"
+    end
+  end
   resources :clients
   resources :projects do
     resources :users, controller: "project_users", only: [ :index, :new, :create, :destroy, :edit, :update ]
   end
   resources :sites
-  devise_for :users
+
 
   resources :timesheets do
     collection do
