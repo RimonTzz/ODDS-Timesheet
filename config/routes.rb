@@ -1,5 +1,13 @@
 
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :people, only: [:index, :edit, :update] do
+      member do
+        post "assign_project"
+        delete "unassign_project"
+      end
+    end
+  end
   devise_for :users do
     get "profile/edit", to: "devise/registrations#edit", as: :edit_user_profile
     patch "profile", to: "devise/registrations#update", as: :user_profile

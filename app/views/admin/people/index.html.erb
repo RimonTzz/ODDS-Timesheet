@@ -1,0 +1,39 @@
+<h1>People Management</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ชื่อจริง</th>
+      <th>นามสกุล</th>
+      <th>อีเมล</th>
+      <th>เบอร์โทร</th>
+      <th>Role</th>
+      <th>Site</th>
+      <th>Project</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.first_name %></td>
+        <td><%= user.last_name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.phone_number %></td>
+        <td><%= user.role %></td>
+        <td>
+            <% unique_sites = user.projects.map(&:site).compact.uniq %>
+            <% unique_sites.each do |site| %>
+                <%= site.site_name %><br>
+            <% end %>
+        </td>
+        <td>
+            <% user.projects.each do |project| %>
+                <%= project.project_name %><br>
+            <% end %>
+        </td>
+        <td><%= link_to "Edit", edit_admin_person_path(user), class: "btn btn-sm btn-warning" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

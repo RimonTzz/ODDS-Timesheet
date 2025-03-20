@@ -33,6 +33,10 @@
         <li><%= link_to "Project Management", projects_path, class: "nav-link" %></li>
         <li><%= link_to "Client Management", clients_path, class: "nav-link" %></li>
       <% end %>
+      <% if current_user&.role == 'super_admin' %>
+        <li><%= link_to "People Management", admin_people_path, class: "nav-link" %></li>
+      <% end %>
+
       <%# <%= link_to "Profile", edit_user_profile_path if user_signed_in? %> 
       <%= link_to "Profile", edit_user_registration_path if user_signed_in? %>
 
