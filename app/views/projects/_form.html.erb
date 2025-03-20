@@ -17,9 +17,20 @@
   </div>
 
   <div>
-  <%= form.label :site_id, "Site", style: "display: block" %>
-  <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "เลือก site" } %>
-</div>
+    <%= form.label :site_id, "Site", style: "display: block" %>
+    <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "เลือก site" } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :check_in, "Check In Time" %>
+    <%= form.time_field :check_in %>
+  </div>
+
+  <div class="field">
+    <%= form.label :check_out, "Check Out Time" %>
+    <%= form.time_field :check_out %>
+  </div>
+
 
   <div>
     <%= form.submit %>

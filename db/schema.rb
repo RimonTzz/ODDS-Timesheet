@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_19_184140) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_20_080010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -26,6 +26,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_184140) do
     t.bigint "site_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.time "check_in"
+    t.time "check_out"
     t.index ["site_id"], name: "index_projects_on_site_id"
   end
 
@@ -69,7 +71,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_184140) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "role", default: 2, null: false
-    t.string "first_name" #อย่าลืมเข้ามาเพิ่ม not null: false
+    t.string "first_name"
     t.string "last_name"
     t.string "phone_number"
     t.index ["email"], name: "index_users_on_email", unique: true

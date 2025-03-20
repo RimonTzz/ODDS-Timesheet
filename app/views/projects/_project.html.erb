@@ -14,4 +14,14 @@
     <%= project.site.client&.client_name %>
   </p>
 
+  <p>
+  <strong>Check In:</strong>
+  <%= project.check_in&.strftime("%H:%M") || "N/A" %>
+</p>
+<p>
+  <strong>Check Out:</strong>
+  <%= project.check_out&.strftime("%H:%M") || "N/A" %>
+</p>
+
+
 </div>
