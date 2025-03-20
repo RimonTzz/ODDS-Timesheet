@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_20_080010) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_20_105402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,8 +43,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_080010) do
   create_table "timesheets", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.date "date"
-    t.datetime "clock_in"
-    t.datetime "clock_out"
+    t.time "check_in"
+    t.time "check_out"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
