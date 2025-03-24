@@ -1,7 +1,6 @@
-
 Rails.application.routes.draw do
   namespace :admin do
-    resources :people, only: [:index, :edit, :update] do
+    resources :people, only: [ :index, :edit, :update ] do
       member do
         post "assign_project"
         delete "unassign_project"
@@ -13,7 +12,7 @@ Rails.application.routes.draw do
     patch "profile", to: "devise/registrations#update", as: :user_profile
     put "profile", to: "devise/registrations#update", as: :update_user_profile
   end
-  resources :users, only: [:edit] do
+  resources :users, only: [ :edit ] do
     collection do
       get "profile/edit", to: "users#edit", as: "edit_user_profile"
     end
@@ -21,19 +20,17 @@ Rails.application.routes.draw do
   resources :clients
   resources :projects do
     resources :users, controller: "project_users", only: [ :index, :new, :create, :destroy, :edit, :update ]
+    member do
+      get "export_pdf"
+    end
   end
   resources :sites
 
 
-  resources :timesheets do
-    collection do
-      get :export_pdf
-    end
-  end
+  resources :timesheets, only: [ :index, :new, :create ]
 
   root "timesheets#index"
 
   get "/people_management", to: "people_management#index", as: "people_management"
   get "/project_management", to: "project_management#index", as: "project_management"
 end
-

@@ -8,7 +8,8 @@ class User < ApplicationRecord
   attribute :last_name, :string
   attribute :phone_number, :string
 
-  has_many :timesheets
   has_many :user_projects
+  has_many :timesheets, through: :user_projects
   has_many :projects, through: :user_projects
+  has_many :sites, through: :projects
 end

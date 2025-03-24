@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_20_110016) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_24_032522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -41,7 +41,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_110016) do
   end
 
   create_table "timesheets", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.date "date"
     t.time "check_in"
     t.time "check_out"
@@ -49,7 +48,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_110016) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "work_status", default: 0
-    t.index ["user_id"], name: "index_timesheets_on_user_id"
+    t.bigint "user_project_id"
+    t.index ["user_project_id"], name: "index_timesheets_on_user_project_id"
   end
 
   create_table "user_projects", force: :cascade do |t|
@@ -81,7 +81,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_110016) do
 
   add_foreign_key "projects", "sites"
   add_foreign_key "sites", "clients"
-  add_foreign_key "timesheets", "users"
+  add_foreign_key "timesheets", "user_projects"
   add_foreign_key "user_projects", "projects"
   add_foreign_key "user_projects", "users"
 end

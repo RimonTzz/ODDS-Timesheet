@@ -1,37 +1,27 @@
-<h1>Time Sheets</h1>
+<h1>New Time Sheet</h1>
 
-<% if @timesheets.any? %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>วันที่</th>
-        <th>ไซต์งาน</th>
-        <th>โครงการ</th>
-        <th>ตำแหน่ง</th>
-        <th>ชั่วโมงที่ทำงาน</th>
-        <th>รายละเอียด</th>
-        <th>ส่งเมื่อ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @timesheets.each_with_index do |timesheet, index| %>
-        <tr>
-          <td><%= index + 1 %></td>
-          <td><%= timesheet.work_date %></td>
-          <td><%= timesheet.site.site_name if timesheet.site %></td>
-          <td><%= timesheet.project.project_name if timesheet.project %></td>
-          <td><%= timesheet.position %></td>
-          <td><%= timesheet.hours_worked %> ชั่วโมง</td>
-          <td><%= timesheet.work_description %></td>
-          <td><%= timesheet.submitted_at.strftime("%Y-%m-%d %H:%M") if timesheet.submitted_at %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>ไม่มีข้อมูล Time Sheet</p>
+<%= form_with(url: new_timesheet_path, method: :get, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :user_project_id, "Project" %>
+    <%= form.select :user_project_id, @user_projects.map { |up| [up.project.project_name, up.id] }, prompt: "Select Project" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :month, "Month" %>
+    <%= select_tag :month, options_for_select(@months, @selected_month), prompt: "Select Month" %>
+  </div>
+
+  <%= form.submit "Load Days" %>
 <% end %>
 
-<%= link_to "เพิ่ม Time Sheet", new_timesheet_path, class: "btn btn-primary" %>
+<% if @timesheet_days.present? %>
+  <%= form_with(url: timesheets_path, method: :post) do |form| %>
+    <%# ... Table สำหรับกรอกข้อมูล ... %>
+    <div class="actions">
+      <%= form.submit "Save Timesheet" %>
+      <%= link_to "Cancel", timesheets_path %>
+    </div>
+  <% end %>
+<% end %>
 
+<%= link_to "Back to Time Sheets", timesheets_path %>

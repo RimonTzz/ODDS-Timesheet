@@ -2,6 +2,8 @@ class UserProject < ApplicationRecord
   belongs_to :user
   belongs_to :project
 
+  has_many :timesheets, foreign_key: "user_project_id"
+
   enum :position, {
     'Scrum Master': 0,
     'Software Developer': 1,

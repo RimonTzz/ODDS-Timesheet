@@ -1,14 +1,66 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @project %>
+<% content_for :title, @project.project_name %>
 
-<div>
-  <%= link_to "Edit this project", edit_project_path(@project) %> |
-  <%= link_to "Back to projects", projects_path %>
+<div class="project-header">
+  <h1><%= @project.project_name %></h1>
+  <% if current_user.admin? %>
+    <div class="admin-actions">
+      <%= link_to "Edit this project", edit_project_path(@project), class: "button" %>
+      <%= button_to "Destroy this project", @project, method: :delete, class: "button delete", data: { confirm: "Are you sure?" } %>
+    </div>
+  <% end %>
+</div>
 
-  <% if current_user_is_admin? || current_user_is_super_admin? %>
-  <%= link_to "จัดการผู้ใช้ในโปรเจ็ค", project_users_path(@project), class: "btn btn-info" %>
+<div class="project-info">
+  <p>
+    <strong>Site:</strong>
+    <%= @project.site.site_name %>
+  </p>
+
+  <p>
+    <strong>Number of Employees:</strong>
+    <%= @project.user_projects.count %> คน
+  </p>
+</div>
+
+<% if current_user.admin? %>
+  <div class="export-section">
+    <h2>Export Timesheet Report</h2>
+    <%= form_tag export_pdf_project_path(@project, format: :pdf), method: :get, class: "export-form" do %>
+      <div class="form-group">
+        <%= label_tag :month, "Select Month:" %>
+        <%= select_tag :month, options_for_select((1..12).map { |m| [I18n.t('date.month_names')[m], m] }, Time.current.month) %>
+      </div>
+      <div class="form-group">
+        <%= label_tag :year, "Select Year:" %>
+        <%= select_tag :year, options_for_select((Time.current.year-1..Time.current.year+1), Time.current.year) %>
+      </div>
+      <%= submit_tag "Export PDF", class: "button export" %>
+    <% end %>
+  </div>
 <% end %>
 
-  <%= button_to "Destroy this project", @project, method: :delete %>
+<div class="project-members">
+  <h2>Project Members</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @project.user_projects.each do |user_project| %>
+        <tr>
+          <td><%= "#{user_project.user.first_name} #{user_project.user.last_name}" %></td>
+          <td><%= user_project.user.email %></td>
+          <td><%= user_project.position %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
+
+<%= link_to "Back to projects", projects_path, class: "button" %>

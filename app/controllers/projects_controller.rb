@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: %i[ show edit update destroy ]
+  before_action :set_project, only: %i[ show edit update destroy export_pdf ]
   before_action :authenticate_user!
   before_action :authorize_not_user!
 
@@ -57,6 +57,18 @@ class ProjectsController < ApplicationController
       format.html { redirect_to projects_path, status: :see_other, notice: "Project was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def export_pdf
+    month = params[:month].to_i
+    year = params[:year].to_i
+    date = Date.new(year, month, 1)
+
+    pdf = ProjectTimesheetPdf.new(@project, date)
+    send_data pdf.render,
+              filename: "timesheet_#{@project.project_name.parameterize}_#{year}_#{month}.pdf",
+              type: "application/pdf",
+              disposition: "inline"
   end
 
   private

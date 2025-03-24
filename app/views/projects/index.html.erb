@@ -4,16 +4,34 @@
 
 <h1>Projects</h1>
 
-<div id="projects">
-  <% @projects.each do |project| %>
+<table>
+  <thead>
+    <tr>
+      <th>Project name</th>
+      <th>Site</th>
+      <th>Number of Employees</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
 
-    <%= render project %>
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= project.project_name %></td>
+        <td><%= project.site.site_name %></td>
+        <td><%= project.user_projects.count %> คน</td>
+        <td>
+          <%= link_to "Show this project", project %>
+          <% if current_user.admin? %>
+            <%= link_to "Edit this project", edit_project_path(project) %>
+            <%= button_to "Destroy this project", project, method: :delete %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
-    <p>
-      <%= link_to "Show this project", project %>
-    </p>
-    
-  <% end %>
-</div>
-
-<%= link_to "New project", new_project_path %>
+<% if current_user.admin? %>
+  <%= link_to "New project", new_project_path %>
+<% end %>
