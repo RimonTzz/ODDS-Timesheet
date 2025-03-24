@@ -2,12 +2,17 @@ class TimesheetsController < ApplicationController
   include Devise::Controllers::Helpers
   include ApplicationHelper
   before_action :authenticate_user!
+  before_action :set_timesheet, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_not_user!, only: [ :edit, :update, :destroy ]
 
   def index
-    @timesheets = current_user.admin? ? Timesheet.all : current_user.timesheets
+    @timesheets = current_user.timesheets.order(date: :desc)
     @user_projects = current_user.user_projects.includes(:project)
     @months = month_options
     @selected_month = params[:month] || Date.today.month
+  end
+
+  def show
   end
 
   def new
@@ -36,6 +41,9 @@ class TimesheetsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
   def create
     user_project = UserProject.find(params[:user_project_id])
     month = params[:month].to_i
@@ -47,6 +55,13 @@ class TimesheetsController < ApplicationController
       (start_date..end_date).each do |date|
         timesheet_data = params[:timesheet][date.day.to_s]
         if timesheet_data.present? && timesheet_data[:check_in].present? && timesheet_data[:check_out].present?
+          # ตรวจสอบวันหยุด
+          if Holiday.is_holiday?(date)
+            flash.now[:alert] = "ไม่สามารถบันทึกข้อมูลได้เนื่องจากวันที่ #{date.strftime('%d/%m/%Y')} เป็นวันหยุด"
+            render :new, status: :unprocessable_entity
+            return
+          end
+
           # หา timesheet ที่มีอยู่หรือสร้างใหม่
           timesheet = Timesheet.find_or_initialize_by(
             user_project: user_project,
@@ -57,7 +72,7 @@ class TimesheetsController < ApplicationController
           timesheet.assign_attributes(
             check_in: timesheet_data[:check_in],
             check_out: timesheet_data[:check_out],
-            work_description: timesheet_data[:description],
+            notes: timesheet_data[:description],
             work_status: timesheet_data[:work_status].to_i
           )
 
@@ -73,17 +88,39 @@ class TimesheetsController < ApplicationController
       # เก็บค่าไว้ใน session
       session[:selected_user_project_id] = user_project.id
       session[:selected_month] = month
-      redirect_to new_timesheet_path(user_project_id: user_project.id, month: month), notice: "Timesheet was successfully saved."
+      redirect_to new_timesheet_path(user_project_id: user_project.id, month: month), notice: "บันทึกข้อมูลเรียบร้อยแล้ว"
     else
-      redirect_to new_timesheet_path(user_project_id: user_project.id, month: month), alert: "Error saving timesheet. Please try again."
+      redirect_to new_timesheet_path(user_project_id: user_project.id, month: month), alert: "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง"
     end
+  end
+
+  def update
+    if Holiday.is_holiday?(@timesheet.date)
+      flash.now[:alert] = "ไม่สามารถบันทึกข้อมูลได้เนื่องจากเป็นวันหยุด"
+      render :edit, status: :unprocessable_entity
+      return
+    end
+
+    if @timesheet.update(timesheet_params)
+      redirect_to timesheets_path, notice: "อัพเดทข้อมูลเรียบร้อยแล้ว"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @timesheet.destroy
+    redirect_to timesheets_path, notice: "ลบข้อมูลเรียบร้อยแล้ว"
   end
 
   def data
     user_project = UserProject.find(params[:user_project_id])
-    timesheets = Timesheet.where(user: user_project.user, project: user_project.project).where("extract(month from date) = ?", params[:month])
+    month = params[:month].to_i
+    start_date = Date.new(Date.today.year, month, 1)
+    end_date = start_date.end_of_month
 
-    render json: { timesheets: timesheets, work_statuses: Timesheet.work_statuses }
+    @timesheets = Timesheet.where(user_project: user_project, date: start_date..end_date)
+    render json: @timesheets
   end
 
   def export_pdf
@@ -108,7 +145,11 @@ class TimesheetsController < ApplicationController
 
   private
 
+  def set_timesheet
+    @timesheet = Timesheet.find(params[:id])
+  end
+
   def timesheet_params
-    params.require(:timesheet).permit(:site_id, :project_id, :position, :work_date, :hours_worked, :work_description, :signature, :submitted_at)
+    params.require(:timesheet).permit(:date, :check_in, :check_out, :work_status, :notes)
   end
 end

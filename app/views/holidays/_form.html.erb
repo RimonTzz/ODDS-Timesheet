@@ -1,0 +1,43 @@
+<%= form_with(model: holiday, local: true) do |f| %>
+  <% if holiday.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(holiday.errors.count, "error") %> prohibited this holiday from being saved:</h2>
+      <ul>
+        <% holiday.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :date, "วันที่" %>
+    <%= f.date_field :date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :name, "ชื่อวันหยุด" %>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :is_bank_holiday, "เป็นวันหยุดธนาคาร" %>
+    <%= f.check_box :is_bank_holiday %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :is_exception, "ยกเว้น" %>
+    <%= f.check_box :is_exception %>
+    <small class="form-text text-muted">เลือกถ้าต้องการให้วันนี้เป็นวันทำงาน แม้จะเป็นวันหยุด</small>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description, "รายละเอียด" %>
+    <%= f.text_area :description, class: "form-control" %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "บันทึก", class: "button" %>
+    <%= link_to "ยกเลิก", holidays_path, class: "button secondary" %>
+  </div>
+<% end %> 

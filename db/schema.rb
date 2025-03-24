@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_24_032522) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_24_070714) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_032522) do
     t.string "contact_info"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "holidays", force: :cascade do |t|
+    t.date "date", null: false
+    t.string "name", null: false
+    t.boolean "is_bank_holiday", default: false
+    t.boolean "is_exception", default: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_holidays_on_date", unique: true
+    t.index ["is_bank_holiday"], name: "index_holidays_on_is_bank_holiday"
+    t.index ["is_exception"], name: "index_holidays_on_is_exception"
   end
 
   create_table "projects", force: :cascade do |t|

@@ -1,99 +1,141 @@
-<%= form_with(url: new_timesheet_path, method: :get) do |form| %>
-  <div class="field">
-    <%= form.label :user_project_id, "Project" %>
-    <%= form.select :user_project_id, @user_projects.map { |up| [up.project.project_name, up.id] }, { selected: @selected_user_project_id }, prompt: "Select Project" %>
-  </div>
+<h1>บันทึกข้อมูลการทำงาน</h1>
 
-  <div class="field">
-    <%= form.label :month, "Month" %>
-    <%= select_tag :month, options_for_select(@months, @selected_month), prompt: "Select Month" %>
-  </div>
-
-  <%= form.submit "Load Days" %>
-<% end %>
-
-<% if @timesheet_days.present? %>
-  <%= form_with(url: timesheets_path, method: :post) do |form| %>
-    <%= form.hidden_field :user_project_id, value: @selected_user_project_id %>
-    <%= hidden_field_tag :month, @selected_month %>
-
-    <table id="timesheet-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Check In</th>
-          <th>Check Out</th>
-          <th>Description</th>
-          <th>Work Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @timesheet_days.each do |date| %>
-          <% existing_timesheet = @existing_timesheets[date] %>
-          <tr>
-            <td><%= date.strftime('%Y-%m-%d') %></td>
-            <td><%= form.time_field "timesheet[#{date.day}][check_in]", value: existing_timesheet&.check_in&.strftime('%H:%M'), class: "check-in-field" %></td>
-            <td><%= form.time_field "timesheet[#{date.day}][check_out]", value: existing_timesheet&.check_out&.strftime('%H:%M'), class: "check-out-field" %></td>
-            <td><%= form.text_field "timesheet[#{date.day}][description]", value: existing_timesheet&.work_description %></td>
-            <td>
-              <%= form.select "timesheet[#{date.day}][work_status]", 
-                  Timesheet.work_statuses.keys, 
-                  { selected: existing_timesheet&.work_status, include_blank: "choose status" }, 
-                  class: "work-status-select",
-                  data: {
-                    project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
-                    project_check_out: @user_project.project.check_out&.strftime('%H:%M')
-                  } %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
-    <div class="actions">
-      <%= form.submit "Save Timesheet" %>
-      <%= link_to "Cancel", timesheets_path %>
+<div class="timesheet-form">
+  <%= form_with(url: new_timesheet_path, method: :get) do |form| %>
+    <div class="form-group">
+      <%= form.label :user_project_id, "โปรเจ็ค" %>
+      <%= form.select :user_project_id, 
+                      @user_projects.map { |up| [up.project.project_name, up.id] },
+                      { selected: @selected_user_project_id, include_blank: "เลือกโปรเจ็ค" },
+                      { class: "form-control" } %>
     </div>
+
+    <div class="form-group">
+      <%= form.label :month, "เดือน" %>
+      <%= form.select :month, 
+                      @months,
+                      { selected: @selected_month, include_blank: "เลือกเดือน" },
+                      { class: "form-control" } %>
+    </div>
+
+    <%= form.submit "Load Days", id: "load-days-button", style: "display: none;" %>
   <% end %>
-<% else %>
-  <p>Please select a project and month to load timesheet days.</p>
-<% end %>
+
+  <% if @timesheet_days.present? %>
+    <%= form_with(url: timesheets_path, method: :post) do |form| %>
+      <%= form.hidden_field :user_project_id, value: @selected_user_project_id %>
+      <%= hidden_field_tag :month, @selected_month %>
+
+      <table class="timesheet-table">
+        <thead>
+          <tr>
+            <th>วันที่</th>
+            <th>เวลาเข้างาน</th>
+            <th>เวลาออกงาน</th>
+            <th>สถานะ</th>
+            <th>รายละเอียด</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @timesheet_days.each do |date| %>
+            <% existing_timesheet = @existing_timesheets[date] %>
+            <% is_holiday = Holiday.is_holiday?(date) %>
+            <tr class="<%= 'holiday' if is_holiday %>">
+              <td><%= date.strftime("%d/%m/%Y") %></td>
+              <td>
+                <%= form.time_field "timesheet[#{date.day}][check_in]", 
+                                  value: existing_timesheet&.check_in&.strftime("%H:%M"),
+                                  disabled: is_holiday,
+                                  class: "form-control check-in-field" %>
+              </td>
+              <td>
+                <%= form.time_field "timesheet[#{date.day}][check_out]",
+                                  value: existing_timesheet&.check_out&.strftime("%H:%M"),
+                                  disabled: is_holiday,
+                                  class: "form-control check-out-field" %>
+              </td>
+              <td>
+                <%= form.select "timesheet[#{date.day}][work_status]",
+                              Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
+                              { selected: existing_timesheet&.work_status, include_blank: "choose status" },
+                              { disabled: is_holiday,
+                                class: "form-control work-status-select",
+                                data: {
+                                  project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
+                                  project_check_out: @user_project.project.check_out&.strftime('%H:%M')
+                                } } %>
+              </td>
+              <td>
+                <%= form.text_field "timesheet[#{date.day}][description]",
+                                  value: existing_timesheet&.work_description,
+                                  disabled: is_holiday,
+                                  class: "form-control" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <div class="form-actions">
+        <%= form.submit "บันทึก", class: "button" %>
+        <%= link_to "ยกเลิก", timesheets_path, class: "button secondary" %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>กรุณาเลือกโปรเจ็คและเดือนเพื่อโหลดข้อมูล</p>
+  <% end %>
+</div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const workStatusSelects = document.querySelectorAll('.work-status-select');
-  
-  workStatusSelects.forEach(select => {
-    select.addEventListener('change', function() {
-      const row = this.closest('tr');
-      const checkInField = row.querySelector('.check-in-field');
-      const checkOutField = row.querySelector('.check-out-field');
-      const projectCheckIn = this.dataset.projectCheckIn;
-      const projectCheckOut = this.dataset.projectCheckOut;
+  document.addEventListener('DOMContentLoaded', function() {
+    const userProjectSelect = document.querySelector('select[name="user_project_id"]');
+    const monthSelect = document.querySelector('select[name="month"]');
+
+    function updateTimesheetData() {
+      const userProjectId = userProjectSelect.value;
+      const month = monthSelect.value;
       
-      switch(this.value) {
-        case 'full_day':
-          checkInField.value = projectCheckIn;
-          checkOutField.value = projectCheckOut;
-          break;
-        case 'morning_leave':
-          checkInField.value = '13:00';
-          checkOutField.value = projectCheckOut;
-          break;
-        case 'afternoon_leave':
-          checkInField.value = projectCheckIn;
-          checkOutField.value = '12:00';
-          break;
-        case 'sick_leave':
-        case 'day_off':
-          checkInField.value = '-';
-          checkOutField.value = '-';
-          break;
-        default:
-          checkInField.value = '';
-          checkOutField.value = '';
+      if (userProjectId && month) {
+        window.location.href = `/timesheets/new?user_project_id=${userProjectId}&month=${month}`;
       }
+    }
+
+    userProjectSelect.addEventListener('change', updateTimesheetData);
+    monthSelect.addEventListener('change', updateTimesheetData);
+
+    const workStatusSelects = document.querySelectorAll('.work-status-select');
+    
+    workStatusSelects.forEach(select => {
+      select.addEventListener('change', function() {
+        const row = this.closest('tr');
+        const checkInField = row.querySelector('.check-in-field');
+        const checkOutField = row.querySelector('.check-out-field');
+        const projectCheckIn = this.dataset.projectCheckIn;
+        const projectCheckOut = this.dataset.projectCheckOut;
+        
+        switch(this.value) {
+          case 'full_day':
+            checkInField.value = projectCheckIn;
+            checkOutField.value = projectCheckOut;
+            break;
+          case 'morning_leave':
+            checkInField.value = '13:00';
+            checkOutField.value = projectCheckOut;
+            break;
+          case 'afternoon_leave':
+            checkInField.value = projectCheckIn;
+            checkOutField.value = '12:00';
+            break;
+          case 'sick_leave':
+          case 'day_off':
+            checkInField.value = '-';
+            checkOutField.value = '-';
+            break;
+          default:
+            checkInField.value = '';
+            checkOutField.value = '';
+        }
+      });
     });
   });
-});
 </script>

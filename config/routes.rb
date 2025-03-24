@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
 
   resources :timesheets, only: [ :index, :new, :create ]
+  resources :holidays
 
   root "timesheets#index"
 
