@@ -6,7 +6,7 @@
       <%= form.label :user_project_id, "โปรเจ็ค" %>
       <%= form.select :user_project_id, 
                       @user_projects.map { |up| [up.project.project_name, up.id] },
-                      { selected: @selected_user_project_id, include_blank: "เลือกโปรเจ็ค" },
+                      { selected: @user_project&.id, include_blank: "เลือกโปรเจ็ค" },
                       { class: "form-control" } %>
     </div>
 
@@ -23,7 +23,7 @@
 
   <% if @timesheet_days.present? %>
     <%= form_with(url: timesheets_path, method: :post) do |form| %>
-      <%= form.hidden_field :user_project_id, value: @selected_user_project_id %>
+      <%= form.hidden_field :user_project_id, value: @user_project.id %>
       <%= hidden_field_tag :month, @selected_month %>
 
       <table class="timesheet-table">

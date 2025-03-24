@@ -1,27 +1,109 @@
 <h1>New Time Sheet</h1>
 
+<% if @user_projects.any? %>
+  <% default_project = @user_projects.order(:id).first %>
+  <% default_month = Time.current.strftime("%Y-%m") %>
+  <% @selected_user_project_id = params[:user_project_id] || default_project.id %>
+  <% @selected_month = params[:month] || default_month %>
+<% end %>
+
 <%= form_with(url: new_timesheet_path, method: :get, local: true) do |form| %>
   <div class="field">
     <%= form.label :user_project_id, "Project" %>
-    <%= form.select :user_project_id, @user_projects.map { |up| [up.project.project_name, up.id] }, prompt: "Select Project" %>
+    <%= form.select :user_project_id, 
+                    @user_projects.map { |up| [up.project.project_name, up.id] },
+                    { selected: @selected_user_project_id },
+                    { class: "form-control" } %>
   </div>
 
   <div class="field">
     <%= form.label :month, "Month" %>
-    <%= select_tag :month, options_for_select(@months, @selected_month), prompt: "Select Month" %>
+    <%= form.select :month, 
+                    @months,
+                    { selected: @selected_month },
+                    { class: "form-control" } %>
   </div>
-
-  <%= form.submit "Load Days" %>
 <% end %>
 
 <% if @timesheet_days.present? %>
   <%= form_with(url: timesheets_path, method: :post) do |form| %>
-    <%# ... Table สำหรับกรอกข้อมูล ... %>
-    <div class="actions">
-      <%= form.submit "Save Timesheet" %>
-      <%= link_to "Cancel", timesheets_path %>
+    <%= form.hidden_field :user_project_id, value: @selected_user_project_id %>
+    <%= hidden_field_tag :month, @selected_month %>
+
+    <table class="timesheet-table">
+      <thead>
+        <tr>
+          <th>วันที่</th>
+          <th>เวลาเข้างาน</th>
+          <th>เวลาออกงาน</th>
+          <th>สถานะ</th>
+          <th>รายละเอียด</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @timesheet_days.each do |date| %>
+          <% existing_timesheet = @existing_timesheets[date] %>
+          <% is_holiday = Holiday.is_holiday?(date) %>
+          <tr class="<%= 'holiday' if is_holiday %>">
+            <td><%= date.strftime("%d/%m/%Y") %></td>
+            <td>
+              <%= form.time_field "timesheet[#{date.day}][check_in]", 
+                                value: existing_timesheet&.check_in&.strftime("%H:%M"),
+                                disabled: is_holiday,
+                                class: "form-control check-in-field" %>
+            </td>
+            <td>
+              <%= form.time_field "timesheet[#{date.day}][check_out]",
+                                value: existing_timesheet&.check_out&.strftime("%H:%M"),
+                                disabled: is_holiday,
+                                class: "form-control check-out-field" %>
+            </td>
+            <td>
+              <%= form.select "timesheet[#{date.day}][work_status]",
+                            Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
+                            { selected: existing_timesheet&.work_status, include_blank: "choose status" },
+                            { disabled: is_holiday,
+                              class: "form-control work-status-select",
+                              data: {
+                                project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
+                                project_check_out: @user_project.project.check_out&.strftime('%H:%M')
+                              } } %>
+            </td>
+            <td>
+              <%= form.text_field "timesheet[#{date.day}][description]",
+                                value: existing_timesheet&.work_description,
+                                disabled: is_holiday,
+                                class: "form-control" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="form-actions">
+      <%= form.submit "บันทึก", class: "button" %>
+      <%= link_to "ยกเลิก", timesheets_path, class: "button secondary" %>
     </div>
   <% end %>
 <% end %>
 
 <%= link_to "Back to Time Sheets", timesheets_path %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const userProjectSelect = document.querySelector('select[name="user_project_id"]');
+    const monthSelect = document.querySelector('select[name="month"]');
+
+    function updateTimesheetData() {
+      const userProjectId = userProjectSelect.value;
+      const month = monthSelect.value;
+      
+      if (userProjectId && month) {
+        window.location.href = `/timesheets/new?user_project_id=${userProjectId}&month=${month}`;
+      }
+    }
+
+    userProjectSelect.addEventListener('change', updateTimesheetData);
+    monthSelect.addEventListener('change', updateTimesheetData);
+  });
+</script>

@@ -2,42 +2,65 @@ class TimesheetsController < ApplicationController
   include Devise::Controllers::Helpers
   include ApplicationHelper
   before_action :authenticate_user!
+  before_action :set_user_projects
   before_action :set_timesheet, only: [ :show, :edit, :update, :destroy ]
   before_action :authorize_not_user!, only: [ :edit, :update, :destroy ]
 
   def index
-    @timesheets = current_user.timesheets.order(date: :desc)
-    @user_projects = current_user.user_projects.includes(:project)
+    @timesheets = current_user.timesheets.includes(:user_project)
     @months = month_options
-    @selected_month = params[:month] || Date.today.month
+    @selected_month = params[:month] || Time.current.strftime("%Y-%m")
   end
 
   def show
   end
 
   def new
-    @user_projects = current_user.user_projects.includes(:project)
+    @user_project = UserProject.find_by(id: params[:user_project_id])
     @months = month_options
-    @selected_month = params[:month] || session[:selected_month] || Date.today.month
 
-    # ถ้าไม่มี user_project_id ที่เลือก ให้ใช้ตัวที่น้อยที่สุด
-    @selected_user_project_id = params[:user_project_id] || session[:selected_user_project_id]
-    if @selected_user_project_id.blank? && @user_projects.any?
-      @selected_user_project_id = @user_projects.first.id
+    # ถ้าไม่มี project ให้ใช้ค่าเริ่มต้น
+    unless @user_project
+      @user_project = @user_projects.order(:id).first
     end
 
-    if @selected_user_project_id.present?
-      @user_project = UserProject.find(@selected_user_project_id)
-      @start_date = Date.new(Date.today.year, @selected_month.to_i, 1)
-      @end_date = @start_date.end_of_month
-      @timesheet_days = (@start_date..@end_date).to_a
-      @timesheet = Timesheet.new
+    # กำหนดค่า month
+    @selected_month = if params[:month].present?
+      begin
+        # ตรวจสอบว่า month ที่ส่งมาเป็นรูปแบบที่ถูกต้องหรือไม่
+        if params[:month].match?(/\A\d{4}-\d{2}\z/)
+          year, month = params[:month].split("-").map(&:to_i)
+          Date.new(year, month, 1) # ทดสอบว่าสามารถสร้างวันที่ได้หรือไม่
+          params[:month]
+        else
+          Time.current.strftime("%Y-%m")
+        end
+      rescue ArgumentError
+        Time.current.strftime("%Y-%m")
+      end
+    else
+      Time.current.strftime("%Y-%m")
+    end
 
-      # ดึงข้อมูล timesheet ที่มีอยู่
-      @existing_timesheets = Timesheet.where(
-        user_project: @user_project,
-        date: @start_date..@end_date
-      ).index_by(&:date)
+    if @user_project
+      begin
+        # สร้าง array ของวันที่ในเดือนที่เลือก
+        year, month = @selected_month.split("-").map(&:to_i)
+        @timesheet_days = (Date.new(year, month, 1)..Date.new(year, month, -1)).to_a
+
+        # ดึงข้อมูล timesheet ที่มีอยู่แล้ว
+        @existing_timesheets = @user_project.timesheets
+                                          .where(date: @timesheet_days)
+                                          .index_by(&:date)
+      rescue ArgumentError
+        # ถ้าเกิด error ให้ใช้เดือนปัจจุบัน
+        current_date = Time.current
+        @selected_month = current_date.strftime("%Y-%m")
+        @timesheet_days = (Date.new(current_date.year, current_date.month, 1)..Date.new(current_date.year, current_date.month, -1)).to_a
+        @existing_timesheets = @user_project.timesheets
+                                          .where(date: @timesheet_days)
+                                          .index_by(&:date)
+      end
     end
   end
 
@@ -45,64 +68,63 @@ class TimesheetsController < ApplicationController
   end
 
   def create
-    user_project = UserProject.find(params[:user_project_id])
-    month = params[:month].to_i
-    start_date = Date.new(Date.today.year, month, 1)
-    end_date = start_date.end_of_month
-    success = true
+    @user_project = UserProject.find(timesheet_params[:user_project_id])
+    @selected_month = params[:month]
 
-    ActiveRecord::Base.transaction do
-      (start_date..end_date).each do |date|
-        timesheet_data = params[:timesheet][date.day.to_s]
-        if timesheet_data.present? && timesheet_data[:check_in].present? && timesheet_data[:check_out].present?
-          # ตรวจสอบวันหยุด
+    # สร้าง array ของวันที่ในเดือนที่เลือก
+    year, month = @selected_month.split("-").map(&:to_i)
+    @timesheet_days = (Date.new(year, month, 1)..Date.new(year, month, -1)).to_a
+
+    # ดึงข้อมูล timesheet ที่มีอยู่แล้ว
+    @existing_timesheets = @user_project.timesheets
+                                      .where(date: @timesheet_days)
+                                      .index_by(&:date)
+
+    # ตรวจสอบว่ามีการส่งข้อมูลมาหรือไม่
+    if params[:timesheet].present?
+      success = true
+      @user_project.transaction do
+        params[:timesheet].each do |day, data|
+          next if data[:check_in].blank? && data[:check_out].blank? && data[:work_status].blank? && data[:description].blank?
+
+          date = Date.new(year, month, day.to_i)
+
+          # ตรวจสอบว่าเป็นวันหยุดหรือไม่
           if Holiday.is_holiday?(date)
-            flash.now[:alert] = "ไม่สามารถบันทึกข้อมูลได้เนื่องจากวันที่ #{date.strftime('%d/%m/%Y')} เป็นวันหยุด"
-            render :new, status: :unprocessable_entity
-            return
+            flash.now[:alert] = "ไม่สามารถบันทึกข้อมูลในวันหยุดได้"
+            success = false
+            break
           end
 
-          # หา timesheet ที่มีอยู่หรือสร้างใหม่
-          timesheet = Timesheet.find_or_initialize_by(
-            user_project: user_project,
-            date: date
-          )
-
-          # อัพเดทข้อมูล
+          timesheet = @user_project.timesheets.find_or_initialize_by(date: date)
           timesheet.assign_attributes(
-            check_in: timesheet_data[:check_in],
-            check_out: timesheet_data[:check_out],
-            notes: timesheet_data[:description],
-            work_status: timesheet_data[:work_status].to_i
+            check_in: data[:check_in],
+            check_out: data[:check_out],
+            work_status: data[:work_status],
+            work_description: data[:description]
           )
 
           unless timesheet.save
             success = false
-            raise ActiveRecord::Rollback
+            break
           end
         end
       end
-    end
 
-    if success
-      # เก็บค่าไว้ใน session
-      session[:selected_user_project_id] = user_project.id
-      session[:selected_month] = month
-      redirect_to new_timesheet_path(user_project_id: user_project.id, month: month), notice: "บันทึกข้อมูลเรียบร้อยแล้ว"
+      if success
+        redirect_to timesheets_path, notice: "บันทึกข้อมูลสำเร็จ"
+      else
+        render :new, status: :unprocessable_entity
+      end
     else
-      redirect_to new_timesheet_path(user_project_id: user_project.id, month: month), alert: "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง"
+      flash.now[:alert] = "กรุณากรอกข้อมูลอย่างน้อย 1 วัน"
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    if Holiday.is_holiday?(@timesheet.date)
-      flash.now[:alert] = "ไม่สามารถบันทึกข้อมูลได้เนื่องจากเป็นวันหยุด"
-      render :edit, status: :unprocessable_entity
-      return
-    end
-
     if @timesheet.update(timesheet_params)
-      redirect_to timesheets_path, notice: "อัพเดทข้อมูลเรียบร้อยแล้ว"
+      redirect_to @timesheet, notice: "อัพเดทข้อมูลสำเร็จ"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -110,7 +132,7 @@ class TimesheetsController < ApplicationController
 
   def destroy
     @timesheet.destroy
-    redirect_to timesheets_path, notice: "ลบข้อมูลเรียบร้อยแล้ว"
+    redirect_to timesheets_path, notice: "ลบข้อมูลสำเร็จ"
   end
 
   def data
@@ -145,11 +167,21 @@ class TimesheetsController < ApplicationController
 
   private
 
+  def set_user_projects
+    @user_projects = current_user.user_projects.includes(:project)
+  end
+
   def set_timesheet
     @timesheet = Timesheet.find(params[:id])
   end
 
   def timesheet_params
-    params.require(:timesheet).permit(:date, :check_in, :check_out, :work_status, :notes)
+    params.require(:timesheet).permit(:user_project_id, :date, :check_in, :check_out, :work_status, :notes)
+  end
+
+  def authorize_not_user!
+    unless current_user.admin?
+      redirect_to timesheets_path, alert: "คุณไม่มีสิทธิ์ในการดำเนินการนี้"
+    end
   end
 end
