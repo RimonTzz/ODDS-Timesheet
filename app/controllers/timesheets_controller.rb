@@ -9,7 +9,52 @@ class TimesheetsController < ApplicationController
   def index
     @timesheets = current_user.timesheets.includes(:user_project)
     @months = month_options
-    @selected_month = params[:month] || Time.current.strftime("%Y-%m")
+    # ถ้าไม่มี project ให้ใช้ค่าเริ่มต้น
+    @selected_user_project_id = params[:user_project_id]
+    unless @selected_user_project_id
+      @selected_user_project_id = @user_projects.order(:id).first&.id
+    end
+
+    @user_project = UserProject.find_by(id: @selected_user_project_id)
+
+    # กำหนดค่า month
+    @selected_month = if params[:month].present?
+      begin
+        # ตรวจสอบว่า month ที่ส่งมาเป็นรูปแบบที่ถูกต้องหรือไม่
+        if params[:month].match?(/\A\d{4}-\d{2}\z/)
+          year, month = params[:month].split("-").map(&:to_i)
+          Date.new(year, month, 1) # ทดสอบว่าสามารถสร้างวันที่ได้หรือไม่
+          params[:month]
+        else
+          Time.current.strftime("%Y-%m")
+        end
+      rescue ArgumentError
+        Time.current.strftime("%Y-%m")
+      end
+    else
+      Time.current.strftime("%Y-%m")
+    end
+
+    if @user_project
+      begin
+        # สร้าง array ของวันที่ในเดือนที่เลือก
+        year, month = @selected_month.split("-").map(&:to_i)
+        @timesheet_days = (Date.new(year, month, 1)..Date.new(year, month, -1)).to_a
+
+        # ดึงข้อมูล timesheet ที่มีอยู่แล้ว
+        @existing_timesheets = @user_project.timesheets
+                                        .where(date: @timesheet_days)
+                                        .index_by(&:date)
+      rescue ArgumentError
+        # ถ้าเกิด error ให้ใช้เดือนปัจจุบัน
+        current_date = Time.current
+        @selected_month = current_date.strftime("%Y-%m")
+        @timesheet_days = (Date.new(current_date.year, current_date.month, 1)..Date.new(current_date.year, current_date.month, -1)).to_a
+        @existing_timesheets = @user_project.timesheets
+                                        .where(date: @timesheet_days)
+                                        .index_by(&:date)
+      end
+    end
   end
 
   def show
@@ -77,8 +122,8 @@ class TimesheetsController < ApplicationController
 
     # ดึงข้อมูล timesheet ที่มีอยู่แล้ว
     @existing_timesheets = @user_project.timesheets
-                                      .where(date: @timesheet_days)
-                                      .index_by(&:date)
+                                    .where(date: @timesheet_days)
+                                    .index_by(&:date)
 
     # ตรวจสอบว่ามีการส่งข้อมูลมาหรือไม่
     if params[:timesheet].present?
@@ -112,13 +157,13 @@ class TimesheetsController < ApplicationController
       end
 
       if success
-        redirect_to timesheets_path, notice: "บันทึกข้อมูลสำเร็จ"
+        redirect_to timesheets_path(user_project_id: @user_project.id, month: @selected_month), notice: "บันทึกข้อมูลสำเร็จ"
       else
-        render :new, status: :unprocessable_entity
+        render :index, status: :unprocessable_entity
       end
     else
       flash.now[:alert] = "กรุณากรอกข้อมูลอย่างน้อย 1 วัน"
-      render :new, status: :unprocessable_entity
+      render :index, status: :unprocessable_entity
     end
   end
 
