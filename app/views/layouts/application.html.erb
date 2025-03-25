@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full bg-white">
   <head>
     <title><%= content_for(:title) || "Timesheet App" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -19,52 +19,415 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <style>
+      .auth-container {
+        display: flex;
+        min-height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        padding: 3rem 1.5rem;
+      }
+
+      @media (min-width: 1024px) {
+        .auth-container {
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
+      }
+
+      .auth-header {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 24rem;
+      }
+
+      .auth-title {
+        margin-top: 2.5rem;
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 2.25rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: rgb(17 24 39);
+      }
+
+      .auth-form-container {
+        margin-top: 2.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 24rem;
+      }
+
+      .auth-form {
+        margin-top: 1.5rem;
+      }
+
+      .form-group {
+        display: block;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        font-weight: 500;
+        color: rgb(17 24 39);
+      }
+
+      .form-input-container {
+        margin-top: 0.5rem;
+      }
+
+      .form-input {
+        display: block;
+        width: 100%;
+        border-radius: 0.375rem;
+        background-color: white;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        color: rgb(17 24 39);
+        outline: 1px solid rgb(209 213 219);
+        outline-offset: -1px;
+      }
+
+      .form-input:focus {
+        outline: 2px solid rgb(79 70 229);
+        outline-offset: -2px;
+      }
+
+      .form-input::placeholder {
+        color: rgb(156 163 175);
+      }
+
+      .error-message {
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: rgb(220 38 38);
+      }
+
+      .hint-message {
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: rgb(107 114 128);
+      }
+
+      .submit-button {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        border-radius: 0.375rem;
+        background-color: rgb(79 70 229);
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      }
+
+      .submit-button:hover {
+        background-color: rgb(99 102 241);
+      }
+
+      .submit-button:focus-visible {
+        outline: 2px solid rgb(79 70 229);
+        outline-offset: 2px;
+      }
+
+      .auth-link-container {
+        margin-top: 2.5rem;
+        text-align: center;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        color: rgb(107 114 128);
+      }
+
+      .auth-link {
+        font-weight: 600;
+        color: rgb(79 70 229);
+      }
+
+      .auth-link:hover {
+        color: rgb(99 102 241);
+      }
+
+      /* Navigation styles */
+      .nav-container {
+        background-color: white;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+      }
+
+      .nav-content {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      @media (min-width: 640px) {
+        .nav-content {
+          padding: 0 1.5rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .nav-content {
+          padding: 0 2rem;
+        }
+      }
+
+      .nav-flex {
+        display: flex;
+        justify-content: space-between;
+        height: 4rem;
+      }
+
+      .nav-left {
+        display: flex;
+      }
+
+      .nav-logo {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+      }
+
+      .nav-logo-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: rgb(79 70 229);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      @media (min-width: 640px) {
+        .nav-links {
+          display: flex;
+          margin-left: 1.5rem;
+          gap: 2rem;
+        }
+      }
+
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: rgb(17 24 39);
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-profile {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: rgb(17 24 39);
+        margin-right: 1rem;
+      }
+
+      .nav-logout {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: rgb(220 38 38);
+      }
+
+      .nav-logout:hover {
+        color: rgb(185 28 28);
+      }
+
+      /* Alert styles */
+      .alert-container {
+        border-radius: 0.375rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .alert-success {
+        background-color: rgb(240 253 244);
+      }
+
+      .alert-error {
+        background-color: rgb(254 242 242);
+      }
+
+      .alert-flex {
+        display: flex;
+      }
+
+      .alert-icon {
+        flex-shrink: 0;
+      }
+
+      .alert-icon-success {
+        color: rgb(34 197 94);
+      }
+
+      .alert-icon-error {
+        color: rgb(248 113 113);
+      }
+
+      .alert-content {
+        margin-left: 0.75rem;
+      }
+
+      .alert-text {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .alert-text-success {
+        color: rgb(22 101 52);
+      }
+
+      .alert-text-error {
+        color: rgb(153 27 27);
+      }
+
+      /* Main content styles */
+      .main-container {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      @media (min-width: 640px) {
+        .main-container {
+          padding: 0 1.5rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .main-container {
+          padding: 0 2rem;
+        }
+      }
+
+      /* Google login button styles */
+      .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 1.5rem 0;
+        color: rgb(107 114 128);
+      }
+
+      .divider::before,
+      .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid rgb(229 231 235);
+      }
+
+      .divider span {
+        padding: 0 1rem;
+        font-size: 0.875rem;
+      }
+
+      .google-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid rgb(229 231 235);
+        border-radius: 0.375rem;
+        background-color: white;
+        color: rgb(17 24 39);
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .google-button:hover {
+        background-color: rgb(249 250 251);
+      }
+
+      .google-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.5rem;
+      }
+    </style>
   </head>
 
-  <body>
-    <nav class="navbar">
-      <div class="navbar-brand">
-        <%= link_to "Timesheet App", root_path %>
-      </div>
-
-      <div class="navbar-menu">
-  <% if user_signed_in? %>
-    <% if current_user.admin? || current_user.super_admin? %>
-      <%= link_to "จัดการลูกค้า", clients_path %>
-      <%= link_to "จัดการวันหยุด", holidays_path %>
-      <%= link_to "จัดการโปรเจ็ค", projects_path %>
-      <%= link_to "จัดการไซต์", sites_path %>
+  <body class="h-full">
+    <% if user_signed_in? %>
+      <nav class="nav-container">
+        <div class="nav-content">
+          <div class="nav-flex">
+            <div class="nav-left">
+              <div class="nav-logo">
+                <%= link_to "Timesheet App", root_path, class: "nav-logo-text" %>
+              </div>
+              <div class="nav-links">
+                <% if current_user.admin? || current_user.super_admin? %>
+                  <%= link_to "จัดการลูกค้า", clients_path, class: "nav-link" %>
+                  <%= link_to "จัดการวันหยุด", holidays_path, class: "nav-link" %>
+                  <%= link_to "จัดการโปรเจ็ค", projects_path, class: "nav-link" %>
+                  <%= link_to "จัดการไซต์", sites_path, class: "nav-link" %>
+                <% end %>
+                <% if current_user.super_admin? %>
+                  <%= link_to "People Management", admin_people_path, class: "nav-link" %>
+                <% end %>
+                <%= link_to "Timesheet", timesheets_path, class: "nav-link" %>
+              </div>
+            </div>
+            <div class="nav-right">
+              <%= link_to "Profile", edit_user_registration_path, class: "nav-profile" %>
+              <%= button_to "ออกจากระบบ", destroy_user_session_path, method: :delete, class: "nav-logout" %>
+            </div>
+          </div>
+        </div>
+      </nav>
     <% end %>
-
-    <% if current_user.super_admin? %>
-      <%= link_to "People Management", admin_people_path %>
-    <% end %>
-
-    <%= link_to "Timesheet", timesheets_path %>
-    <%= link_to "Profile", edit_user_registration_path %>
-    <%= button_to "ออกจากระบบ", destroy_user_session_path, method: :delete %>
-    
-  <% else %>
-    <%= link_to "เข้าสู่ระบบ", new_user_session_path %>
-  <% end %>
-</div>
-    </nav>
 
     <% if notice %>
-      <p class="alert alert-success"><%= notice %></p>
+      <div class="alert-container alert-success">
+        <div class="alert-flex">
+          <div class="alert-icon alert-icon-success">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="alert-content">
+            <p class="alert-text alert-text-success">
+              <%= notice %>
+            </p>
+          </div>
+        </div>
+      </div>
     <% end %>
+
     <% if alert %>
-      <p class="alert alert-danger"><%= alert %></p>
+      <div class="alert-container alert-error">
+        <div class="alert-flex">
+          <div class="alert-icon alert-icon-error">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="alert-content">
+            <p class="alert-text alert-text-error">
+              <%= alert %>
+            </p>
+          </div>
+        </div>
+      </div>
     <% end %>
 
-      <%# <%= link_to "Profile", edit_user_profile_path if user_signed_in? %> 
-      
-
-      
-  </nav>
-  <%= yield %>
-</body>
+    <main class="main-container">
+      <%= yield %>
+    </main>
+  </body>
 </html>

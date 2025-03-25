@@ -1,44 +1,174 @@
-<h2>Sign up</h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <%= f.label :first_name, "ชื่อจริง" %><br />
-    <%= f.text_field :first_name, autofocus: true %>
+<div class="auth-container">
+  <div class="auth-header">
+    <h2 class="auth-title">สมัครสมาชิก</h2>
   </div>
 
-  <div class="field">
-    <%= f.label :last_name, "นามสกุล" %><br />
-    <%= f.text_field :last_name %>
-  </div>
+  <div class="auth-form-container">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :phone_number, "เบอร์โทรศัพท์" %><br />
-    <%= f.text_field :phone_number %>
-  </div>
+      <div class="form-group">
+        <%= f.label :first_name, "ชื่อ *", class: "form-label" %>
+        <div class="form-input-container">
+          <%= f.text_field :first_name, class: "form-input", required: true, placeholder: "ชื่อ", data: { action: "blur->form-validation#validate" } %>
+          <div class="error-message" data-form-validation-target="firstNameError"></div>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email %>
-  </div>
+      <div class="form-group">
+        <%= f.label :last_name, "นามสกุล *", class: "form-label" %>
+        <div class="form-input-container">
+          <%= f.text_field :last_name, class: "form-input", required: true, placeholder: "นามสกุล", data: { action: "blur->form-validation#validate" } %>
+          <div class="error-message" data-form-validation-target="lastNameError"></div>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
+      <div class="form-group">
+        <%= f.label :phone_number, "เบอร์โทรศัพท์ *", class: "form-label" %>
+        <div class="form-input-container">
+          <%= f.telephone_field :phone_number, class: "form-input", required: true, placeholder: "0812345678", pattern: "[0-9]{10}", data: { action: "blur->form-validation#validate" } %>
+          <div class="hint-message">กรอกเบอร์โทรศัพท์ 10 หลัก เช่น 0812345678</div>
+          <div class="error-message" data-form-validation-target="phoneError"></div>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+      <div class="form-group">
+        <%= f.label :email, "อีเมล *", class: "form-label" %>
+        <div class="form-input-container">
+          <%= f.email_field :email, class: "form-input", required: true, placeholder: "example@odds.team", data: { action: "blur->form-validation#validate" } %>
+          <div class="hint-message">กรอกอีเมล @odds.team เท่านั้น</div>
+          <div class="error-message" data-form-validation-target="emailError"></div>
+        </div>
+      </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
+      <div class="form-group">
+        <%= f.label :password, "รหัสผ่าน *", class: "form-label" %>
+        <div class="form-input-container">
+          <%= f.password_field :password, class: "form-input", required: true, placeholder: "รหัสผ่าน", data: { action: "blur->form-validation#validate" } %>
+          <div class="hint-message">ต้องมีอย่างน้อย 8 ตัวอักษร, ตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก และตัวเลข</div>
+          <div class="error-message" data-form-validation-target="passwordError"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "ยืนยันรหัสผ่าน *", class: "form-label" %>
+        <div class="form-input-container">
+          <%= f.password_field :password_confirmation, class: "form-input", required: true, placeholder: "ยืนยันรหัสผ่าน", data: { action: "blur->form-validation#validate" } %>
+          <div class="hint-message">กรอกรหัสผ่านอีกครั้งเพื่อยืนยัน</div>
+          <div class="error-message" data-form-validation-target="passwordConfirmationError"></div>
+        </div>
+      </div>
+
+      <%= f.submit "สมัครสมาชิก", class: "submit-button", data: { disable_with: "กำลังสมัครสมาชิก..." } %>
+    <% end %>
+
+    <div class="auth-link-container">
+      มีบัญชีอยู่แล้ว? <%= link_to "เข้าสู่ระบบ", new_session_path(resource_name), class: "auth-link" %>
+    </div>
   </div>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.auth-form');
+    const emailInput = form.querySelector('#user_email');
+    const phoneInput = form.querySelector('#user_phone_number');
+    const passwordInput = form.querySelector('#user_password');
+    const passwordConfirmationInput = form.querySelector('#user_password_confirmation');
+
+    // Email validation
+    emailInput.addEventListener('blur', function() {
+      const email = this.value;
+      const emailError = form.querySelector('[data-form-validation-target="emailError"]');
+
+      if (!email) {
+        emailError.textContent = 'กรุณากรอกอีเมล';
+        return;
+      }
+
+      if (!email.endsWith('@odds.team')) {
+        emailError.textContent = 'กรุณากรอกอีเมล @odds.team เท่านั้น';
+        return;
+      }
+
+      // Clear error message before checking
+      emailError.textContent = '';
+
+      
+    });
+
+    // Phone number validation
+    phoneInput.addEventListener('blur', function() {
+      const phone = this.value;
+      const phoneError = form.querySelector('[data-form-validation-target="phoneError"]');
+      
+      if (!phone) {
+        phoneError.textContent = 'กรุณากรอกเบอร์โทรศัพท์';
+        return;
+      }
+
+      if (!/^[0-9]{10}$/.test(phone)) {
+        phoneError.textContent = 'กรุณากรอกเบอร์โทรศัพท์ 10 หลัก';
+      } else {
+        phoneError.textContent = '';
+      }
+    });
+
+    // Password validation
+    passwordInput.addEventListener('blur', function() {
+      const password = this.value;
+      const passwordError = form.querySelector('[data-form-validation-target="passwordError"]');
+      
+      if (!password) {
+        passwordError.textContent = 'กรุณากรอกรหัสผ่าน';
+        return;
+      }
+
+      if (password.length < 8) {
+        passwordError.textContent = 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
+      } else if (!/[A-Z]/.test(password)) {
+        passwordError.textContent = 'รหัสผ่านต้องมีตัวพิมพ์ใหญ่อย่างน้อย 1 ตัว';
+      } else if (!/[a-z]/.test(password)) {
+        passwordError.textContent = 'รหัสผ่านต้องมีตัวพิมพ์เล็กอย่างน้อย 1 ตัว';
+      } else if (!/[0-9]/.test(password)) {
+        passwordError.textContent = 'รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว';
+      } else {
+        passwordError.textContent = '';
+      }
+    });
+
+    // Password confirmation validation
+    passwordConfirmationInput.addEventListener('blur', function() {
+      const password = passwordInput.value;
+      const confirmation = this.value;
+      const confirmationError = form.querySelector('[data-form-validation-target="passwordConfirmationError"]');
+      
+      if (!confirmation) {
+        confirmationError.textContent = 'กรุณายืนยันรหัสผ่าน';
+        return;
+      }
+
+      if (password !== confirmation) {
+        confirmationError.textContent = 'รหัสผ่านไม่ตรงกัน';
+      } else {
+        confirmationError.textContent = '';
+      }
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+      const errors = form.querySelectorAll('.error-message');
+      let hasError = false;
+
+      errors.forEach(error => {
+        if (error.textContent) {
+          hasError = true;
+        }
+      });
+
+      if (hasError) {
+        e.preventDefault();
+      }
+    });
+  });
 <% end %>
-
-<%= render "devise/shared/links" %>

@@ -7,11 +7,10 @@ Rails.application.routes.draw do
       end
     end
   end
-  devise_for :users do
-    get "profile/edit", to: "devise/registrations#edit", as: :edit_user_profile
-    patch "profile", to: "devise/registrations#update", as: :user_profile
-    put "profile", to: "devise/registrations#update", as: :update_user_profile
-  end
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
   resources :users, only: [ :edit ] do
     collection do
       get "profile/edit", to: "users#edit", as: "edit_user_profile"
@@ -29,6 +28,8 @@ Rails.application.routes.draw do
 
   resources :timesheets, only: [ :index, :new, :create ]
   resources :holidays
+
+  get 'users/check_email', to: 'users#check_email'
 
   root "timesheets#index"
 
