@@ -1,7 +1,7 @@
 class SitesController < ApplicationController
   before_action :set_site, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
-  before_action :authorize_super_admin!
+  before_action :authorize_not_user!
 
   # GET /sites or /sites.json
   def index
