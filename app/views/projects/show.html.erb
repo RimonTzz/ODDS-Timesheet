@@ -1,27 +1,56 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <p class="notice"><%= notice %></p>
+<% end %>
 
 <% content_for :title, @project.project_name %>
 
-<div class="project-header">
-  <h1><%= @project.project_name %></h1>
-  <% if current_user.admin? %>
-    <div class="admin-actions">
-      <%= link_to "Edit this project", edit_project_path(@project), class: "button" %>
-      <%= button_to "Destroy this project", @project, method: :delete, class: "button delete", data: { confirm: "Are you sure?" } %>
+<div class="project-details">
+  <div class="project-details-header">
+    <h1 class="project-details-title"><%= @project.project_name %></h1>
+    <%= link_to "กลับไปหน้าหลัก", projects_path, class: "back-button" %>
+  </div>
+
+  <div class="project-members">
+    <div class="section-header">
+      <h2 class="section-title">สมาชิกในโปรเจค</h2>
+      <button type="button" class="add-member-button" onclick="toggleAddMemberForm()">
+        เพิ่มสมาชิก
+      </button>
     </div>
-  <% end %>
-</div>
 
-<div class="project-info">
-  <p>
-    <strong>Site:</strong>
-    <%= @project.site.site_name %>
-  </p>
 
-  <p>
-    <strong>Number of Employees:</strong>
-    <%= @project.user_projects.count %> คน
-  </p>
+
+    <div class="table-container">
+      <table class="members-table">
+        <thead>
+          <tr>
+            <th>อีเมล</th>
+            <th>บทบาท</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @project.user_projects.each do |user_project| %>
+            <tr>
+              <td><%= user_project.user.email %></td>
+              <td><%= user_project.position.titleize %></td>
+              <td>
+                <div class="member-actions">
+                  <%= link_to "แก้ไข", edit_project_user_path(@project, user_project.user), class: "member-action-button edit-button" %>
+                  <%= button_to "ลบ", project_user_path(@project, user_project.user), method: :delete, class: "member-action-button delete-button", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="project-actions">
+    <%= link_to "แก้ไขข้อมูล", edit_project_path(@project), class: "project-action-button edit-button" %>
+    <%= button_to "ลบโปรเจค", @project, method: :delete, class: "project-action-button delete-button" %>
+  </div>
 </div>
 
 <% if current_user.admin? %>
@@ -41,26 +70,9 @@
   </div>
 <% end %>
 
-<div class="project-members">
-  <h2>Project Members</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @project.user_projects.each do |user_project| %>
-        <tr>
-          <td><%= "#{user_project.user.first_name} #{user_project.user.last_name}" %></td>
-          <td><%= user_project.user.email %></td>
-          <td><%= user_project.position %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-
-<%= link_to "Back to projects", projects_path, class: "button" %>
+<%= javascript_tag do %>
+  function toggleAddMemberForm() {
+    const form = document.getElementById('addMemberForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+<% end %>

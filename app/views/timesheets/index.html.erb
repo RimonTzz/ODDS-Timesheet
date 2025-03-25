@@ -1,92 +1,101 @@
-<h1>บันทึกข้อมูลการทำงาน</h1>
-
-<% if @user_projects.any? %>
-  <% default_project = @user_projects.order(:id).first %>
-  <% default_month = Time.current.strftime("%Y-%m") %>
-  <% @selected_user_project_id = params[:user_project_id] || default_project.id %>
-  <% @selected_month = params[:month] || default_month %>
-  <% @user_project = UserProject.find(@selected_user_project_id) %>
-  <div class="timesheet-form">
-    <%= form_with(url: timesheets_path, method: :post) do |form| %>
-      <div class="form-group">
-        <%= form.label :user_project_id, "โปรเจ็ค" %>
-        <%= form.select :user_project_id, 
-                        @user_projects.map { |up| [up.project.project_name, up.id] },
-                        { selected: @selected_user_project_id },
-                        { class: "form-control" } %>
-      </div>
-
-      <div class="form-group">
-        <%= form.label :month, "เดือน" %>
-        <%= form.select :month, 
-                        @months,
-                        { selected: @selected_month },
-                        { class: "form-control" } %>
-      </div>
-
-      <% if @timesheet_days.present? %>
-        <%= form.hidden_field :user_project_id, value: @selected_user_project_id %>
-        <%= hidden_field_tag :month, @selected_month %>
-
-        <table class="timesheet-table">
-          <thead>
-            <tr>
-              <th>วันที่</th>
-              <th>เวลาเข้างาน</th>
-              <th>เวลาออกงาน</th>
-              <th>สถานะ</th>
-              <th>รายละเอียด</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @timesheet_days.each do |date| %>
-              <% existing_timesheet = @existing_timesheets[date] %>
-              <% is_holiday = Holiday.is_holiday?(date) %>
-              <tr class="<%= 'holiday' if is_holiday %>">
-                <td><%= date.strftime("%d/%m/%Y") %></td>
-                <td>
-                  <%= form.time_field "timesheet[#{date.day}][check_in]", 
-                                    value: existing_timesheet&.check_in&.strftime("%H:%M"),
-                                    disabled: is_holiday,
-                                    class: "form-control check-in-field" %>
-                </td>
-                <td>
-                  <%= form.time_field "timesheet[#{date.day}][check_out]",
-                                    value: existing_timesheet&.check_out&.strftime("%H:%M"),
-                                    disabled: is_holiday,
-                                    class: "form-control check-out-field" %>
-                </td>
-                <td>
-                  <%= form.select "timesheet[#{date.day}][work_status]",
-                                Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
-                                { selected: existing_timesheet&.work_status, include_blank: "choose status" },
-                                { disabled: is_holiday,
-                                  class: "form-control work-status-select",
-                                  data: {
-                                    project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
-                                    project_check_out: @user_project.project.check_out&.strftime('%H:%M')
-                                  } } %>
-                </td>
-                <td>
-                  <%= form.text_field "timesheet[#{date.day}][description]",
-                                    value: existing_timesheet&.work_description,
-                                    disabled: is_holiday,
-                                    class: "form-control" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-
-        <div class="form-actions">
-          <%= form.submit "บันทึก", class: "button" %>
-        </div>
-      <% end %>
-    <% end %>
+<div class="timesheet-container">
+  <div class="timesheet-header">
+    <h1 class="timesheet-title">บันทึกข้อมูลการทำงาน</h1>
   </div>
-<% else %>
-  <p>กรุณาเพิ่มโปรเจ็คก่อนใช้งาน</p>
-<% end %>
+
+  <% if @user_projects.any? %>
+    <% default_project = @user_projects.order(:id).first %>
+    <% default_month = Time.current.strftime("%Y-%m") %>
+    <% @selected_user_project_id = params[:user_project_id] || default_project.id %>
+    <% @selected_month = params[:month] || default_month %>
+    <% @user_project = UserProject.find(@selected_user_project_id) %>
+    
+    <div class="timesheet-form">
+      <%= form_with(url: timesheets_path, method: :post) do |form| %>
+        <div class="form-group">
+          <%= form.label :user_project_id, "โปรเจ็ค", class: "form-label" %>
+          <%= form.select :user_project_id, 
+                          @user_projects.map { |up| [up.project.project_name, up.id] },
+                          { selected: @selected_user_project_id },
+                          { class: "form-input" } %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :month, "เดือน", class: "form-label" %>
+          <%= form.select :month, 
+                          @months,
+                          { selected: @selected_month },
+                          { class: "form-input" } %>
+        </div>
+
+        <% if @timesheet_days.present? %>
+          <%= form.hidden_field :user_project_id, value: @selected_user_project_id %>
+          <%= hidden_field_tag :month, @selected_month %>
+
+          <div class="table-container">
+            <table class="timesheet-table">
+              <thead>
+                <tr>
+                  <th>วันที่</th>
+                  <th>เวลาเข้างาน</th>
+                  <th>เวลาออกงาน</th>
+                  <th>สถานะ</th>
+                  <th>รายละเอียด</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @timesheet_days.each do |date| %>
+                  <% existing_timesheet = @existing_timesheets[date] %>
+                  <% is_holiday = Holiday.is_holiday?(date) %>
+                  <tr class="<%= 'holiday' if is_holiday %>">
+                    <td><%= date.strftime("%d/%m/%Y") %></td>
+                    <td>
+                      <%= form.time_field "timesheet[#{date.day}][check_in]", 
+                                        value: existing_timesheet&.check_in&.strftime("%H:%M"),
+                                        disabled: is_holiday,
+                                        class: "form-input" %>
+                    </td>
+                    <td>
+                      <%= form.time_field "timesheet[#{date.day}][check_out]",
+                                        value: existing_timesheet&.check_out&.strftime("%H:%M"),
+                                        disabled: is_holiday,
+                                        class: "form-input" %>
+                    </td>
+                    <td>
+                      <%= form.select "timesheet[#{date.day}][work_status]",
+                                    Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
+                                    { selected: existing_timesheet&.work_status, include_blank: "เลือกสถานะ" },
+                                    { disabled: is_holiday,
+                                      class: "form-input",
+                                      data: {
+                                        project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
+                                        project_check_out: @user_project.project.check_out&.strftime('%H:%M')
+                                      } } %>
+                    </td>
+                    <td>
+                      <%= form.text_field "timesheet[#{date.day}][description]",
+                                        value: existing_timesheet&.work_description,
+                                        disabled: is_holiday,
+                                        class: "form-input" %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="timesheet-actions">
+            <%= form.submit "บันทึก", class: "timesheet-submit" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="no-projects-message">
+      <p>กรุณาเพิ่มโปรเจ็คก่อนใช้งาน</p>
+    </div>
+  <% end %>
+</div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -105,13 +114,13 @@
     userProjectSelect.addEventListener('change', updateTimesheetData);
     monthSelect.addEventListener('change', updateTimesheetData);
 
-    const workStatusSelects = document.querySelectorAll('.work-status-select');
+    const workStatusSelects = document.querySelectorAll('select[name*="[work_status]"]');
     
     workStatusSelects.forEach(select => {
       select.addEventListener('change', function() {
         const row = this.closest('tr');
-        const checkInField = row.querySelector('.check-in-field');
-        const checkOutField = row.querySelector('.check-out-field');
+        const checkInField = row.querySelector('input[name*="[check_in]"]');
+        const checkOutField = row.querySelector('input[name*="[check_out]"]');
         const projectCheckIn = this.dataset.projectCheckIn;
         const projectCheckOut = this.dataset.projectCheckOut;
         

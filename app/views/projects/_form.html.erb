@@ -1,38 +1,37 @@
 <%= form_with(model: project) do |form| %>
   <% if project.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
-
-      <ul>
+    <div class="error-container">
+      <h2 class="error-title"><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+      <ul class="error-list">
         <% project.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+          <li class="error-item"><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :project_name, style: "display: block" %>
-    <%= form.text_field :project_name %>
+  <div class="form-group">
+    <%= form.label :project_name, "ชื่อโปรเจค", class: "form-label" %>
+    <%= form.text_field :project_name, class: "form-input" %>
   </div>
 
-  <div>
-    <%= form.label :site_id, "Site", style: "display: block" %>
-    <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "เลือก site" } %>
+  <div class="form-group">
+    <%= form.label :site_id, "ไซต์", class: "form-label" %>
+    <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "เลือกไซต์" }, class: "form-input" %>
   </div>
 
-  <div class="field">
-    <%= form.label :check_in, "Check In Time" %>
-    <%= form.time_field :check_in %>
+  <div class="form-group">
+    <%= form.label :check_in, "เวลาเช็คอิน", class: "form-label" %>
+    <%= form.time_field :check_in, class: "form-input" %>
   </div>
 
-  <div class="field">
-    <%= form.label :check_out, "Check Out Time" %>
-    <%= form.time_field :check_out %>
+  <div class="form-group">
+    <%= form.label :check_out, "เวลาเช็คเอาท์", class: "form-label" %>
+    <%= form.time_field :check_out, class: "form-input" %>
   </div>
 
-
-  <div>
-    <%= form.submit %>
+  <div class="form-actions">
+    <%= form.submit "บันทึก", class: "submit-button" %>
+    <%= link_to "ยกเลิก", projects_path, class: "cancel-button" %>
   </div>
 <% end %>

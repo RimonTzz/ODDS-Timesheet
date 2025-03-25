@@ -372,13 +372,11 @@
                 <%= link_to "Timesheet App", root_path, class: "nav-logo-text" %>
               </div>
               <div class="nav-links">
-                <% if current_user.admin? || current_user.super_admin? %>
-                  <%= link_to "จัดการลูกค้า", clients_path, class: "nav-link" %>
-                  <%= link_to "จัดการวันหยุด", holidays_path, class: "nav-link" %>
-                  <%= link_to "จัดการโปรเจ็ค", projects_path, class: "nav-link" %>
-                  <%= link_to "จัดการไซต์", sites_path, class: "nav-link" %>
-                <% end %>
-                <% if current_user.super_admin? %>
+                <%= link_to "จัดการลูกค้า", clients_path, class: "nav-link" %>
+                <%= link_to "จัดการวันหยุด", holidays_path, class: "nav-link" %>
+                <%= link_to "จัดการโปรเจ็ค", projects_path, class: "nav-link" %>
+                <%= link_to "จัดการไซต์", sites_path, class: "nav-link" %>
+                <% if current_user.admin? %>
                   <%= link_to "People Management", admin_people_path, class: "nav-link" %>
                 <% end %>
                 <%= link_to "Timesheet", timesheets_path, class: "nav-link" %>

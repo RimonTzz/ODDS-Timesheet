@@ -1,37 +1,46 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <p class="notice"><%= notice %></p>
+<% end %>
 
 <% content_for :title, "Projects" %>
 
-<h1>Projects</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Project name</th>
-      <th>Site</th>
-      <th>Number of Employees</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @projects.each do |project| %>
-      <tr>
-        <td><%= project.project_name %></td>
-        <td><%= project.site.site_name %></td>
-        <td><%= project.user_projects.count %> คน</td>
-        <td>
-          <%= link_to "Show this project", project %>
-          <% if current_user.admin? %>
-            <%= link_to "Edit this project", edit_project_path(project) %>
-            <%= button_to "Destroy this project", project, method: :delete %>
-          <% end %>
-        </td>
-      </tr>
+<div class="projects-container">
+  <div class="projects-header">
+    <h1 class="projects-title">Projects</h1>
+    <% if current_user.admin? %>
+      <%= link_to "New project", new_project_path, class: "new-project-button" %>
     <% end %>
-  </tbody>
-</table>
+  </div>
 
-<% if current_user.admin? %>
-  <%= link_to "New project", new_project_path %>
-<% end %>
+  <div class="table-container">
+    <table class="projects-table">
+      <thead>
+        <tr>
+          <th>Project name</th>
+          <th>Site</th>
+          <th>Number of Employees</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr>
+            <td class="project-name"><%= project.project_name %></td>
+            <td class="project-site"><%= project.site.site_name %></td>
+            <td class="project-employees"><%= project.user_projects.count %> คน</td>
+            <td>
+              <div class="project-actions">
+                <%= link_to "Show", project, class: "project-action-link show" %>
+                <% if current_user.admin? %>
+                  <%= link_to "Edit", edit_project_path(project), class: "project-action-link edit" %>
+                  <%= button_to "Delete", project, method: :delete, class: "project-action-button delete", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

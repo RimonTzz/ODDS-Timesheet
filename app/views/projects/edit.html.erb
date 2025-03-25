@@ -1,12 +1,14 @@
-<% content_for :title, "Editing project" %>
+<% content_for :title, "แก้ไขโปรเจค" %>
 
-<h1>Editing project</h1>
+<div class="project-form-container">
+  <div class="form-header">
+    <h1 class="form-title">แก้ไขโปรเจค</h1>
+  </div>
 
-<%= render "form", project: @project %>
+  <%= render "form", project: @project %>
 
-<br>
-
-<div>
-  <%= link_to "Show this project", @project %> |
-  <%= link_to "Back to projects", projects_path %>
+  <div class="form-actions">
+    <%= link_to "ดูรายละเอียด", @project, class: "action-link show" %>
+    <%= link_to "กลับไปหน้าหลัก", projects_path, class: "cancel-button" %>
+  </div>
 </div>
