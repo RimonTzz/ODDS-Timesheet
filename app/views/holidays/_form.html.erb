@@ -1,43 +1,104 @@
-<%= form_with(model: holiday, local: true) do |f| %>
+<%= form_with(model: holiday, class: "space-y-6") do |form| %>
   <% if holiday.errors.any? %>
-    <div class="error-messages">
-      <h2><%= pluralize(holiday.errors.count, "error") %> prohibited this holiday from being saved:</h2>
-      <ul>
-        <% holiday.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+    <div class="error-container">
+      <h2 class="error-title"><%= pluralize(holiday.errors.count, "error") %> prohibited this holiday from being saved:</h2>
+      <ul class="error-list">
+        <% holiday.errors.each do |error| %>
+          <li class="error-item"><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="form-group">
-    <%= f.label :date, "วันที่" %>
-    <%= f.date_field :date, class: "form-control" %>
+    <%= form.label :name, "ชื่อวันหยุด *", class: "form-label" %>
+    <div class="form-input-container">
+      <%= form.text_field :name, class: "form-input", required: true, placeholder: "ชื่อวันหยุด" %>
+      <div class="error-message" data-form-validation-target="nameError"></div>
+    </div>
   </div>
 
   <div class="form-group">
-    <%= f.label :name, "ชื่อวันหยุด" %>
-    <%= f.text_field :name, class: "form-control" %>
+    <%= form.label :date, "วันที่ *", class: "form-label" %>
+    <div class="form-input-container">
+      <%= form.date_field :date, class: "form-input", required: true %>
+      <div class="error-message" data-form-validation-target="dateError"></div>
+    </div>
   </div>
 
   <div class="form-group">
-    <%= f.label :is_bank_holiday, "เป็นวันหยุดธนาคาร" %>
-    <%= f.check_box :is_bank_holiday %>
+    <%= form.label :is_bank_holiday, "เป็นวันหยุดธนาคาร" %>
+    <%= form.check_box :is_bank_holiday %>
   </div>
 
   <div class="form-group">
-    <%= f.label :is_exception, "ยกเว้น" %>
-    <%= f.check_box :is_exception %>
+    <%= form.label :is_exception, "ยกเว้น" %>
+    <%= form.check_box :is_exception %>
     <small class="form-text text-muted">เลือกถ้าต้องการให้วันนี้เป็นวันทำงาน แม้จะเป็นวันหยุด</small>
   </div>
 
   <div class="form-group">
-    <%= f.label :description, "รายละเอียด" %>
-    <%= f.text_area :description, class: "form-control" %>
+    <%= form.label :description, "รายละเอียด" %>
+    <%= form.text_area :description, class: "form-control" %>
   </div>
 
   <div class="form-actions">
-    <%= f.submit "บันทึก", class: "button" %>
-    <%= link_to "ยกเลิก", holidays_path, class: "button secondary" %>
+    <%= form.submit class: "submit-button", data: { disable_with: "กำลังบันทึก..." } %>
+    <%= link_to "ยกเลิก", holidays_path, class: "cancel-button" %>
   </div>
+<% end %>
+
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const nameInput = form.querySelector('#holiday_name');
+    const dateInput = form.querySelector('#holiday_date');
+
+    function showError(input, message) {
+      const errorDiv = document.getElementById(`${input.id.split('_').pop()}_error`);
+      errorDiv.textContent = message;
+      errorDiv.classList.remove('hidden');
+      input.classList.add('border-red-500');
+    }
+
+    function hideError(input) {
+      const errorDiv = document.getElementById(`${input.id.split('_').pop()}_error`);
+      errorDiv.classList.add('hidden');
+      input.classList.remove('border-red-500');
+    }
+
+    nameInput.addEventListener('blur', function() {
+      if (!this.value) {
+        showError(this, 'กรุณากรอกชื่อวันหยุด');
+      } else {
+        hideError(this);
+      }
+    });
+
+    dateInput.addEventListener('blur', function() {
+      if (!this.value) {
+        showError(this, 'กรุณาเลือกวันที่');
+      } else {
+        hideError(this);
+      }
+    });
+
+    form.addEventListener('submit', function(e) {
+      let isValid = true;
+
+      if (!nameInput.value) {
+        showError(nameInput, 'กรุณากรอกชื่อวันหยุด');
+        isValid = false;
+      }
+
+      if (!dateInput.value) {
+        showError(dateInput, 'กรุณาเลือกวันที่');
+        isValid = false;
+      }
+
+      if (!isValid) {
+        e.preventDefault();
+      }
+    });
+  });
 <% end %> 
