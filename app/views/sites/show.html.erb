@@ -1,10 +1,23 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <div class="notice"><%= notice %></div>
+<% end %>
 
-<%= render @site %>
+<div class="site-form-container">
+  <div class="site-form-header">
+    <h1 class="site-form-title">รายละเอียดไซต์</h1>
+  </div>
 
-<div>
-  <%= link_to "Edit this site", edit_site_path(@site) %> |
-  <%= link_to "Back to sites", sites_path %>
+  <div class="site-card">
+    <div class="site-info">
+      <h2 class="site-name"><%= @site.site_name %></h2>
+      <p class="site-location"><%= @site.location %></p>
+      <p class="site-client">Client: <%= @site.client&.client_name %></p>
+    </div>
+  </div>
 
-  <%= button_to "Destroy this site", @site, method: :delete %>
+  <div class="site-form-actions">
+    <%= link_to "แก้ไข", edit_site_path(@site), class: "site-action-link edit" %>
+    <%= button_to "ลบ", @site, method: :delete, class: "site-action-button delete", data: { confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } %>
+    <%= link_to "กลับไปหน้าหลัก", sites_path, class: "site-form-cancel" %>
+  </div>
 </div>

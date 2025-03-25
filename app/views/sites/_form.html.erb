@@ -1,34 +1,32 @@
 <%= form_with(model: site) do |form| %>
   <% if site.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(site.errors.count, "error") %> prohibited this site from being saved:</h2>
-
-      
-
-      <ul>
+    <div class="error-container">
+      <h2 class="error-title"><%= pluralize(site.errors.count, "error") %> prohibited this site from being saved:</h2>
+      <ul class="error-list">
         <% site.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+          <li class="error-item"><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :site_name, style: "display: block" %>
-    <%= form.text_field :site_name %>
+  <div class="site-form-group">
+    <%= form.label :site_name, "ชื่อไซต์", class: "site-form-label" %>
+    <%= form.text_field :site_name, class: "site-form-input" %>
   </div>
 
-  <div>
-    <%= form.label :location, style: "display: block" %>
-    <%= form.text_field :location %>
+  <div class="site-form-group">
+    <%= form.label :location, "ที่ตั้ง", class: "site-form-label" %>
+    <%= form.text_field :location, class: "site-form-input" %>
   </div>
 
-<div>
-  <%= form.label :client_id, "Client", style: "display: block" %>
-  <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "เลือก Client" } %>
-</div>
+  <div class="site-form-group">
+    <%= form.label :client_id, "Client", class: "site-form-label" %>
+    <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "เลือก Client" }, class: "site-form-select" %>
+  </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="site-form-actions">
+    <%= form.submit "บันทึก", class: "site-form-submit" %>
+    <%= link_to "ยกเลิก", sites_path, class: "site-form-cancel" %>
   </div>
 <% end %>

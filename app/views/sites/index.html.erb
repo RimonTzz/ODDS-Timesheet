@@ -1,16 +1,29 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "ไซต์" %>
 
-<% content_for :title, "Sites" %>
-
-<h1>Sites</h1>
-
-<div id="sites">
-  <% @sites.each do |site| %>
-    <%= render site %>
-    <p>
-      <%= link_to "Show this site", site %>
-    </p>
+<div class="sites-container">
+  <% if notice %>
+    <div class="notice"><%= notice %></div>
   <% end %>
-</div>
 
-<%= link_to "New site", new_site_path %>
+  <div class="sites-header">
+    <h1 class="sites-title">ไซต์</h1>
+    <%= link_to "เพิ่มไซต์ใหม่", new_site_path, class: "new-site-button" %>
+  </div>
+
+  <div class="sites-list">
+    <% @sites.each do |site| %>
+      <div class="site-card">
+        <div class="site-info">
+          <h2 class="site-name"><%= site.site_name %></h2>
+          <p class="site-location"><%= site.location %></p>
+          <p class="site-client">Client: <%= site.client&.client_name %></p>
+        </div>
+        <div class="site-actions">
+          <%= link_to "ดูรายละเอียด", site, class: "site-action-link show" %>
+          <%= link_to "แก้ไข", edit_site_path(site), class: "site-action-link edit" %>
+          <%= button_to "ลบ", site, method: :delete, class: "site-action-button delete", data: { confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
