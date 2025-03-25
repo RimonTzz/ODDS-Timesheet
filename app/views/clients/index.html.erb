@@ -1,16 +1,21 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <p class="notice"><%= notice %></p>
+<% end %>
 
 <% content_for :title, "Clients" %>
 
-<h1>Clients</h1>
+<div class="clients-container">
+  <div class="clients-header">
+    <h1 class="clients-title">รายชื่อลูกค้า</h1>
+    <%= link_to "เพิ่มลูกค้า", new_client_path, class: "new-client-button" %>
+  </div>
 
-<div id="clients">
-  <% @clients.each do |client| %>
-    <%= render client %>
-    <p>
-      <%= link_to "Show this client", client %>
-    </p>
-  <% end %>
+  <div id="clients" class="clients-list">
+    <% @clients.each do |client| %>
+      <div class="client-card">
+        <%= render client %>
+        <%= link_to "ดูรายละเอียด", client, class: "client-action-button edit-button" %>
+      </div>
+    <% end %>
+  </div>
 </div>
-
-<%= link_to "New client", new_client_path %>

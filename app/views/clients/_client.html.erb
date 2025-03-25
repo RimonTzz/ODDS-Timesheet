@@ -1,12 +1,13 @@
-<div id="<%= dom_id client %>">
-  <p>
-    <strong>Client name:</strong>
-    <%= client.client_name %>
-  </p>
+<div id="<%= dom_id client %>" class="info-group">
+  <div class="info-group">
+    <div class="info-label">ชื่อลูกค้า:</div>
+    <div class="info-value"><%= client.client_name %></div>
+  </div>
 
-  <p>
-    <strong>Contact info:</strong>
-    <%= client.contact_info %>
-  </p>
-
+  <% if client.contact_info.present? %>
+    <div class="info-group">
+      <div class="info-label">ข้อมูลการติดต่อ:</div>
+      <div class="info-value"><%= client.contact_info %></div>
+    </div>
+  <% end %>
 </div>
