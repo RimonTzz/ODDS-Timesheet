@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     registrations: 'users/registrations'
-  }
+  }, sign_out_via: [:delete, :get]
   resources :users, only: [ :edit ] do
     collection do
       get "profile/edit", to: "users#edit", as: "edit_user_profile"
