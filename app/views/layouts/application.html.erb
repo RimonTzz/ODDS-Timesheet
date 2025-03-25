@@ -31,20 +31,26 @@
       </div>
 
       <div class="navbar-menu">
-        <% if user_signed_in? %>
-          <% if current_user.admin? %>
-            <%= link_to "จัดการวันหยุด", holidays_path %>
-            <%= link_to "จัดการโปรเจ็ค", projects_path %>
-            <%= link_to "จัดการไซต์", sites_path %>
-          <% end %>
-          <%= link_to "Timesheet", timesheets_path %>
-          <%= link_to "Profile", edit_user_registration_path if user_signed_in? %>
-          <%= button_to "ออกจากระบบ", destroy_user_session_path, method: :delete %>
-         
-        <% else %>
-          <%= link_to "เข้าสู่ระบบ", new_user_session_path %>
-        <% end %>
-      </div>
+  <% if user_signed_in? %>
+    <% if current_user.admin? || current_user.super_admin? %>
+      <%= link_to "จัดการลูกค้า", clients_path %>
+      <%= link_to "จัดการวันหยุด", holidays_path %>
+      <%= link_to "จัดการโปรเจ็ค", projects_path %>
+      <%= link_to "จัดการไซต์", sites_path %>
+    <% end %>
+
+    <% if current_user.super_admin? %>
+      <%= link_to "People Management", admin_people_path %>
+    <% end %>
+
+    <%= link_to "Timesheet", timesheets_path %>
+    <%= link_to "Profile", edit_user_registration_path %>
+    <%= button_to "ออกจากระบบ", destroy_user_session_path, method: :delete %>
+    
+  <% else %>
+    <%= link_to "เข้าสู่ระบบ", new_user_session_path %>
+  <% end %>
+</div>
     </nav>
 
     <% if notice %>
