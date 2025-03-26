@@ -6,9 +6,9 @@
 
 <div class="page-container">
   <div class="page-header">
-    <h1 class="page-title">Projects</h1>
-    <% if current_user.admin? %>
-      <%= link_to "New project", new_project_path, class: "new-project-button" %>
+    <h1 class="page-title">Project list</h1>
+    <% if current_user.admin? || current_user.super_admin? %>
+      <%= link_to "New project", new_project_path, class: "new-button" %>
     <% end %>
   </div>
 

@@ -35,6 +35,7 @@
 .form-input.border-red-500 {
   border-color: rgb(239 68 68);
 }
+/*  End Form styles */
 
 .hint-message {
   margin-top: 0.25rem;
@@ -118,95 +119,150 @@
   margin-bottom: 0.25rem;
 }
 
+/* New-Button styles */
+.new-button {
+  padding: 0.875rem 1.0rem;
+  background: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 3rem;
+  transition: background-color 0.2s;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
 
-      /* Navigation styles */
-      .nav-container {
-        background-color: white;
-        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-      }
+.new-button:hover {
+  background: #218838;
+}
 
-      .nav-content {
-        max-width: 80rem;
-        margin: 0 auto;
-        padding: 0 1rem;
-      }
 
-      @media (min-width: 640px) {
-        .nav-content {
-          padding: 0 1.5rem;
-        }
-      }
+/* Navigation styles */
+.nav-container {
+  background-color: whitesmoke;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  border-radius: 2rem; 
+  margin: 1rem 1.5rem 0 1.5rem;
+}
 
-      @media (min-width: 1024px) {
-        .nav-content {
-          padding: 0 2rem;
-        }
-      }
+.nav-content {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
 
-      .nav-flex {
-        display: flex;
-        justify-content: space-between;
-        height: 4rem;
-      }
+@media (min-width: 640px) {
+  .nav-content {
+    padding: 0 1.5rem;
+  }
+}
 
-      .nav-left {
-        display: flex;
-      }
+@media (min-width: 1024px) {
+  .nav-content {
+    padding: 0 0.5rem;
+  }
+}
 
-      .nav-logo {
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-      }
+.nav-flex {
+  display: flex;
+  justify-content: space-between;
+  height: 4rem;
+}
 
-      .nav-logo-text {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: rgb(79 70 229);
-      }
+.nav-left {
+  display: flex;
+}
 
-      .nav-links {
-        display: none;
-      }
+.nav-logo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
 
-      @media (min-width: 640px) {
-        .nav-links {
-          display: flex;
-          margin-left: 1.5rem;
-          gap: 2rem;
-        }
-      }
+.nav-logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(79 70 229);
+}
 
-      .nav-link {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.25rem 0;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: rgb(17 24 39);
-      }
+.nav-links {
+  display: none;
+}
 
-      .nav-right {
-        display: flex;
-        align-items: center;
-      }
+@media (min-width: 640px) {
+  .nav-links {
+    display: flex;
+    margin-left: 1.5rem;
+    gap: 2rem;
+  }
+}
 
-      .nav-profile {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: rgb(17 24 39);
-        margin-right: 1rem;
-      }
+.nav-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #333;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  border-radius: 2rem;
+}
 
-      .nav-logout {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: rgb(220 38 38);
-      }
+.nav-link:hover {
+  color: #000;
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
-      .nav-logout:hover {
-        color: rgb(185 28 28);
-      }
+.nav-link.active {
+  background-color: #000;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 75%;
+
+}
+
+.nav-link.active::after {
+  display: none;
+}
+
+.nav-right {
+  display: flex;
+  padding-left: 2rem;
+}
+
+.nav-logout {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0;
+  margin: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: black;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.nav-logout:hover {
+  color: rgb(185 28 28);
+}
 
 
 .nav-logo-link {
@@ -216,103 +272,122 @@ text-decoration: none;
 }
 
 .nav-logo-image {
-height: 40px;
+height: 50px;
 width: auto;
 fill: #fff;
 }
+/* End Navigation styles */
 
-
+/* Page styles */
 .page-container {
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin: 1rem 0 1rem 0;
 }
 
 .page-title {
+  margin: 0;
+  font-size: 2.5rem;
+  color: black;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+
+}
+
+.clients-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.clients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.clients-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: rgb(17 24 39);
+  color: #1f2937;
 }
 
-.new-client-button {
-  padding: 0.5rem 1rem;
-  background-color: rgb(99 102 241);
-  color: white;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border-radius: 0.375rem;
-  transition: background-color 0.15s ease-in-out;
-}
-
-.new-client-button:hover {
-  background-color: rgb(79 70 229);
-}
-
-.clients-list {
-  display: grid;
-  gap: 1rem;
-}
-
-.client-card {
-  padding: 1rem;
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
   background-color: white;
-  border: 1px solid rgb(209 213 219);
-  border-radius: 0.375rem;
-  transition: all 0.15s ease-in-out;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.client-card:hover {
-  border-color: rgb(99 102 241);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.clients-table th {
+  background-color: #f3f4f6;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.clients-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #4b5563;
+}
+
+.clients-table tr:last-child td {
+  border-bottom: none;
+}
+
+.clients-table tr:hover {
+  background-color: #f9fafb;
 }
 
 .client-name {
-  font-size: 1rem;
   font-weight: 500;
-  color: rgb(17 24 39);
-  margin-bottom: 0.5rem;
+  color: #1f2937;
 }
 
-.client-contact {
-  font-size: 0.875rem;
-  color: rgb(107 114 128);
+.client-site {
+  color: #6b7280;
 }
 
 .client-actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 1rem;
+}
+
+.client-action-link {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.client-action-link:hover {
+  background-color: #f3f4f6;
 }
 
 .client-action-button {
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
   border-radius: 0.25rem;
-  transition: all 0.15s ease-in-out;
+  font-size: 0.875rem;
+  color: #dc2626;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.edit-button {
-  background-color: rgb(59 130 246);
-  color: white;
-}
-
-.edit-button:hover {
-  background-color: rgb(37 99 235);
-}
-
-.delete-button {
-  background-color: rgb(239 68 68);
-  color: white;
-}
-
-.delete-button:hover {
-  background-color: rgb(220 38 38);
+.client-action-button:hover {
+  background-color: #fee2e2;
 }
 
 /* Client show styles */
@@ -386,20 +461,6 @@ fill: #fff;
 }
 
 /* Holiday styles */
-
-.new-holiday-button {
-  padding: 0.5rem 1rem;
-  background-color: rgb(99 102 241);
-  color: white;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border-radius: 0.375rem;
-  transition: background-color 0.15s ease-in-out;
-}
-
-.new-holiday-button:hover {
-  background-color: rgb(79 70 229);
-}
 
 .holidays-list {
   display: grid;
@@ -945,19 +1006,6 @@ fill: #fff;
 
 /* Projects Index Page Styles */
 
-.new-project-button {
-  padding: 0.5rem 1rem;
-  background: #28a745;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.new-project-button:hover {
-  background: #218838;
-}
-
 .projects-table {
   width: 100%;
   border-collapse: collapse;
@@ -1116,18 +1164,6 @@ select.form-input:focus {
 }
 
 /* Sites Styles */
-.new-site-button {
-  padding: 0.5rem 1rem;
-  background: #28a745;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.new-site-button:hover {
-  background: #218838;
-}
 
 .sites-list {
   display: grid;
@@ -1571,3 +1607,95 @@ select.form-input:focus {
   color: #6c757d;
   margin-top: 0.25rem;
 }
+.sites-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .sites-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .sites-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+  
+  .sites-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sites-table th {
+    background-color: #f3f4f6;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .sites-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    color: #4b5563;
+  }
+  
+  .sites-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .sites-table tr:hover {
+    background-color: #f9fafb;
+  }
+  
+  .site-name {
+    font-weight: 500;
+    color: #1f2937;
+  }
+  
+  .site-location {
+    color: #6b7280;
+  }
+  
+  .site-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .site-action-link {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .site-action-link:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .site-action-button {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc2626;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .site-action-button:hover {
+    background-color: #fee2e2;
+  }
+  

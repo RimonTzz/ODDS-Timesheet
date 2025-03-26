@@ -16,6 +16,11 @@
     <%= yield :head %>
 
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
       .auth-container {
         display: flex;
         min-height: 100%;
@@ -217,7 +222,10 @@
         }
       }
 
-      
+      .nav-profile {
+        // ... existing code ...
+      }
+
     </style>
   </head>
 
@@ -233,18 +241,18 @@
                 <% end %>
               </div>
               <div class="nav-links">
-                <%= link_to "Client M", clients_path, class: "nav-link" %>
-                <%= link_to "Holiday M", holidays_path, class: "nav-link" %>
-                <%= link_to "Project M", projects_path, class: "nav-link" %>
-                <%= link_to "Site M", sites_path, class: "nav-link" %>
+                <%= link_to "Client M", clients_path, class: "nav-link #{current_page?(clients_path) ? 'active' : ''}" %>
+                <%= link_to "Site M", sites_path, class: "nav-link #{current_page?(sites_path) ? 'active' : ''}" %>
+                <%= link_to "Project M", projects_path, class: "nav-link #{current_page?(projects_path) ? 'active' : ''}" %>
                 <% if current_user.admin? %>
-                  <%= link_to "People Management", admin_people_path, class: "nav-link" %>
+                  <%= link_to "People Management", admin_people_path, class: "nav-link #{current_page?(admin_people_path) ? 'active' : ''}" %>
                 <% end %>
-                <%= link_to "Timesheet", timesheets_path, class: "nav-link" %>
+                <%= link_to "Holiday M", holidays_path, class: "nav-link #{current_page?(holidays_path) ? 'active' : ''}" %>
+                <%= link_to "Timesheet", timesheets_path, class: "nav-link #{current_page?(timesheets_path) || current_page?(root_path) ? 'active' : ''}" %>
               </div>
             </div>
             <div class="nav-right">
-              <%= link_to "Profile", edit_user_registration_path, class: "nav-profile" %>
+              <%= link_to "Profile", edit_user_registration_path, class: "nav-link #{current_page?(edit_user_registration_path) ? 'active' : ''}" %>
               <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-logout" %>
             </div>
           </div>

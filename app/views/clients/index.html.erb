@@ -6,16 +6,34 @@
 
 <div class="page-container">
   <div class="page-header">
-    <h1 class="page-title">รายชื่อลูกค้า</h1>
-    <%= link_to "เพิ่มลูกค้า", new_client_path, class: "new-client-button" %>
-  </div>
-
-  <div id="clients" class="clients-list">
-    <% @clients.each do |client| %>
-      <div class="client-card">
-        <%= render client %>
-        <%= link_to "ดูรายละเอียด", client, class: "client-action-button edit-button" %>
-      </div>
+    <h1 class="page-title">Client list</h1>
+    <% if current_user.admin? || current_user.super_admin? %>
+      <%= link_to "New client", new_client_path, class: "new-button" %>
     <% end %>
   </div>
+
+  <table class="clients-table">
+    <thead>
+      <tr>
+        <th>ชื่อลูกค้า</th>
+        <th>ไซต์</th>
+        <th>จัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @clients.each do |client| %>
+        <tr>
+          <td class="client-name"><%= client.client_name %></td>
+          <td class="client-site"><%= client.contact_info %></td>
+          <td class="client-actions">
+            <%= link_to "ดูรายละเอียด", client, class: "client-action-link" %>
+            <% if current_user.admin? || current_user.super_admin? %>
+              <%= link_to "แก้ไข", edit_client_path(client), class: "client-action-link" %>
+              <%= button_to "ลบ", client, method: :delete, class: "client-action-button", form: { data: { turbo_confirm: "คุณแน่ใจหรือไม่ที่จะลบลูกค้านี้?" } } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

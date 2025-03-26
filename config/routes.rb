@@ -8,8 +8,8 @@ Rails.application.routes.draw do
     end
   end
   devise_for :users, controllers: {
-    sessions: 'users/sessions',
-    registrations: 'users/registrations'
+    sessions: "users/sessions",
+    registrations: "users/registrations"
   }, sign_out_via: [:delete, :get]
   resources :users, only: [ :edit ] do
     collection do
@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   resources :timesheets, only: [ :index, :new, :create ]
   resources :holidays
 
-  get 'users/check_email', to: 'users#check_email'
+  get "users/check_email", to: "users#check_email"
 
   root "timesheets#index"
 

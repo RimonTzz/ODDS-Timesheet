@@ -1,29 +1,41 @@
-<% content_for :title, "ไซต์" %>
+<% if notice %>
+  <p class="notice"><%= notice %></p>
+<% end %>
+
+<% content_for :title, "Sites" %>
 
 <div class="page-container">
-  <% if notice %>
-    <div class="notice"><%= notice %></div>
-  <% end %>
-
   <div class="page-header">
-    <h1 class="page-title">ไซต์</h1>
-    <%= link_to "เพิ่มไซต์ใหม่", new_site_path, class: "new-site-button" %>
-  </div>
-
-  <div class="sites-list">
-    <% @sites.each do |site| %>
-      <div class="site-card">
-        <div class="site-info">
-          <h2 class="site-name"><%= site.site_name %></h2>
-          <p class="site-location"><%= site.location %></p>
-          <p class="site-client">Client: <%= site.client&.client_name %></p>
-        </div>
-        <div class="site-actions">
-          <%= link_to "ดูรายละเอียด", site, class: "site-action-link show" %>
-          <%= link_to "แก้ไข", edit_site_path(site), class: "site-action-link edit" %>
-          <%= button_to "ลบ", site, method: :delete, class: "site-action-button delete", data: { confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } %>
-        </div>
-      </div>
+    <h1 class="page-title">Site list</h1>
+    <% if current_user.admin? || current_user.super_admin? %>
+      <%= link_to "Add site", new_site_path, class: "new-button" %>
     <% end %>
   </div>
+
+  <table class="sites-table">
+    <thead>
+      <tr>
+        <th>ชื่อไซต์</th>
+        <th>ที่ตั้ง</th>
+        <th>ลูกค้า</th>
+        <th>จัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sites.each do |site| %>
+        <tr>
+          <td class="site-name"><%= site.site_name %></td>
+          <td class="site-location"><%= site.location %></td>
+          <td><%= site.client.client_name %></td>
+          <td class="site-actions">
+            <%= link_to "ดูรายละเอียด", site, class: "site-action-link" %>
+            <% if current_user.admin? %>
+              <%= link_to "แก้ไข", edit_site_path(site), class: "site-action-link" %>
+              <%= button_to "ลบ", site, method: :delete, class: "site-action-button", form: { data: { turbo_confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
