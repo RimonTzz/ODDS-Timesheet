@@ -20,21 +20,10 @@ class ClientsController < ApplicationController
   def create
     @client = Client.new(client_params)
 
-    respond_to do |format|
-      if @client.save
-        format.html { redirect_to clients_path, notice: "Client was successfully created." }
-        format.turbo_stream { 
-          render turbo_stream: [
-            turbo_stream.prepend("clients-table", partial: "client", locals: { client: @client }),
-            turbo_stream.update("newClientModal", "")
-          ]
-        }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream { 
-          render turbo_stream: turbo_stream.update("newClientModal", partial: "form", locals: { client: @client })
-        }
-      end
+    if @client.save
+      redirect_to clients_path, notice: "Client was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
