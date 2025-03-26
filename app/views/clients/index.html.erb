@@ -8,7 +8,7 @@
   <div class="page-header">
     <h1 class="page-title">Client list</h1>
     <% if current_user.admin? || current_user.super_admin? %>
-      <%= link_to "New client", new_client_path, class: "new-button" %>
+      <%= button_tag "New client", class: "new-button", type: "button", onclick: "toggleNewClientModal()" %>
     <% end %>
   </div>
   <div class="table-container">
@@ -38,3 +38,31 @@
     </table>
   </div>
 </div>
+
+<!-- Modal -->
+<div id="newClientModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>New client</h2>
+      <span class="close" onclick="toggleNewClientModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <%= render "form", client: Client.new %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  function toggleNewClientModal() {
+    const modal = document.getElementById('newClientModal');
+    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('newClientModal');
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+<% end %>

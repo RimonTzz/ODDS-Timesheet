@@ -12,11 +12,6 @@ class ClientsController < ApplicationController
   def show
   end
 
-  # GET /clients/new
-  def new
-    @client = Client.new
-  end
-
   # GET /clients/1/edit
   def edit
   end
@@ -27,11 +22,18 @@ class ClientsController < ApplicationController
 
     respond_to do |format|
       if @client.save
-        format.html { redirect_to @client, notice: "Client was successfully created." }
-        format.json { render :show, status: :created, location: @client }
+        format.html { redirect_to clients_path, notice: "Client was successfully created." }
+        format.turbo_stream { 
+          render turbo_stream: [
+            turbo_stream.prepend("clients-table", partial: "client", locals: { client: @client }),
+            turbo_stream.update("newClientModal", "")
+          ]
+        }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @client.errors, status: :unprocessable_entity }
+        format.turbo_stream { 
+          render turbo_stream: turbo_stream.update("newClientModal", partial: "form", locals: { client: @client })
+        }
       end
     end
   end
@@ -62,11 +64,11 @@ class ClientsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_client
-      @client = Client.find(params.expect(:id))
+      @client = Client.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def client_params
-      params.expect(client: [ :client_name, :contact_info ])
+      params.require(:client).permit(:client_name, :contact_info)
     end
 end
