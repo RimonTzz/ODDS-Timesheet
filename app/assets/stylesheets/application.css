@@ -146,7 +146,7 @@
   height: 100%;
   background: #000;
   border-radius: 4rem;
-  z-index: -1; /* ทำให้พื้นหลังไม่ทับเนื้อหาภายใน */
+  z-index: -1;
   transition: all 0.4s ease;
 }
 
@@ -321,25 +321,6 @@ fill: #fff;
   color: black;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 
-}
-
-.clients-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.clients-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.clients-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1f2937;
 }
 
 .clients-table {
@@ -636,13 +617,6 @@ fill: #fff;
 }
 
 /* Table styles */
-.table-container {
-  overflow-x: auto;
-  background-color: white;
-  border: 1px solid rgb(209 213 219);
-  border-radius: 0.375rem;
-  margin-top: 1rem;
-}
 
 .holidays-table {
   width: 100%;
