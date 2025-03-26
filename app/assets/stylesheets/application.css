@@ -322,17 +322,20 @@ fill: #fff;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 
 }
+/* End Page styles */
 
-.clients-table {
+/* Table styles */
+.table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.clients-table th {
+.table th {
   background-color: #f3f4f6;
   padding: 0.75rem 1rem;
   text-align: left;
@@ -341,20 +344,22 @@ fill: #fff;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.clients-table td {
+.table td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #e5e7eb;
   color: #4b5563;
 }
 
-.clients-table tr:last-child td {
+.table tr:last-child td {
   border-bottom: none;
 }
 
-.clients-table tr:hover {
+.table tr:hover {
   background-color: #f9fafb;
 }
+/* End Table styles */
 
+/* data-table styles */
 .client-name {
   font-weight: 500;
   color: #1f2937;
@@ -368,6 +373,9 @@ fill: #fff;
   display: flex;
   gap: 0.5rem;
 }
+
+/* end data-table styles */
+
 
 .client-action-link {
   padding: 0.25rem 0.5rem;
@@ -616,81 +624,6 @@ fill: #fff;
   border-color: rgb(239 68 68);
 }
 
-/* Table styles */
-
-.holidays-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.holidays-table th,
-.holidays-table td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid rgb(209 213 219);
-}
-
-.holidays-table th {
-  background-color: rgb(243 244 246);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: rgb(17 24 39);
-  white-space: nowrap;
-}
-
-.holidays-table tr:last-child td {
-  border-bottom: none;
-}
-
-.holidays-table tr:hover {
-  background-color: rgb(249 250 251);
-}
-
-.holidays-table td {
-  font-size: 0.875rem;
-  color: rgb(17 24 39);
-}
-
-.holidays-table td:first-child {
-  white-space: nowrap;
-}
-
-.holidays-table td:nth-child(3) {
-  max-width: 300px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Update holiday tags for table */
-.holidays-table .holiday-tags {
-  display: flex;
-  gap: 0.25rem;
-  flex-wrap: wrap;
-}
-
-.holidays-table .holiday-tag {
-  padding: 0.125rem 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: 0.25rem;
-}
-
-/* Update holiday actions for table */
-.holidays-table .holiday-actions {
-  display: flex;
-  gap: 0.25rem;
-  margin-top: 0;
-}
-
-.holidays-table .holiday-action-button {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: 0.25rem;
-  transition: all 0.15s ease-in-out;
-}
-
 /* Project Show Page Styles */
 .project-details {
   max-width: 1200px;
@@ -776,29 +709,6 @@ fill: #fff;
   border-radius: 6px;
 }
 
-.members-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.members-table th,
-.members-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.members-table th {
-  background: #f8f9fa;
-  font-weight: 600;
-  color: #495057;
-}
-
-.members-table tr:hover {
-  background: #f8f9fa;
-}
-
 .member-actions {
   display: flex;
   gap: 0.5rem;
@@ -855,14 +765,6 @@ fill: #fff;
 }
 
 /* Project Users Page Styles */
-.project-users-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 .add-user-button {
   padding: 0.5rem 1rem;
@@ -875,29 +777,6 @@ fill: #fff;
 
 .add-user-button:hover {
   background: #218838;
-}
-
-.users-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.users-table th,
-.users-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.users-table th {
-  background: #f8f9fa;
-  font-weight: 600;
-  color: #495057;
-}
-
-.users-table tr:hover {
-  background: #f8f9fa;
 }
 
 .user-actions {
@@ -1005,29 +884,6 @@ fill: #fff;
 
 /* Projects Index Page Styles */
 
-.projects-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.projects-table th,
-.projects-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.projects-table th {
-  background: #f8f9fa;
-  font-weight: 600;
-  color: #495057;
-}
-
-.projects-table tr:hover {
-  background: #f8f9fa;
-}
-
 .project-name {
   font-weight: 500;
   color: #2c3e50;
@@ -1091,14 +947,6 @@ fill: #fff;
 }
 
 /* Project Form Styles */
-.project-form-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 .form-header {
   margin-bottom: 2rem;
@@ -1254,14 +1102,6 @@ select.form-input:focus {
 }
 
 /* Site Form Styles */
-.site-form-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 .site-form-header {
   margin-bottom: 2rem;
@@ -1606,56 +1446,7 @@ select.form-input:focus {
   color: #6c757d;
   margin-top: 0.25rem;
 }
-.sites-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-  
-  .sites-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-  
-  .sites-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1f2937;
-  }
-  
-  .sites-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .sites-table th {
-    background-color: #f3f4f6;
-    padding: 0.75rem 1rem;
-    text-align: left;
-    font-weight: 600;
-    color: #374151;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .sites-table td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    color: #4b5563;
-  }
-  
-  .sites-table tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .sites-table tr:hover {
-    background-color: #f9fafb;
-  }
+/* Site show styles */
   
   .site-name {
     font-weight: 500;

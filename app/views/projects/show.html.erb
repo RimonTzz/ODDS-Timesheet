@@ -13,15 +13,11 @@
   <div class="project-members">
     <div class="section-header">
       <h2 class="section-title">สมาชิกในโปรเจค</h2>
-      <button type="button" class="add-member-button" onclick="toggleAddMemberForm()">
-        เพิ่มสมาชิก
-      </button>
+      <%= link_to "เพิ่มสมาชิก", project_users_path(@project), class: "add-member-button" %>
     </div>
 
-
-
     <div class="table-container">
-      <table class="members-table">
+      <table class="table">
         <thead>
           <tr>
             <th>อีเมล</th>
