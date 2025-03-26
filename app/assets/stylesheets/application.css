@@ -121,18 +121,42 @@
 
 /* New-Button styles */
 .new-button {
+  position: relative;
   padding: 0.875rem 1.0rem;
-  background: #28a745;
-  color: white;
+  border: 2px solid #000;
+  background: transparent;
+  color: #000;
   text-decoration: none;
   border-radius: 3rem;
-  transition: background-color 0.2s;
+  overflow: hidden;
+  transition: color 0.4s, border-color 0.4s;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
 .new-button:hover {
-  background: #218838;
+  color: #fff;
 }
+
+.new-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 4rem;
+  z-index: -1; /* ทำให้พื้นหลังไม่ทับเนื้อหาภายใน */
+  transition: all 0.4s ease;
+}
+
+.new-button:hover::before {
+  left: 0;
+}
+
+
+
+
 
 
 /* Navigation styles */
@@ -191,7 +215,7 @@
   .nav-links {
     display: flex;
     margin-left: 1.5rem;
-    gap: 2rem;
+    gap: 1rem;
   }
 }
 
@@ -208,6 +232,7 @@
   position: relative;
   transition: all 0.3s ease-in-out;
   border-radius: 2rem;
+  overflow: hidden;
 }
 
 .nav-link:hover {
