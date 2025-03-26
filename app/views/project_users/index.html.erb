@@ -1,37 +1,37 @@
-<div class="project-users-container">
+<div class="page-container">
   <div class="page-header">
     <h1 class="page-title">ผู้ใช้ในโปรเจ็ค <%= @project.project_name %></h1>
     <%= link_to "เพิ่มผู้ใช้", new_project_user_path(@project), class: "add-user-button" %>
   </div>
 
-  <div class="table-container">
-    <table class="users-table">
-      <thead>
+ 
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>อีเมล</th>
+        <th>ตำแหน่ง</th>
+        <th>จัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @project_users.each do |user| %>
         <tr>
-          <th>อีเมล</th>
-          <th>ตำแหน่ง</th>
-          <th>จัดการ</th>
+          <td><%= user.email %></td>
+          <td>
+            <% user_project = UserProject.find_by(user: user, project: @project) %>
+            <%= user_project&.position&.titleize %>
+          </td>
+          <td>
+            <div class="user-actions">
+              <%= link_to "แก้ไข", edit_project_user_path(@project, user_project.user), class: "user-action-button edit-button" %>
+              <%= button_to "ลบ", project_user_path(@project, user), method: :delete, class: "user-action-button delete-button", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+            </div>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        <% @project_users.each do |user| %>
-          <tr>
-            <td><%= user.email %></td>
-            <td>
-              <% user_project = UserProject.find_by(user: user, project: @project) %>
-              <%= user_project&.position&.titleize %>
-            </td>
-            <td>
-              <div class="user-actions">
-                <%= link_to "แก้ไข", edit_project_user_path(@project, user_project.user), class: "user-action-button edit-button" %>
-                <%= button_to "ลบ", project_user_path(@project, user), method: :delete, class: "user-action-button delete-button", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
-              </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+      <% end %>
+    </tbody>
+  </table>
+
 
   <div class="back-link">
     <%= link_to "กลับไปที่โปรเจ็ค", @project, class: "back-button" %>
