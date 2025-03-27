@@ -8,7 +8,7 @@
   <div class="page-header">
     <h1 class="page-title">Client list</h1>
     <% if current_user.admin? || current_user.super_admin? %>
-      <%= button_tag "New client", class: "new-button", type: "button", onclick: "toggleNewClientModal()" %>
+      <%= button_tag "New client", class: "new-button", type: "button", onclick: "toggleModal('newClientModal')" %>
     <% end %>
   </div>
   <div class="table-container">
@@ -26,7 +26,7 @@
             <td class="client-name"><%= client.client_name %></td>
             <td class="client-site"><%= client.contact_info %></td>
             <td class="client-actions">
-              <%= link_to "ดูรายละเอียด", client, class: "client-action-link" %>
+              <%= link_to "ดูรายละเอียด", client, class: "client-action-link", onclick: "toggleModal('detailClientModal')" %>
               <% if current_user.admin? || current_user.super_admin? %>
                 <%= link_to "แก้ไข", edit_client_path(client), class: "client-action-link" %>
                 <%= button_to "ลบ", client, method: :delete, class: "client-action-button", form: { data: { turbo_confirm: "คุณแน่ใจหรือไม่ที่จะลบลูกค้านี้?" } } %>
@@ -42,16 +42,36 @@
 <%= render "new" %>
 
 <%= javascript_tag do %>
-  function toggleNewClientModal() {
-    const modal = document.getElementById('newClientModal');
+  function toggleModal(modalId) {
+    const modal = document.getElementById(modalId);
     modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+    if (modalId === 'newClientModal' && modal.style.display === 'none') {
+      resetNewClientForm(); // เรียกฟังก์ชัน Reset Form เมื่อ Modal ถูกปิด
+    }
+  }
+
+  function resetNewClientForm() {
+    const form = document.getElementById('newClientForm');
+    if (form) {
+      form.reset(); // ใช้ Method reset() ของ Form Element
+      // คุณอาจต้องการ Reset Error Messages หรือ Styles ที่เกี่ยวข้องกับ Validation ด้วย
+      const errorMessages = form.querySelectorAll('.error-message');
+      errorMessages.forEach(message => message.remove());
+      const errorInputs = form.querySelectorAll('.form-input.is-invalid'); // สมมติว่าคุณมี Class นี้สำหรับ Input ที่มี Error
+      errorInputs.forEach(input => input.classList.remove('is-invalid'));
+    }
   }
 
   // Close modal when clicking outside
   window.onclick = function(event) {
-    const modal = document.getElementById('newClientModal');
-    if (event.target == modal) {
-      modal.style.display = "none";
+    const newClientModal = document.getElementById('newClientModal');
+    const detailClientModal = document.getElementById('detailClientModal');
+    if (event.target == newClientModal) {
+      newClientModal.style.display = "none";
+      resetNewClientForm(); // เรียกฟังก์ชัน Reset Form เมื่อคลิกภายนอกเพื่อปิด Modal
+    }
+    if (event.target == detailClientModal) {
+      detailClientModal.style.display = "none";
     }
   }
 <% end %>
