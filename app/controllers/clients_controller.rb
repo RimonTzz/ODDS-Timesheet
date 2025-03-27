@@ -10,6 +10,9 @@ class ClientsController < ApplicationController
 
   # GET /clients/1 or /clients/1.json
   def show
+    respond_to do |format|
+      format.json { render json: @client }
+    end
   end
 
   # GET /clients/1/edit

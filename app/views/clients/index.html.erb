@@ -26,8 +26,7 @@
             <td class="client-name"><%= client.client_name %></td>
             <td class="client-site"><%= client.contact_info %></td>
             <td class="client-actions">
-              <%= link_to "ดูรายละเอียด", client, class: "client-action-link", onclick: "toggleModal('detailClientModal')" %>
-              <% if current_user.admin? || current_user.super_admin? %>
+                <%= link_to "ดูรายละเอียด", client, class: "client-action-link", data: { client_id: client.id }, onclick: "showClientDetails(this); return false;" %>              <% if current_user.admin? || current_user.super_admin? %>
                 <%= link_to "แก้ไข", edit_client_path(client), class: "client-action-link" %>
                 <%= button_to "ลบ", client, method: :delete, class: "client-action-button", form: { data: { turbo_confirm: "คุณแน่ใจหรือไม่ที่จะลบลูกค้านี้?" } } %>
               <% end %>
@@ -40,6 +39,7 @@
 </div>
 
 <%= render "new" %>
+<%= render "show" %>
 
 <%= javascript_tag do %>
   function toggleModal(modalId) {
@@ -60,6 +60,28 @@
       const errorInputs = form.querySelectorAll('.form-input.is-invalid'); // สมมติว่าคุณมี Class นี้สำหรับ Input ที่มี Error
       errorInputs.forEach(input => input.classList.remove('is-invalid'));
     }
+  }
+
+  function showClientDetails(link) {
+    const clientId = link.dataset.clientId;
+    const clientDetailContent = document.getElementById('clientDetailContent');
+
+    fetch(`/clients/${clientId}.json`)
+      .then(response => response.json())
+      .then(data => {
+        const detailsHTML = `
+          <p><strong>ชื่อ:</strong> ${data.client_name}</p>
+          <p><strong>ติดต่อ:</strong> ${data.contact_info}</p>
+          <p><strong>สร้างเมื่อ:</strong> ${new Date(data.created_at).toLocaleDateString()}</p>
+          <p><strong>แก้ไขเมื่อ:</strong> ${new Date(data.updated_at).toLocaleDateString()}</p>
+          `;
+        clientDetailContent.innerHTML = detailsHTML;
+        toggleModal('detailClientModal');
+      })
+      .catch(error => {
+        console.error("เกิดข้อผิดพลาดในการโหลดรายละเอียดลูกค้า:", error);
+        alert("เกิดข้อผิดพลาดในการโหลดรายละเอียดลูกค้า");
+      });
   }
 
   // Close modal when clicking outside
