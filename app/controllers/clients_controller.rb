@@ -16,6 +16,11 @@ class ClientsController < ApplicationController
   def edit
   end
 
+  # GET /clients/new
+  def new
+    @client = Client.new
+  end
+
   # POST /clients or /clients.json
   def create
     @client = Client.new(client_params)
@@ -23,7 +28,7 @@ class ClientsController < ApplicationController
     if @client.save
       redirect_to clients_path, notice: "Client was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render turbo_stream: turbo_stream.update("newClientModal", partial: "form", locals: { client: @client })
     end
   end
 

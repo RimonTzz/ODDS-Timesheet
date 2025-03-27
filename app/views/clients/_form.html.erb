@@ -1,68 +1,24 @@
 <%= form_with(model: client, data: { turbo: true }) do |form| %>
-  <% if client.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(client.errors.count, "error") %> prohibited this client from being saved:</h2>
 
-      <ul>
-        <% client.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <div class="form-group">
+    <%= form.label :client_name, "ชื่อลูกค้า *", class: "form-label" %>
+    <div class="form-input-container">
+      <%= form.text_field :client_name, class: "form-input", required: true, placeholder: "ชื่อลูกค้า" %>
+      <div class="error-message" data-form-validation-target="clientNameError"></div>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :client_name, "ชื่อลูกค้า", style: "display: block" %>
-    <%= form.text_field :client_name %>
   </div>
 
-  <div>
-    <%= form.label :contact_info, "ข้อมูลการติดต่อ", style: "display: block" %>
-    <%= form.text_field :contact_info %>
+  <div class="form-group">
+    <%= form.label :contact_info, "ข้อมูลการติดต่อ", class: "form-label" %>
+    <div class="form-input-container">
+      <%= form.text_field :contact_info, class: "form-input", placeholder: "ข้อมูลการติดต่อ" %>
+      <div class="error-message" data-form-validation-target="contactInfoError"></div>
+    </div>
   </div>
 
-  <div>
-    <%= form.submit "บันทึก", class: "submit-button" %>
+  <div class="form-actions">
+    <%= form.submit class: "submit-button", data: { disable_with: "กำลังบันทึก..." } %>
+    <%= link_to "ยกเลิก", clients_path, class: "cancel-button" %>
   </div>
 <% end %>
 
-<%= javascript_tag do %>
-  document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    const clientNameInput = form.querySelector('#client_client_name');
-
-    function showError(input, message) {
-      const errorDiv = document.getElementById(`${input.id.split('_').pop()}_error`);
-      errorDiv.textContent = message;
-      errorDiv.classList.remove('hidden');
-      input.classList.add('border-red-500');
-    }
-
-    function hideError(input) {
-      const errorDiv = document.getElementById(`${input.id.split('_').pop()}_error`);
-      errorDiv.classList.add('hidden');
-      input.classList.remove('border-red-500');
-    }
-
-    clientNameInput.addEventListener('blur', function() {
-      if (!this.value) {
-        showError(this, 'กรุณากรอกชื่อลูกค้า');
-      } else {
-        hideError(this);
-      }
-    });
-
-    form.addEventListener('submit', function(e) {
-      let isValid = true;
-
-      if (!clientNameInput.value) {
-        showError(clientNameInput, 'กรุณากรอกชื่อลูกค้า');
-        isValid = false;
-      }
-
-      if (!isValid) {
-        e.preventDefault();
-      }
-    });
-  });
-<% end %>

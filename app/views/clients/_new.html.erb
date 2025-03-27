@@ -1,0 +1,12 @@
+<!-- Modal -->
+<div id="newClientModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>New client</h2>
+      <span class="close" onclick="toggleNewClientModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <%= render "form", client: Client.new %>
+    </div>
+  </div>
+</div> 
