@@ -4,12 +4,17 @@
       <h2>รายละเอียดลูกค้า</h2>
       <span class="close-button" onclick="toggleModal('detailClientModal')">&times;</span>
     </div>
-    <div class="modal-body">
-      <div id="clientDetailContent">
-        </div>
+    <div class="modal-body" id="clientDetailContent">
+      <% if local_assigns[:client] %>
+        <p><strong>ชื่อ:</strong> <%= client.client_name %></p>
+        <p><strong>ติดต่อ:</strong> <%= client.contact_info %></p>
+      <% end %>
     </div>
     <div class="modal-footer">
       <button type="button" class="close-button" onclick="toggleModal('detailClientModal')">ปิด</button>
+      <% if current_user.admin? || current_user.super_admin? %>
+        <div id="clientActionButtons"></div>
+      <% end %>
     </div>
   </div>
 </div>
