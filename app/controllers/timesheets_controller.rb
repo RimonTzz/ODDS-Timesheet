@@ -113,7 +113,7 @@ class TimesheetsController < ApplicationController
   end
 
   def create
-    @user_project = UserProject.find(timesheet_params[:user_project_id])
+    @user_project = UserProject.find(params[:user_project_id])
     @selected_month = params[:month]
 
     # สร้าง array ของวันที่ในเดือนที่เลือก
