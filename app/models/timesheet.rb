@@ -9,10 +9,10 @@ class Timesheet < ApplicationRecord
   validates :work_status, presence: true
 
   enum :work_status, {
-    "full_day": 0,
-    "morning_leave": 1,
-    "afternoon_leave": 2,
-    "day_off": 3,
-    "sick_leave": 4
+    "full day": 0,
+    "morning leave": 1,
+    "afternoon leave": 2,
+    "day off": 3,
+    "sick leave": 4
   }
 end
