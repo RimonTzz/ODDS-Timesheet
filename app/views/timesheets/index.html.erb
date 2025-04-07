@@ -82,7 +82,7 @@
                                       } } %>
                     </td>
                     <td>
-                      <%= form.text_field "timesheet[#{date.day}][description]",
+                      <%= form.text_area "timesheet[#{date.day}][description]",
                                         value: existing_timesheet&.work_description,
                                         disabled: is_holiday,
                                         class: "form-input" %>
@@ -134,20 +134,20 @@
         const projectCheckOut = this.dataset.projectCheckOut;
         
         switch(this.value) {
-          case 'full_day':
+          case 'full day':
             checkInField.value = projectCheckIn;
             checkOutField.value = projectCheckOut;
             break;
-          case 'morning_leave':
+          case 'morning leave':
             checkInField.value = '13:00';
             checkOutField.value = projectCheckOut;
             break;
-          case 'afternoon_leave':
+          case 'afternoon leave':
             checkInField.value = projectCheckIn;
             checkOutField.value = '12:00';
             break;
-          case 'sick_leave':
-          case 'day_off':
+          case 'sick leave':
+          case 'day off':
             checkInField.value = '-';
             checkOutField.value = '-';
             break;
