@@ -1,6 +1,15 @@
 <div class="page-container">
   <div class="page-header">
     <h1 class="page-title">Time Log</h1>
+    <% if @user_project %>
+      <div class="export-section">
+        <%= link_to export_pdf_timesheets_path(format: :pdf, user_project_id: @user_project.id, month: @selected_month), 
+            class: "export-button", 
+            target: "_blank" do %>
+          <i class="fas fa-file-pdf"></i> Export PDF
+        <% end %>
+      </div>
+    <% end %>
   </div>
 
   <% if @user_projects.any? %>
