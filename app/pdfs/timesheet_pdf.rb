@@ -31,22 +31,22 @@ class TimesheetPdf < Prawn::Document
         formatted_text [
           { text: "Name", styles: [:bold] },
           { text: " : #{@user_project.user.first_name} #{@user_project.user.last_name}" }
-        ], size: 14
+        ], size: 10
   
         formatted_text [
           { text: "Site", styles: [:bold] },
           { text: " : #{@user_project.project.site.site_name}" }
-        ], size: 14
+        ], size: 10
   
         formatted_text [
           { text: "Project", styles: [:bold] },
           { text: " : #{@user_project.project.project_name}" }
-        ], size: 14
+        ], size: 10
   
         formatted_text [
           { text: "Month", styles: [:bold] },
           { text: " : #{format_month(@month)}" }
-        ], size: 14
+        ], size: 10
       end
   
       # Right-side logo
@@ -64,12 +64,39 @@ class TimesheetPdf < Prawn::Document
   def table_content
     column_widths = [110, 50, 50, 100, 230]  # กำหนดขนาดของแต่ละคอลัมน์
   
+    # กำหนดตาราง
     table timesheet_rows, width: bounds.width, column_widths: column_widths do
       row(0).font_style = :bold
       row(0).background_color = "CCCCCC"
       self.header = true
       cells.padding_right = 2
       cells.borders = [:bottom, :left, :right, :top]
+    end
+
+    # ขยับตำแหน่งให้ห่างจากตาราง 100px
+    move_down 50  # ระยะห่างจากตาราง 100px
+
+    # เก็บตำแหน่ง cursor ไว้สำหรับทั้งสองช่อง
+    signature_y = cursor
+
+    # ช่องเซ็นลายเซ็นต์ "Approve By (Client 1)" ซ้าย
+    bounding_box([0, signature_y], width: bounds.width / 2 - 10, height: 110) do
+      text "Initial By (Odd-e)", align: :center, valign: :top
+      move_down 50  # เพิ่มระยะห่างระหว่างข้อความกับเส้น
+      stroke_horizontal_rule
+      move_down 10  # ระยะห่างระหว่างเส้นกับช่องลายเซ็นต์
+      text "(  #{@user_project.user.first_name} #{@user_project.user.last_name}  )", align: :center  # ช่องว่างสำหรับลายเซ็นต์
+      text "date: #{Date.today.strftime('%d / %m / %Y')}", align: :center    
+    end
+
+    # ช่องเซ็นลายเซ็นต์ "Approve By (Client 2)" ขวา
+    bounding_box([bounds.width / 2 + 10, signature_y], width: bounds.width / 2 - 10, height: 110) do
+      text "Approve By (Client)", align: :center, valign: :top
+      move_down 50  # เพิ่มระยะห่างระหว่างข้อความกับเส้น
+      stroke_horizontal_rule
+      move_down 10  # ระยะห่างระหว่างเส้นกับช่องลายเซ็นต์
+      text "(                                                        )", align: :center  # ช่องว่างสำหรับลายเซ็นต์
+      text "date:       /        /        ", align: :center    
     end
   end
 
