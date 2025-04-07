@@ -25,7 +25,7 @@ class TimesheetPdf < Prawn::Document
     bounding_box([ 0, cursor ], width: bounds.width) do
       bounding_box([ 0, cursor ], width: bounds.width - 160) do
         text "Monthly Time Sheet", size: 20, style: :bold
-        move_down 10
+        move_down 5
 
         formatted_text [
           { text: "Name", styles: [:bold] },
@@ -50,12 +50,12 @@ class TimesheetPdf < Prawn::Document
 
       logo_path = Rails.root.join("app/assets/images/icon/ODT_logo.png")
       if File.exist?(logo_path)
-        bounding_box([bounds.right - 80, cursor + 85], width: 150) do
+        bounding_box([bounds.right - 80, cursor + 75], width: 150) do
           image logo_path, width: 75
         end
       end
     end
-    move_down 50
+    move_down 40
   end
 
   def table_content
