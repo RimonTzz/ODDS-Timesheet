@@ -191,11 +191,22 @@ class TimesheetsController < ApplicationController
   end
 
   def export_pdf
-    @timesheets = current_user.admin? ? Timesheet.all : current_user.timesheets
+    @user_project = UserProject.find(params[:user_project_id])
+    @selected_month = params[:month]
+    
+    year, month = @selected_month.split("-").map(&:to_i)
+    start_date = Date.new(year, month, 1)
+    end_date = start_date.end_of_month
+
+    @timesheets = @user_project.timesheets.where(date: start_date..end_date)
+    
     respond_to do |format|
       format.pdf do
-        pdf = TimesheetPdf.new(@timesheets)
-        send_data pdf.render, filename: "timesheet.pdf", type: "application/pdf", disposition: "inline"
+        pdf = TimesheetPdf.new(@timesheets, @user_project, @selected_month)
+        send_data pdf.render, 
+                  filename: "timesheet_#{@user_project.project.project_name}_#{@selected_month}.pdf", 
+                  type: "application/pdf", 
+                  disposition: "inline"
       end
     end
   end
