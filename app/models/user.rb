@@ -7,16 +7,24 @@ class User < ApplicationRecord
   # Validations
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :phone_number, presence: true, format: { with: /\A[0-9]{10}\z/, message: "ต้องเป็นตัวเลข 10 หลัก" }
-  validates :email, presence: true, uniqueness: true, format: { with: /\A[^@\s]+@odds\.team\z/, message: "ต้องเป็นอีเมล @odds.team เท่านั้น" }
-  validates :password, presence: true, length: { minimum: 8 }, format: { with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+\z/, message: "ต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก และตัวเลข" }
+  validates :phone_number, presence: true, 
+            format: { with: /\A[0-9]{10}\z/, message: "ต้องเป็นตัวเลข 10 หลัก" },
+            on: :create
+  validates :email, presence: true, 
+            uniqueness: true, 
+            format: { with: /\A[^@\s]+@odds\.team\z/, message: "ต้องเป็นอีเมล @odds.team เท่านั้น" },
+            on: :create
+  validates :password, presence: true, 
+            length: { minimum: 8 }, 
+            format: { with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+\z/, message: "ต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก และตัวเลข" },
+            if: :password_required?
 
   enum :role, { super_admin: 0, admin: 1, user: 2 }
   attribute :first_name, :string
   attribute :last_name, :string
   attribute :phone_number, :string
 
-  has_many :user_projects
+  has_many :user_projects, dependent: :destroy
   has_many :timesheets, through: :user_projects
   has_many :projects, through: :user_projects
   has_many :sites, through: :projects
@@ -30,9 +38,20 @@ class User < ApplicationRecord
     end
   end
 
+  def update_without_password(params, *options)
+    if params[:password].blank?
+      params.delete(:password)
+      params.delete(:password_confirmation)
+    end
+
+    result = update(params, *options)
+    clean_up_passwords
+    result
+  end
+
   private
 
   def password_required?
-    new_record? || password.present?
+    new_record? || password.present? || password_confirmation.present?
   end
 end
