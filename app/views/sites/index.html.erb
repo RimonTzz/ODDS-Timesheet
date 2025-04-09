@@ -28,11 +28,7 @@
           <td class="site-location"><%= site.location %></td>
           <td><%= site.client.client_name %></td>
           <td class="site-actions">
-            <%= link_to "ดูรายละเอียด", site, class: "site-action-link" %>
-            <% if current_user.admin? %>
-              <%= link_to "แก้ไข", edit_site_path(site), class: "site-action-link" %>
-              <%= button_to "ลบ", site, method: :delete, class: "site-action-button", form: { data: { turbo_confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } } %>
-            <% end %>
+            <%= link_to "show", site, class: "site-action-link show" %>
           </td>
         </tr>
       <% end %>
