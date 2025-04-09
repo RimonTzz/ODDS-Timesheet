@@ -16,7 +16,7 @@
   </div>
 
   <div class="site-form-actions">
-    <%= link_to "แก้ไข", edit_site_path(@site), class: "site-action-link edit" %>
+    <%= link_to "แก้ไข", edit_site_path(@site), class: "action-link edit" %>
     <%= button_to "ลบ", @site, method: :delete, class: "site-action-button delete", data: { confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } %>
     <%= link_to "กลับไปหน้าหลัก", sites_path, class: "site-form-cancel" %>
   </div>
