@@ -45,7 +45,19 @@
 
   <div class="project-actions">
     <%= link_to "แก้ไขข้อมูล", edit_project_path(@project), class: "project-action-button edit-button" %>
-    <%= button_to "ลบโปรเจค", @project, method: :delete, class: "project-action-button delete-button" %>
+    <% if @project.timesheets.any? %>
+      <%= button_to "ลบโปรเจค", @project, 
+          method: :delete, 
+          class: "project-action-button delete-button",
+          form: { data: { 
+            turbo_confirm: "โปรเจคนี้มีข้อมูล timesheets ที่เกี่ยวข้อง #{@project.timesheets.count} รายการ คุณต้องการลบทั้งโปรเจคและข้อมูล timesheets ที่เกี่ยวข้องหรือไม่? การลบนี้จะทำให้ข้อมูลทั้งหมดถูกลบไปด้วย" 
+          } } %>
+    <% else %>
+      <%= button_to "ลบโปรเจค", @project, 
+          method: :delete, 
+          class: "project-action-button delete-button",
+          form: { data: { turbo_confirm: "คุณแน่ใจหรือไม่ที่จะลบโปรเจคนี้?" } } %>
+    <% end %>
   </div>
 </div>
 

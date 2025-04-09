@@ -32,10 +32,6 @@
             <td>
               <div class="project-actions">
                 <%= link_to "Show", project, class: "project-action-link show" %>
-                <% if current_user.admin? %>
-                  <%= link_to "Edit", edit_project_path(project), class: "project-action-link edit" %>
-                  <%= button_to "Delete", project, method: :delete, class: "project-action-button delete", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
-                <% end %>
               </div>
             </td>
           </tr>

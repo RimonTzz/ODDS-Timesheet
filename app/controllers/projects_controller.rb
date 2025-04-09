@@ -51,11 +51,25 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/1 or /projects/1.json
   def destroy
-    @project.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to projects_path, status: :see_other, notice: "Project was successfully destroyed." }
-      format.json { head :no_content }
+    begin
+      if @project.timesheets.any?
+        @project.destroy_with_timesheets
+        respond_to do |format|
+          format.html { redirect_to projects_path, status: :see_other, notice: "ลบโปรเจคและข้อมูล timesheets ที่เกี่ยวข้องสำเร็จ" }
+          format.json { head :no_content }
+        end
+      else
+        @project.destroy!
+        respond_to do |format|
+          format.html { redirect_to projects_path, status: :see_other, notice: "ลบโปรเจคสำเร็จ" }
+          format.json { head :no_content }
+        end
+      end
+    rescue ActiveRecord::RecordNotDestroyed => e
+      respond_to do |format|
+        format.html { redirect_to projects_path, alert: "ไม่สามารถลบโปรเจคได้: #{e.message}" }
+        format.json { render json: { error: e.message }, status: :unprocessable_entity }
+      end
     end
   end
 
