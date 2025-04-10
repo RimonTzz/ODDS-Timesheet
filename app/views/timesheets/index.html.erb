@@ -1,15 +1,7 @@
 <div class="page-container">
   <div class="page-header">
     <h1 class="page-title">Time Log</h1>
-    <% if @user_project %>
-      <div class="export-section">
-        <%= link_to export_pdf_timesheets_path(format: :pdf, user_project_id: @user_project.id, month: @selected_month), 
-            class: "export-button", 
-            target: "_blank" do %>
-          <i class="fas fa-file-pdf"></i> Export PDF
-        <% end %>
-      </div>
-    <% end %>
+    
   </div>
 
   <% if @user_projects.any? %>
@@ -21,20 +13,30 @@
     
     <div class="timesheet-form">
       <%= form_with(url: timesheets_path, method: :post) do |form| %>
-        <div class="form-group">
-          <%= form.label :user_project_id, "โปรเจ็ค", class: "form-label" %>
-          <%= form.select :user_project_id, 
-                          @user_projects.map { |up| [up.project.project_name, up.id] },
-                          { selected: @selected_user_project_id },
-                          { class: "form-input" } %>
-        </div>
+        <div class="form-row"> 
+          <div class="timesheet-form-group">
+            <%= form.label :user_project_id, "Project", class: "form-label" %>
+            <%= form.select :user_project_id,
+                            @user_projects.map { |up| [up.project.project_name, up.id] },
+                            { selected: @selected_user_project_id },
+                            { class: "form-input" } %>
+          </div>
 
-        <div class="form-group">
-          <%= form.label :month, "เดือน", class: "form-label" %>
-          <%= form.select :month, 
-                          @months,
-                          { selected: @selected_month },
-                          { class: "form-input" } %>
+          <div class="timesheet-form-group">
+            <%= form.label :month, "Month", class: "form-label" %>
+            <%= form.select :month,
+                            @months,
+                            { selected: @selected_month },
+                            { class: "form-input" } %>
+          </div>
+          <% if @user_project %>
+              <%= link_to export_pdf_timesheets_path(format: :pdf, user_project_id: @user_project.id, month: @selected_month), 
+                  class: "save-button", 
+                  target: "_blank" do %>
+                <i class="fas fa-file-pdf"></i> Export PDF
+              <% end %>
+          <% end %>
+
         </div>
 
         <% if @timesheet_days.present? %>
@@ -49,7 +51,7 @@
                   <th style="width: 5%;">Check in</th>
                   <th style="width: 5%;">Check out</th>
                   <th style="width: 20%;">Status</th>
-                  <th style="width: 60%;">รายละเอียด</th>
+                  <th style="width: 60%;">Activity</th>
                 </tr>
               </thead>
               <tbody>
@@ -94,7 +96,7 @@
           </div>
 
           <div class="timesheet-actions">
-            <%= form.submit "บันทึก", class: "timesheet-submit" %>
+            <%= form.submit "Save", class: "save-button" %>
           </div>
         <% end %>
       <% end %>

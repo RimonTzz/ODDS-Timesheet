@@ -3,12 +3,22 @@
   margin-bottom: 1.5rem;
 }
 
+.timesheet-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden; /* ไม่ให้เนื้อหาของปุ่มที่เคลื่อนที่ออกนอก container */
+}
+
+/* เอาไว้แต่งหัวข้อ ใช้เยอะมาก*/
 .form-label {
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
   color: rgb(17 24 39);
   margin-bottom: 0.5rem;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .form-input {
@@ -77,6 +87,101 @@
   display: flex;
   gap: 0.5rem;
   margin-top: 1.5rem;
+}
+
+/* botton group*/
+
+/* New-Button styles */
+.new-button, 
+button.new-button,button.save-button{
+    position: relative;
+    padding: 0.875rem 1rem;
+    border: 2px solid #000;
+    background: transparent;
+    color: #000;
+    text-decoration: none;
+    border-radius: 3rem;
+    overflow: hidden;
+    transition: color 0.4s ease, border-color 0.4s ease;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    height: auto;
+    line-height: normal;
+    display: inline-block;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    min-width: 120px;
+    box-sizing: border-box;
+}
+
+/* เอฟเฟกต์ hover */
+.new-button:hover, 
+button.new-button:hover{
+  color: #fff;
+}
+
+/* พื้นหลังเคลื่อนจากซ้ายไปขวา */
+.new-button::before, 
+button.new-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 4rem;
+  z-index: -1;
+  transition: left 0.4s ease-in-out;
+}
+
+.new-button:hover::before, 
+button.new-button:hover::before {
+  left: 0;
+}
+
+.save-button {
+    position: relative; /* กำหนดให้ปุ่มสามารถรองรับการเคลื่อนที่ของ ::before */
+    padding: 0.875rem 1rem;
+    border: 2px solid #112D4E;
+    background: #112D4E;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 3rem;
+    overflow: hidden;
+    transition: color 0.4s ease, border-color 0.4s ease;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    height: auto;
+    line-height: normal;
+    display: inline-block;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    min-width: 120px;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.save-button:hover {
+    background: #3F72AF;
+    border: 2px solid #3F72AF;
+}
+
+.save-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%; /* เริ่มที่ตำแหน่งซ้ายสุด */
+    width: 100%;
+    height: 100%;
+    background: #3F72AF;
+    border-radius: 4rem;
+    z-index: -1;
+    transition: left 0.4s ease-in-out; /* ทำให้แถบเคลื่อนที่จากซ้ายไปขวา */
+}
+
+.save-button:hover::before {
+    left: 0; /* เมื่อ hover แถบจะขยับมาที่ตำแหน่งซ้ายสุด */
 }
 
 .submit-button {
@@ -187,55 +292,6 @@
   font-size: 0.875rem;
   color: rgb(185 28 28);
   margin-bottom: 0.25rem;
-}
-
-/* New-Button styles */
-.new-button, 
-button.new-button{
-    position: relative;
-    padding: 0.875rem 1rem;
-    border: 2px solid #000;
-    background: transparent;
-    color: #000;
-    text-decoration: none;
-    border-radius: 3rem;
-    overflow: hidden;
-    transition: color 0.4s ease, border-color 0.4s ease;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    height: auto;
-    line-height: normal;
-    display: inline-block;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 500;
-    min-width: 120px;
-    box-sizing: border-box;
-}
-
-/* เอฟเฟกต์ hover */
-.new-button:hover, 
-button.new-button:hover{
-  color: #fff;
-}
-
-/* พื้นหลังเคลื่อนจากซ้ายไปขวา */
-.new-button::before, 
-button.new-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  border-radius: 4rem;
-  z-index: -1;
-  transition: left 0.4s ease-in-out;
-}
-
-.new-button:hover::before, 
-button.new-button:hover::before {
-  left: 0;
 }
 
 
@@ -925,10 +981,10 @@ fill: #fff;
 
 /* Project Export Section Styles */
 .export-section {
-  max-width: 1200px;
+  max-height: 38px;
   margin: 2rem auto;
   padding: 2rem;
-  background: #fff;
+  background: red;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -1207,6 +1263,19 @@ select.form-input:focus {
 }
 
 /* Timesheet Styles */
+.form-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.timesheet-form-group {
+    margin-bottom: 1.5rem;
+    flex-basis: 0; /* กำหนดขนาดเริ่มต้นเป็น 0 */
+    flex-grow: 1;
+    
+}
 
 .timesheet-form {
   background: #fff;
@@ -1316,31 +1385,7 @@ select.form-input:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.timesheet-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 2rem;
-}
 
-.timesheet-submit {
-  padding: 0.5rem 1.5rem;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s;
-}
-
-.timesheet-submit:hover {
-  background: #218838;
-}
-
-.timesheet-submit:disabled {
-  background: #6c757d;
-  cursor: not-allowed;
-}
 
 .no-projects-message {
   text-align: center;
