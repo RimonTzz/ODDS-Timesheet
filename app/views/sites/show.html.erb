@@ -17,7 +17,21 @@
 
   <div class="site-form-actions">
     <%= link_to "แก้ไข", edit_site_path(@site), class: "action-link edit" %>
-    <%= button_to "ลบ", @site, method: :delete, class: "site-action-button delete", data: { confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } %>
+    <% if current_user.admin? || current_user.super_admin? %>
+      <% if @site.projects.any? %>
+        <%= button_to "ลบ", @site, 
+            method: :delete, 
+            class: "site-action-button delete",
+            form: { data: { 
+              turbo_confirm: "ไซต์นี้มีโปรเจคที่เกี่ยวข้อง #{@site.projects.count} โปรเจค และมีข้อมูล timesheets ที่เกี่ยวข้อง #{@site.projects.sum { |p| p.timesheets.count }} รายการ คุณต้องการลบทั้งไซต์ โปรเจค และข้อมูล timesheets ที่เกี่ยวข้องหรือไม่? การลบนี้จะทำให้ข้อมูลทั้งหมดถูกลบไปด้วย" 
+            } } %>
+      <% else %>
+        <%= button_to "ลบ", @site, 
+            method: :delete, 
+            class: "site-action-button delete",
+            form: { data: { turbo_confirm: "คุณแน่ใจหรือไม่ที่จะลบไซต์นี้?" } } %>
+      <% end %>
+    <% end %>
     <%= link_to "กลับไปหน้าหลัก", sites_path, class: "site-form-cancel" %>
   </div>
 </div>
