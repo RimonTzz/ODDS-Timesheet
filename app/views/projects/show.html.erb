@@ -7,7 +7,7 @@
 <div class="project-details">
   <div class="project-details-header">
     <h1 class="project-details-title"><%= @project.project_name %></h1>
-    <%= link_to "กลับไปหน้าหลัก", projects_path, class: "back-button" %>
+    <%= link_to "Back", projects_path, class: "back-button" %>
   </div>
 
   <div class="project-members">
@@ -20,9 +20,9 @@
       <table class="table">
         <thead>
           <tr>
-            <th>อีเมล</th>
-            <th>บทบาท</th>
-            <th>จัดการ</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th> 
           </tr>
         </thead>
         <tbody>
@@ -32,8 +32,8 @@
               <td><%= user_project.position.titleize %></td>
               <td>
                 <div class="member-actions">
-                  <%= link_to "แก้ไข", edit_project_user_path(@project, user_project.user), class: "member-action-button edit-button" %>
-                  <%= button_to "ลบ", project_user_path(@project, user_project.user), method: :delete, class: "member-action-button delete-button", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+                  <%= link_to "Show", edit_project_user_path(@project, user_project.user), class: "member-action-button edit-button" %>
+                  <%= button_to "Delete", project_user_path(@project, user_project.user), method: :delete, class: "member-action-button delete-button", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
                 </div>
               </td>
             </tr>

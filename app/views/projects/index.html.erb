@@ -18,7 +18,7 @@
         <tr>
           <th>Project name</th>
           <th>Site</th>
-          <th>Number of Employees</th>
+          <th>Number of Employees (People)</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -28,7 +28,7 @@
           <tr>
             <td class="project-name"><%= project.project_name %></td>
             <td class="project-site"><%= project.site.site_name %></td>
-            <td class="project-employees"><%= project.user_projects.count %> คน</td>
+            <td class="project-employees"><%= project.user_projects.count %> </td>
             <td>
               <div class="actions">
                 <%= link_to "Show", project, class: "action-link show" %>
