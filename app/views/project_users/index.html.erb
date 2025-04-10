@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-header">
-    <h1 class="page-title">ผู้ใช้ในโปรเจ็ค <%= @project.project_name %></h1>
+    <h1 class="page-title">Member in project : <%= @project.project_name %></h1>
     <%= link_to "เพิ่มผู้ใช้", new_project_user_path(@project), class: "add-user-button" %>
   </div>
 
@@ -8,9 +8,9 @@
   <table class="table">
     <thead>
       <tr>
-        <th>อีเมล</th>
-        <th>ตำแหน่ง</th>
-        <th>จัดการ</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -22,9 +22,9 @@
             <%= user_project&.position&.titleize %>
           </td>
           <td>
-            <div class="user-actions">
-              <%= link_to "แก้ไข", edit_project_user_path(@project, user_project.user), class: "user-action-button edit-button" %>
-              <%= button_to "ลบ", project_user_path(@project, user), method: :delete, class: "user-action-button delete-button", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+            <div class="table-actions">
+              <%= link_to "Edit", edit_project_user_path(@project, user_project.user), class: "action-link edit" %>
+              <%= button_to "Delete", project_user_path(@project, user), method: :delete, class: "action-link delete", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
             </div>
           </td>
         </tr>
