@@ -24,10 +24,10 @@
     <tbody>
       <% @sites.each do |site| %>
         <tr>
-          <td class="site-name"><%= site.site_name %></td>
-          <td class="site-location"><%= site.location %></td>
+          <td ><%= site.site_name %></td>
+          <td ><%= site.location %></td>
           <td><%= site.client.client_name %></td>
-          <td class="actions">
+          <td class="table-actions">
             <%= link_to "show", site, class: "action-link show" %>
           </td>
         </tr>

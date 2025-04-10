@@ -5,15 +5,15 @@
 <% content_for :title, @project.project_name %>
 
 <div class="project-details">
-  <div class="project-details-header">
-    <h1 class="project-details-title"><%= @project.project_name %></h1>
+  <div class="page-header">
+    <h1 class="page-title"><%= @project.project_name %></h1>
     <%= link_to "Back", projects_path, class: "back-button" %>
   </div>
 
   <div class="project-members">
-    <div class="section-header">
-      <h2 class="section-title">สมาชิกในโปรเจค</h2>
-      <%= link_to "เพิ่มสมาชิก", project_users_path(@project), class: "add-member-button" %>
+    <div class="page-header">
+      <h2 class="page-title">Member in project</h2>
+      <%= link_to "Add member", project_users_path(@project), class: "new-button" %>
     </div>
 
     <div class="table-container">
@@ -31,9 +31,9 @@
               <td><%= user_project.user.email %></td>
               <td><%= user_project.position.titleize %></td>
               <td>
-                <div class="member-actions">
-                  <%= link_to "Show", edit_project_user_path(@project, user_project.user), class: "member-action-button edit-button" %>
-                  <%= button_to "Delete", project_user_path(@project, user_project.user), method: :delete, class: "member-action-button delete-button", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+                <div class="table-actions">
+                  <%= link_to "Edit", edit_project_user_path(@project, user_project.user), class: "action-link edit" %>
+                  <%= button_to "Delete", project_user_path(@project, user_project.user), method: :delete, class: "action-link delete", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
                 </div>
               </td>
             </tr>

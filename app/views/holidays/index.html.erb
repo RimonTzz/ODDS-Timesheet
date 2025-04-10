@@ -36,9 +36,9 @@
               </div>
             </td>
             <td>
-              <div class="holiday-actions">
-                <%= link_to "แก้ไข", edit_holiday_path(holiday), class: "holiday-action-button edit-button" %>
-                <%= button_to "ลบ", holiday, method: :delete, class: "holiday-action-button delete-button" %>
+              <div class="table-actions">
+                <%= link_to "Edit", edit_holiday_path(holiday), class: "action-link edit" %>
+                <%= button_to "Delete", holiday, method: :delete, class: "action-link delete" %>
               </div>
             </td>
           </tr>

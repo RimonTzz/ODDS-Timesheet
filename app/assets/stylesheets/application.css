@@ -3,6 +3,11 @@
   margin-bottom: 1.5rem;
 }
 
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
 .timesheet-actions {
     display: flex;
     justify-content: flex-end;
@@ -294,6 +299,35 @@ button.new-button:hover::before {
   margin-bottom: 0.25rem;
 }
 
+.action-link.show {
+    background: #007bff;
+    color: white;
+}
+
+.action-link.show:hover {
+    background: #0056b3;
+}
+
+.action-link.edit {
+    background: #ffc107;
+    color: #000;
+}
+
+.action-link.edit:hover {
+    background: #e0a800;
+}
+
+.action-link.delete {
+    background: red;
+    color: white,
+    
+}
+
+.action-link.delete:hover {
+    background: red;
+}
+  
+
 
 /* Navigation styles */
 .nav-container {
@@ -453,7 +487,6 @@ fill: #fff;
 
 .page-title {
   margin: 0;
-  font-size: 2.5rem;
   color: black;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 
@@ -495,23 +528,6 @@ fill: #fff;
 }
 /* End Table styles */
 
-/* data-table styles */
-.client-name {
-  font-weight: 500;
-  color: #1f2937;
-}
-
-.client-site {
-  color: #6b7280;
-}
-
-.client-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* end data-table styles */
-
 /* action button styles */
 
 .actions {
@@ -521,47 +537,11 @@ fill: #fff;
 }
 
 .action-link {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 4px;
   text-decoration: none;
   transition: all 0.2s;
   font-size: 0.875rem;
-}
-
-.action-link.show {
-  background: #007bff;
-  color: white;
-}
-
-.action-link.show:hover {
-  background: #0056b3;
-}
-
-.action-link.edit {
-  background: #ffc107;
-  color: #000;
-}
-
-.action-link.edit:hover {
-  background: #e0a800;
-}
-
-.action-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-size: 0.875rem;
-}
-
-.action-button.delete {
-  background: #dc3545;
-  color: white;
-}
-
-.action-button.delete:hover {
-  background: #c82333;
 }
 
 /* End action button styles */
@@ -703,37 +683,6 @@ fill: #fff;
   color: white;
 }
 
-.holiday-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.holiday-action-button {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: 0.25rem;
-  transition: all 0.15s ease-in-out;
-}
-
-.holiday-action-button.edit-button {
-  background-color: rgb(59 130 246);
-  color: white;
-}
-
-.holiday-action-button.edit-button:hover {
-  background-color: rgb(37 99 235);
-}
-
-.holiday-action-button.delete-button {
-  background-color: rgb(239 68 68);
-  color: white;
-}
-
-.holiday-action-button.delete-button:hover {
-  background-color: rgb(220 38 38);
-}
 
 /* Checkbox styles */
 .form-checkbox {
@@ -797,19 +746,6 @@ fill: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.project-details-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.project-details-title {
-  font-size: 2rem;
-  color: #2c3e50;
-  margin: 0;
-}
-
 .back-button {
   padding: 0.5rem 1rem;
   background: #f8f9fa;
@@ -844,13 +780,6 @@ fill: #fff;
   color: #212529;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
 .add-member-button {
   padding: 0.5rem 1rem;
   background: #28a745;
@@ -870,19 +799,6 @@ fill: #fff;
   padding: 1.5rem;
   background: #f8f9fa;
   border-radius: 6px;
-}
-
-.member-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.member-action-button {
-  padding: 0.25rem 0.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .delete-button {
@@ -1045,28 +961,6 @@ fill: #fff;
   background: #218838;
 }
 
-/* Projects Index Page Styles */
-
-.project-name {
-  font-weight: 500;
-  color: #2c3e50;
-}
-
-.project-site {
-  color: #6c757d;
-}
-
-.project-employees {
-  color: #495057;
-}
-
-.project-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-
-
 /* Project Form Styles */
 
 .form-header {
@@ -1077,23 +971,6 @@ fill: #fff;
   font-size: 1.5rem;
   color: #2c3e50;
   margin: 0;
-}
-
-.action-link {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: all 0.2s;
-  font-size: 0.875rem;
-}
-
-.action-link.show {
-  background: #007bff;
-  color: white;
-}
-
-.action-link.show:hover {
-  background: #0056b3;
 }
 
 /* Time input styles */
@@ -1153,23 +1030,6 @@ select.form-input:focus {
 
 .site-info {
   margin-bottom: 1rem;
-}
-
-.site-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-}
-
-.site-location {
-  color: #6c757d;
-  margin-bottom: 0.5rem;
-}
-
-.site-client {
-  color: #495057;
-  font-weight: 500;
 }
 
 /* Site Form Styles */
@@ -1506,36 +1366,6 @@ select.form-input:focus {
   color: #6c757d;
   margin-top: 0.25rem;
 }
-/* Site show styles */
-  
-  .site-name {
-    font-weight: 500;
-    color: #1f2937;
-  }
-  
-  .site-location {
-    color: #6b7280;
-  }
-  
-  .site-actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .site-action-button {
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    color: #dc2626;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .site-action-button:hover {
-    background-color: #fee2e2;
-  }
   
 /* Modal Styles */
 .modal {
@@ -1596,4 +1426,3 @@ select.form-input:focus {
 .modal-body {
   padding: 20px 0;
 }
-
