@@ -132,7 +132,7 @@ class TimesheetPdf < Prawn::Document
         hours = (work_seconds / 3600.0).round(3)
       end
   
-      day = hours > 0 ? (hours / 8.0).round(3) : 0.0
+      day = calculate_day_value(hours)
   
       total_days += day
       total_hours += hours
@@ -199,5 +199,10 @@ class TimesheetPdf < Prawn::Document
     s = format("%.2f", value)
     s.sub(/\.?0+$/, '')  # Remove trailing zeros
   end
+  
+  def calculate_day_value(hours)
+    return 0.0 if hours.nil? || hours <= 0
+    (hours / 8.0).round(3)
+  end  
   
 end

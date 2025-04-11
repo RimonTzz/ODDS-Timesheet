@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
     year = params[:year].to_i
     date = Date.new(year, month, 1)
 
-    pdf = ProjectTimesheetPdf.new(@project, date)
+    pdf = ProjectTimesheetPdf.new(@project, date, current_user)
     send_data pdf.render,
               filename: "timesheet_#{@project.project_name.parameterize}_#{year}_#{month}.pdf",
               type: "application/pdf",
