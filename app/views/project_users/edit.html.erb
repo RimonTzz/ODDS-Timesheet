@@ -1,4 +1,4 @@
-<h1>แก้ไขตำแหน่งผู้ใช้ในโปรเจ็ค <%= @project.project_name %></h1>
+<h1 class = "page-title">Edit role employees in this Project <%= @project.project_name %></h1>
 
 <%= form_with model: @user_project, url: project_user_path(@project, @user_project.user), method: :patch do |form| %>
   <% if @user_project.errors.any? %>

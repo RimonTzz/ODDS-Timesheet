@@ -1,7 +1,10 @@
 <div class="page-container">
+    <div class="back-link">
+    <%= link_to "Back to Project", @project, class: "back-button" %>
+  </div>
   <div class="page-header">
     <h1 class="page-title">Member in project : <%= @project.project_name %></h1>
-    <%= link_to "เพิ่มผู้ใช้", new_project_user_path(@project), class: "add-user-button" %>
+    <%= link_to "Add employee", new_project_user_path(@project), class: "add-user-button" %>
   </div>
 
  
@@ -31,9 +34,4 @@
       <% end %>
     </tbody>
   </table>
-
-
-  <div class="back-link">
-    <%= link_to "กลับไปที่โปรเจ็ค", @project, class: "back-button" %>
-  </div>
 </div>

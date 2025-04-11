@@ -1,4 +1,4 @@
-<h1>เพิ่มผู้ใช้เข้าโปรเจ็ค <%= @project.project_name %></h1>
+<h1 class= "page-title">Add member to  <%= @project.project_name %></h1>
 
 <%= form_with url: project_users_path(@project), method: :post do |form| %>
 <% if @user_project.errors.any? %>
@@ -13,19 +13,19 @@
     </div>
   <% end %>
   <div class="field">
-    <%= form.label :user_id, "เลือกผู้ใช้:" %>
-    <%= form.collection_select :user_id, @available_users, :id, :email, { prompt: "เลือกผู้ใช้" } %>
+    <%= form.label :user_id, "Member:" %>
+    <%= form.collection_select :user_id, @available_users, :id, :email, { prompt: "choose Member" } %>
   </div>
 
     <div class="field">
-    <%= form.label :position, "ตำแหน่ง:" %>
-    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "เลือกตำแหน่ง" }, { name: 'user_project[position]', id: 'position' } %>
+    <%= form.label :position, "Role:" %>
+    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "Choose role" }, { name: 'user_project[position]', id: 'position' } %>
   </div>
   <div>
-    <%= form.submit "เพิ่มผู้ใช้", class: "btn btn-success" %>
+    <%= form.submit "Add member", class: "btn btn-success" %>
   </div>
 
    
 <% end %>
 
-<%= link_to "กลับไปที่รายชื่อผู้ใช้", project_users_path(@project) %>
+<%= link_to "Back to member list", project_users_path(@project) %>
