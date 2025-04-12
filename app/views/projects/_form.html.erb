@@ -1,37 +1,37 @@
-<%= form_with(model: project) do |form| %>
+<%= form_with(model: project, local: true) do |form| %>
   <% if project.errors.any? %>
-    <div class="error-container">
-      <h2 class="error-title"><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
-      <ul class="error-list">
+    <div class="error-messages">
+      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+      <ul>
         <% project.errors.each do |error| %>
-          <li class="error-item"><%= error.full_message %></li>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="form-group">
-    <%= form.label :project_name, "ชื่อโปรเจค", class: "form-label" %>
-    <%= form.text_field :project_name, class: "form-input" %>
+    <%= form.label :project_name, "Project Name", class: "form-label" %>
+    <%= form.text_field :project_name, class: "form-input", required: true, placeholder: "Project Name" %>
   </div>
 
   <div class="form-group">
-    <%= form.label :site_id, "ไซต์", class: "form-label" %>
-    <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "เลือกไซต์" }, class: "form-input" %>
+    <%= form.label :site_id, "Site", class: "form-label" %>
+    <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "Choose Site" }, { class: "form-select", required: true } %>
   </div>
 
   <div class="form-group">
-    <%= form.label :check_in, "เวลาเช็คอิน", class: "form-label" %>
-    <%= form.time_field :check_in, class: "form-input" %>
+    <%= form.label :check_in, "Check-in Time", class: "form-label" %>
+    <%= form.time_field :check_in, class: "form-input", required: true, placeholder: "Check-in Time" %>
   </div>
 
   <div class="form-group">
-    <%= form.label :check_out, "เวลาเช็คเอาท์", class: "form-label" %>
-    <%= form.time_field :check_out, class: "form-input" %>
+    <%= form.label :check_out, "Check-out Time", class: "form-label" %>
+    <%= form.time_field :check_out, class: "form-input", required: true, placeholder: "Check-out Time" %>
   </div>
 
   <div class="form-actions">
-    <%= form.submit "บันทึก", class: "submit-button" %>
-    <%= link_to "ยกเลิก", projects_path, class: "cancel-button" %>
+    <%= form.submit "Save", class: "minimal-button primary" %>
+    <%= link_to "Cancel", projects_path, class: "minimal-button secondary" %>
   </div>
 <% end %>

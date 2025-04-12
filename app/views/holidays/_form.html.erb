@@ -1,50 +1,44 @@
-<%= form_with(model: holiday, class: "space-y-6") do |form| %>
+<%= form_with(model: holiday, local: true) do |form| %>
   <% if holiday.errors.any? %>
-    <div class="error-container">
-      <h2 class="error-title"><%= pluralize(holiday.errors.count, "error") %> prohibited this holiday from being saved:</h2>
-      <ul class="error-list">
+    <div class="error-messages">
+      <h2><%= pluralize(holiday.errors.count, "error") %> prohibited this holiday from being saved:</h2>
+      <ul>
         <% holiday.errors.each do |error| %>
-          <li class="error-item"><%= error.full_message %></li>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="form-group">
-    <%= form.label :name, "Name holiday *", class: "form-label" %>
-    <div class="form-input-container">
-      <%= form.text_field :name, class: "form-input", required: true, placeholder: "ชื่อวันหยุด" %>
-      <div class="error-message" data-form-validation-target="nameError"></div>
-    </div>
+    <%= form.label :name, "Holiday Name", class: "form-label" %>
+    <%= form.text_field :name, class: "form-input", required: true, placeholder: "Holiday Name" %>
   </div>
 
   <div class="form-group">
-    <%= form.label :date, "Date *", class: "form-label" %>
-    <div class="form-input-container">
-      <%= form.date_field :date, class: "form-input", required: true %>
-      <div class="error-message" data-form-validation-target="dateError"></div>
-    </div>
+    <%= form.label :date, "Date", class: "form-label" %>
+    <%= form.date_field :date, class: "form-input", required: true %>
   </div>
 
   <div class="form-group">
-    <%= form.label :is_bank_holiday, "Bank holiday" %>
-    <%= form.check_box :is_bank_holiday %>
+    <%= form.label :is_bank_holiday, "Bank Holiday", class: "form-label" %>
+    <%= form.check_box :is_bank_holiday, class: "form-checkbox" %>
   </div>
 
   <div class="form-group">
-    <%= form.label :is_exception, "Exception" %>
-    <%= form.check_box :is_exception %>
+    <%= form.label :is_exception, "Exception", class: "form-label" %>
+    <%= form.check_box :is_exception, class: "form-checkbox" %>
     <small class="form-text text-muted">Select if you want this day to be a working day even if it is a holiday</small>
   </div>
 
   <div class="form-group">
-    <%= form.label :description, "Description" %>
-    <%= form.text_area :description, class: "form-control" %>
+    <%= form.label :description, "Description", class: "form-label" %>
+    <%= form.text_area :description, class: "form-input", placeholder: "Description" %>
   </div>
 
   <div class="form-actions">
-    <%= form.submit class: "submit-button", data: { disable_with: "Saving..." } %>
-    <%= link_to "Cancel", holidays_path, class: "cancel-button" %>
+    <%= form.submit "Save", class: "minimal-button primary" %>
+    <%= link_to "Cancel", holidays_path, class: "minimal-button secondary" %>
   </div>
 <% end %>
 
@@ -101,4 +95,4 @@
       }
     });
   });
-<% end %> 
+<% end %>
