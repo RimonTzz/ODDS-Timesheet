@@ -7,9 +7,7 @@
 <div class="page-container">
   <div class="page-header">
     <h1 class="page-title">Client list</h1>
-    <% if current_user.admin? || current_user.super_admin? %>
-      <%= button_tag "New client", class: "new-button", type: "button", onclick: "toggleModal('newClientModal')" %>
-    <% end %>
+    <%= link_to 'New Client', new_client_path, class: "new-button" %>
   </div>
   <div class="table-container">
     <table class="table">
@@ -34,7 +32,7 @@
                     method: :delete,
                     class: "action-link delete",
                     form: { data: { 
-                      turbo_confirm: "ไคลเอนต์นี้เชื่อมต่อกับ #{client.sites.count} ไซต์:\n#{client.sites.map(&:site_name).join(', ')}\n\nคุณแน่ใจหรือไม่ที่จะลบไคลเอนต์นี้?"
+                      turbo_confirm: "This client has #{client.sites.count} sites:\n#{client.sites.map(&:site_name).join(', ')}\n\nAre you sure you want to delete this client?"
                     } } do %>
                   <%= image_tag "icon/Delete.svg", class: "outline" %>
                   <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
@@ -47,30 +45,7 @@
   </div>
 </div>
 
-<%= render "new" %>
-<%= render "show", client: Client.new %>
-
 <%= javascript_tag do %>
-  function toggleModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
-    if (modalId === 'newClientModal' && modal.style.display === 'none') {
-      resetNewClientForm(); // เรียกฟังก์ชัน Reset Form เมื่อ Modal ถูกปิด
-    }
-  }
-
-  function resetNewClientForm() {
-    const form = document.getElementById('newClientForm');
-    if (form) {
-      form.reset(); // ใช้ Method reset() ของ Form Element
-      // คุณอาจต้องการ Reset Error Messages หรือ Styles ที่เกี่ยวข้องกับ Validation ด้วย
-      const errorMessages = form.querySelectorAll('.error-message');
-      errorMessages.forEach(message => message.remove());
-      const errorInputs = form.querySelectorAll('.form-input.is-invalid'); // สมมติว่าคุณมี Class นี้สำหรับ Input ที่มี Error
-      errorInputs.forEach(input => input.classList.remove('is-invalid'));
-    }
-  }
-
   function showClientDetails(link) {
     const clientId = link.dataset.clientId;
     const clientDetailContent = document.getElementById('clientDetailContent');
@@ -87,10 +62,14 @@
         
         // Add edit and delete buttons
         const buttonsHTML = `
-          <a href="/clients/${data.id}/edit" class="action-link" data-turbo="false">แก้ไข</a>
+          <a href="/clients/${data.id}/edit" class="action-link" data-turbo="false">  
+            <%= image_tag "icon/Edit.svg", class: "outline" %>
+            <%= image_tag "icon/Edit_solid.svg", class: "solid" %>
+          </a>
           <form action="/clients/${data.id}" method="post" style="display: inline;" data-turbo="false">
             <input type="hidden" name="_method" value="delete">
-            <button type="submit" class="client-action-button" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบลูกค้านี้?')">ลบ</button>
+            <%= image_tag "icon/Delete.svg", class: "outline" %>
+            <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
           </form>
         `;
         clientActionButtons.innerHTML = buttonsHTML;
@@ -105,12 +84,7 @@
 
   // Close modal when clicking outside
   window.onclick = function(event) {
-    const newClientModal = document.getElementById('newClientModal');
     const detailClientModal = document.getElementById('detailClientModal');
-    if (event.target == newClientModal) {
-      newClientModal.style.display = "none";
-      resetNewClientForm(); // เรียกฟังก์ชัน Reset Form เมื่อคลิกภายนอกเพื่อปิด Modal
-    }
     if (event.target == detailClientModal) {
       detailClientModal.style.display = "none";
     }

@@ -15,13 +15,13 @@ class ClientsController < ApplicationController
     end
   end
 
-  # GET /clients/1/edit
-  def edit
-  end
-
   # GET /clients/new
   def new
     @client = Client.new
+  end
+
+  # GET /clients/1/edit
+  def edit
   end
 
   # POST /clients or /clients.json
@@ -31,7 +31,7 @@ class ClientsController < ApplicationController
     if @client.save
       redirect_to clients_path, notice: "Client was successfully created."
     else
-      render turbo_stream: turbo_stream.update("newClientModal", partial: "form", locals: { client: @client })
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -39,7 +39,7 @@ class ClientsController < ApplicationController
   def update
     respond_to do |format|
       if @client.update(client_params)
-        format.html { redirect_to @client, notice: "Client was successfully updated." }
+        format.html { redirect_to clients_path, notice: "Client was successfully updated." }
         format.json { render :show, status: :ok, location: @client }
       else
         format.html { render :edit, status: :unprocessable_entity }

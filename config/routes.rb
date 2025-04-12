@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       get "profile/edit", to: "users#edit", as: "edit_user_profile"
     end
   end
-  resources :clients, except: [:new] do
+  resources :clients do
     resources :projects
   end
   resources :projects do
