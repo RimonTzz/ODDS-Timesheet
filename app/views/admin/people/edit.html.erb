@@ -2,44 +2,48 @@
   <div class="back-link">
     <%= link_to "Back to People Management", admin_people_path, class: "back-button" %>
   </div>
+
   <div class="page-header">
     <h1 class="page-title">Edit role user: <%= @user.email %></h1>
   </div>
 
-<%= form_with model: @user, url: admin_person_path(@user), method: :patch do |f| %>
-  <div class="form-group">
-    <%= f.label :role, class: "form-label" %>
-    <%= f.select :role, @roles, { prompt: "Select Role" }, class: "form-input" %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.submit "Update User", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<ul>
-  <% @user_projects.each do |up| %>
-    <li>
-      <%= up.project.project_name %>
-      <%= button_to unassign_project_admin_person_path(@user, project_id: up.project.id),
-          method: :delete,
-          class: "action-link delete",
-          data: { confirm: "Are you sure?" } do %>
-        <%= image_tag "icon/Delete.svg", class: "outline" %>
-        <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
+  <div class="minimal-form">
+    <%= form_with model: @user, url: admin_person_path(@user), method: :patch, local: true do |f| %>
+      <% if @user.errors.any? %>
+        <div class="error-messages">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
       <% end %>
-    </li>
-    
-  <% end %>
-</ul>
 
-<%# <h3>Assign User to Project</h3>
-<%= form_with url: assign_project_admin_person_path(@user), method: :post do |f| %>
-  <%# <div class="field">
-    <%= select_tag :project_id, options_from_collection_for_select(@projects.where.not(id: @user.projects.pluck(:id)), :id, :project_name, prompt: "Select Project") %>
-  <%# </div>
-  <div>
-    <%= submit_tag "Assign Project", class: "btn btn-sm btn-success" %>
+      <div class="form-group">
+        <%= f.label :role, class: "form-label" %>
+        <%= f.select :role, @roles, { prompt: "Select Role" }, class: "form-select" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Update User", class: "minimal-button primary" %>
+      </div>
+    <% end %>
   </div>
-<%# <% end %> 
+
+  <ul>
+    <% @user_projects.each do |up| %>
+      <li>
+        <%= up.project.project_name %>
+        <%= button_to unassign_project_admin_person_path(@user, project_id: up.project.id),
+            method: :delete,
+            class: "action-link delete",
+            data: { confirm: "Are you sure?" } do %>
+          <%= image_tag "icon/Delete.svg", class: "outline" %>
+          <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
+        <% end %>
+      </li>
+      
+    <% end %>
+  </ul>
 </div>
