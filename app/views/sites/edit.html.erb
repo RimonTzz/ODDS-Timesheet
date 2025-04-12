@@ -1,14 +1,12 @@
 <% content_for :title, "แก้ไขไซต์" %>
 
 <div class="page-container">
-  <div class="site-form-header">
-    <h1 class="site-form-title">แก้ไขไซต์</h1>
+  <div class="back-link">
+    <%= link_to "Back to Site", @site, class: "back-button" %>
+  </div>
+  <div class="page-header">
+    <h1 class="page-title">Edit Site</h1>
   </div>
 
   <%= render "form", site: @site %>
-
-  <div class="site-form-actions">
-    <%= link_to "ดูรายละเอียด", @site, class: "action-link show" %>
-    <%= link_to "กลับไปหน้าหลัก", sites_path, class: "site-form-cancel" %>
-  </div>
 </div>

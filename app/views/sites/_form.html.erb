@@ -11,12 +11,12 @@
   <% end %>
 
   <div class="site-form-group">
-    <%= form.label :site_name, "ชื่อไซต์", class: "site-form-label" %>
+    <%= form.label :site_name, "Site name", class: "site-form-label" %>
     <%= form.text_field :site_name, class: "site-form-input" %>
   </div>
 
   <div class="site-form-group">
-    <%= form.label :location, "ที่ตั้ง", class: "site-form-label" %>
+    <%= form.label :location, "Location", class: "site-form-label" %>
     <%= form.text_field :location, class: "site-form-input" %>
   </div>
 
@@ -26,7 +26,7 @@
   </div>
 
   <div class="site-form-actions">
-    <%= form.submit "บันทึก", class: "site-form-submit" %>
-    <%= link_to "ยกเลิก", sites_path, class: "site-form-cancel" %>
+    <%= form.submit "Save", class: "site-form-submit" %>
+    <%= link_to "Cancel", sites_path, class: "site-form-cancel" %>
   </div>
 <% end %>

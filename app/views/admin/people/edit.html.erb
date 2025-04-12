@@ -1,4 +1,10 @@
-<h1>Edit User: <%= @user.email %></h1>
+<div class="page-container">
+  <div class="back-link">
+    <%= link_to "Back to People Management", admin_people_path, class: "back-button" %>
+  </div>
+  <div class="page-header">
+    <h1 class="page-title">Edit role user: <%= @user.email %></h1>
+  </div>
 
 <%= form_with model: @user, url: admin_person_path(@user), method: :patch do |f| %>
   <div class="field">
@@ -11,7 +17,6 @@
   </div>
 <% end %>
 
-<h2>Projects Assigned to <%= @user.email %></h2>
 <ul>
   <% @user_projects.each do |up| %>
     <li>
@@ -31,5 +36,4 @@
     <%= submit_tag "Assign Project", class: "btn btn-sm btn-success" %>
   </div>
 <%# <% end %> 
-
-<%= link_to "Back to People Management", admin_people_path %>
+</div>
