@@ -31,7 +31,7 @@
           </div>
           <% if @user_project %>
               <%= link_to export_pdf_timesheets_path(format: :pdf, user_project_id: @user_project.id, month: @selected_month), 
-                  class: "save-button", 
+                  class: "export-button", 
                   target: "_blank" do %>
                 <i class="fas fa-file-pdf"></i> Export PDF
               <% end %>
@@ -96,7 +96,7 @@
           </div>
 
           <div class="timesheet-actions">
-            <%= form.submit "Save", class: "save-button" %>
+            <%= form.submit "Save", class: "export-button" %>
           </div>
         <% end %>
       <% end %>

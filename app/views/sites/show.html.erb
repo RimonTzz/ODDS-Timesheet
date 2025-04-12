@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="site-form-actions">
+  <div class="form-actions">
     <%= link_to "Edit", edit_site_path(@site), class: "action-link edit" %>
     <% if current_user.admin? || current_user.super_admin? %>
       <% if @site.projects.any? %>

@@ -90,7 +90,7 @@
 /* Form actions */
 .form-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 5rem;
   margin-top: 1.5rem;
 }
 
@@ -145,7 +145,7 @@ button.new-button:hover::before {
   left: 0;
 }
 
-.save-button {
+.export-button {
     position: relative; /* กำหนดให้ปุ่มสามารถรองรับการเคลื่อนที่ของ ::before */
     padding: 0.875rem 1rem;
     border: 2px solid #112D4E;
@@ -167,12 +167,12 @@ button.new-button:hover::before {
     z-index: 1;
 }
 
-.save-button:hover {
+.exxport-button:hover {
     background: #3F72AF;
     border: 2px solid #3F72AF;
 }
 
-.save-button::before {
+.export-button::before {
     content: '';
     position: absolute;
     top: 0;
@@ -185,7 +185,7 @@ button.new-button:hover::before {
     transition: left 0.4s ease-in-out; /* ทำให้แถบเคลื่อนที่จากซ้ายไปขวา */
 }
 
-.save-button:hover::before {
+.export-button:hover::before {
     left: 0; /* เมื่อ hover แถบจะขยับมาที่ตำแหน่งซ้ายสุด */
 }
 
@@ -231,12 +231,6 @@ button.new-button:hover::before {
 
 .error-message.hidden {
   display: none;
-}
-
-.form-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
 }
 
 .submit-button {
@@ -334,53 +328,67 @@ button.new-button:hover::before {
 }
 
 .back-button {
-    display: inline-flex;
-    align-items: center;
-    background-color: #000;
-    color: #fff;
-    text-decoration: none;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    border-radius: 9999px;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    font-weight: bold;
-    overflow: hidden;
-    white-space: nowrap;
-    transition: max-width 0.4s ease, padding 0.3s ease, opacity 0.4s ease;
-    padding: 0;
-    position: relative;
-    justify-content: flex-start; /* <- เปลี่ยนจาก center เป็น flex-start */
-  }
+  display: inline-flex;
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 0.4s ease, padding 0.3s ease, opacity 0.4s ease;
+  padding: 0;
+  position: relative;
+  justify-content: flex-start; /* <- เปลี่ยนจาก center เป็น flex-start */
+}
   
-  .back-button::before {
-    content: "<";
-    display: inline-block;
-    width: 40px;           /* Reserve space */
-    text-align: center;    /* Center the < inside its own space */
-    margin-right: 0;
-    flex-shrink: 0;        /* Prevent from shrinking */
-    transition: margin 0.3s ease;
-  }
-  
-  .back-button:hover {
-    width: auto; /* ปรับตามความยาวข้อความ */
-    padding-left: 0;
-    padding-right: 24px;
-  }
-  
-  .back-button-text {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    font-size: 14px;
-  }
-  
-  .back-button:hover .back-button-text {
-    opacity: 1;
-  }
-  
-  
+.back-button::before {
+  content: "<";
+  display: inline-block;
+  width: 40px;           /* Reserve space */
+  text-align: center;    /* Center the < inside its own space */
+  margin-right: 0;
+  flex-shrink: 0;        /* Prevent from shrinking */
+  transition: margin 0.3s ease;
+}
 
+.back-button:hover {
+  width: auto; /* ปรับตามความยาวข้อความ */
+  padding-left: 0;
+  padding-right: 24px;
+}
+
+.back-button-text {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-size: 14px;
+}
+
+.back-button:hover .back-button-text {
+  opacity: 1;
+}
+
+.button-group {
+  display: inline-flex;
+}
+
+.button-group {
+  display: inline-flex;
+}
+
+.button-group {
+  display: inline-flex;
+  gap: 0.5rem; /* เพิ่มช่องว่างระหว่างปุ่มเล็กน้อย */
+}
+
+.button-group {
+  display: inline-flex;
+}
   
 
 
@@ -1021,10 +1029,6 @@ select.form-input:focus {
 
 /* Site Form Styles */
 
-.site-form-header {
-  margin-bottom: 2rem;
-}
-
 .site-form-group {
   margin-bottom: 1.5rem;
 }
@@ -1070,43 +1074,6 @@ select.form-input:focus {
   outline: none;
   border-color: #80bdff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.site-form-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.site-form-submit {
-  padding: 0.5rem 1rem;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-}
-
-.site-form-submit:hover {
-  background: #218838;
-}
-
-.site-form-cancel {
-  padding: 0.5rem 1rem;
-  background: #fff;
-  color: #6c757d;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.875rem;
-  transition: all 0.2s;
-}
-
-.site-form-cancel:hover {
-  background: #f8f9fa;
-  color: #495057;
 }
 
 /* Timesheet Styles */

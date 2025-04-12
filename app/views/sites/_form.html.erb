@@ -24,9 +24,8 @@
     <%= form.label :client_id, "Client", class: "site-form-label" %>
     <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "เลือก Client" }, class: "site-form-select" %>
   </div>
-
-  <div class="site-form-actions">
-    <%= form.submit "Save", class: "site-form-submit" %>
-    <%= link_to "Cancel", sites_path, class: "site-form-cancel" %>
-  </div>
+  <div class="form-actions">
+  <%= form.submit "Save", class: "save-button" %>
+  <%= link_to "Cancel", sites_path, class: "cancel-button" %>
+</div>
 <% end %>

@@ -1,13 +1,13 @@
 <% content_for :title, "เพิ่มไซต์ใหม่" %>
 
 <div class="page-container">
-  <div class="site-form-header">
-    <h1 class="site-form-title">เพิ่มไซต์ใหม่</h1>
+  <div class="page-header">
+    <h1 class="page-title">New site</h1>
   </div>
 
   <%= render "form", site: @site %>
 
-  <div class="site-form-actions">
+  <div class="form-actions">
     <%= link_to "กลับไปหน้าหลัก", sites_path, class: "site-form-cancel" %>
   </div>
 </div>
