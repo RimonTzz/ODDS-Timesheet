@@ -1,8 +1,7 @@
 <%= form_with model: @user_project, url: project_users_path(@project), method: :post do |form| %>
   <% if @user_project.errors.any? %>
-    <div style="color: red">
+    <div class="error-messages">
       <h2><%= pluralize(@user_project.errors.count, "error") %> prohibited this user project from being saved:</h2>
-
       <ul>
         <% @user_project.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,19 +10,20 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :user_id, "เลือกผู้ใช้:" %>
-    <%= form.collection_select :user_id, @available_users, :id, :email, { prompt: "เลือกผู้ใช้" } %>
+  <div class="form-group">
+    <%= form.label :user_id, "Member", class: "form-label" %>
+    <%= form.collection_select :user_id, @available_users, :id, :email, { prompt: "choose Member" }, { class: "form-select" } %>
   </div>
 
-  <div class="field">
-    <%= form.label :position, "ตำแหน่ง:" %>
-    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "เลือกตำแหน่ง" } %>
+  <div class="form-group">
+    <%= form.label :position, "Role", class: "form-label" %>
+    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "choose Role" }, { class: "form-select" } %>
   </div>
 
-  <div>
-    <%= form.submit "เพิ่มผู้ใช้", class: "btn btn-success" %>
+  <div class="form-actions">
+    <%= form.submit "Add Member", class: "minimal-button primary" %>
+    <%= link_to "Cancel", project_users_path(@project), class: "minimal-button secondary" %>
+
   </div>
 <% end %>
 
-<%= link_to "กลับไปที่รายชื่อผู้ใช้", project_users_path(@project) %>

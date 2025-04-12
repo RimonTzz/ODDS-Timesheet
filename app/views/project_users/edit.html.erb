@@ -1,6 +1,4 @@
-
 <div class="page-container">
-
   <div class="back-link">
     <%= link_to "Back to Project Users", project_users_path(@project), class: "back-button" %>
   </div>
@@ -9,27 +7,28 @@
     <h1 class="page-title">Edit role employees in this Project <%= @project.project_name %></h1>
   </div>
 
-<%= form_with model: @user_project, url: project_user_path(@project, @user_project.user), method: :patch do |form| %>
-  <% if @user_project.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user_project.errors.count, "error") %> prohibited this user project from being saved:</h2>
+  <div class="minimal-form">
+    <%= form_with model: @user_project, url: project_user_path(@project, @user_project.user), method: :patch do |form| %>
+      <% if @user_project.errors.any? %>
+        <div class="error-messages">
+          <h2><%= pluralize(@user_project.errors.count, "error") %> prohibited this user project from being saved:</h2>
+          <ul>
+            <% @user_project.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-      <ul>
-        <% @user_project.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+      <div class="form-group">
+        <%= form.label :position, "Position", class: "form-label" %>
+        <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "Select Position" }, { class: "form-select" } %>
+      </div>
 
-  <div class="form-group">
-    <%= form.label :position, "Position *", class: "form-label" %>
-    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "Select Position" }, class: "form-input" %>
+      <div class="form-actions">
+        <%= form.submit "Update Position", class: "minimal-button primary" %>
+        <%= link_to "Cancel", project_users_path(@project), class: "minimal-button secondary" %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="form-actions">
-    <%= form.submit "Update Position", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
 </div>
