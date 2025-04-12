@@ -30,8 +30,11 @@
           <td ><%= project.user_projects.count %> </td>
           <td>
             <div class="table-actions">
-              <%# <%= link_to "Show", project, class: "action-link show" %> 
-              <%= link_to "Show pj user", project_users_path(project_id: project.id), class: "action-link show" %>
+              <%# <%= image_tag "icon/Show.svg", class: "action-link show", onclick: "window.location.href='#{project_path(project)}'" %> 
+              <div class="action-link show" onclick="window.location.href='<%= project_users_path(project_id: project.id) %>'">
+                <%= image_tag "icon/Show.svg", class: "outline" %>
+                <%= image_tag "icon/Show_solid.svg", class: "solid" %>
+              </div>
             </div>
           </td>
         </tr>

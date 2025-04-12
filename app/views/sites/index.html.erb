@@ -28,7 +28,10 @@
           <td ><%= site.location %></td>
           <td><%= site.client.client_name %></td>
           <td class="table-actions">
-            <%= link_to "show", site, class: "action-link show" %>
+            <div class="action-link show" onclick="window.location.href='<%= site_path(site) %>'">
+              <%= image_tag "icon/Show.svg", class: "outline" %>
+              <%= image_tag "icon/Show_solid.svg", class: "solid" %>
+            </div>
           </td>
         </tr>
       <% end %>

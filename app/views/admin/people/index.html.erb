@@ -13,7 +13,7 @@
         <th>Role</th>
         <th>Site</th>
         <th>Project</th>
-        <th></th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -35,7 +35,14 @@
                   <%= project.project_name %><br>
               <% end %>
           </td>
-          <td><%= link_to "Edit", edit_admin_person_path(user), class: "btn btn-sm btn-warning" %></td>
+          <td>
+            <div class="table-actions">
+              <div class="action-link edit" onclick="window.location.href='<%= edit_admin_person_path(user) %>'">
+                <%= image_tag "icon/Edit.svg", class: "outline" %>
+                <%= image_tag "icon/Edit_solid.svg", class: "solid" %>
+              </div>
+            </div>
+          </td>
         </tr>
       <% end %>
     </tbody>

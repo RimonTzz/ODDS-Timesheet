@@ -37,8 +37,16 @@
             </td>
             <td>
               <div class="table-actions">
-                <%= link_to "Edit", edit_holiday_path(holiday), class: "action-link edit" %>
-                <%= button_to "Delete", holiday, method: :delete, class: "action-link delete" %>
+                <div class="action-link edit" onclick="window.location.href='<%= edit_holiday_path(holiday) %>'">
+                  <%= image_tag "icon/Edit.svg", class: "outline" %>
+                  <%= image_tag "icon/Edit_solid.svg", class: "solid" %>
+                </div>
+                <%= button_to holiday, 
+                    method: :delete, 
+                    class: "action-link delete" do %>
+                  <%= image_tag "icon/Delete.svg", class: "outline" %>
+                  <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
+                <% end %>
               </div>
             </td>
           </tr>

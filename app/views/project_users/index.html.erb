@@ -26,8 +26,17 @@
           </td>
           <td>
             <div class="table-actions">
-              <%= link_to "Edit", edit_project_user_path(@project, user_project.user), class: "action-link edit" %>
-              <%= button_to "Delete", project_user_path(@project, user), method: :delete, class: "action-link delete", data: { confirm: 'คุณแน่ใจหรือไม่?' } %>
+              <div class="action-link edit" onclick="window.location.href='<%= edit_project_user_path(@project, user_project.user) %>'">
+                <%= image_tag "icon/Edit.svg", class: "outline" %>
+                <%= image_tag "icon/Edit_solid.svg", class: "solid" %>
+              </div>
+              <%= button_to project_user_path(@project, user), 
+                  method: :delete, 
+                  class: "action-link delete",
+                  data: { confirm: 'คุณแน่ใจหรือไม่?' } do %>
+                <%= image_tag "icon/Delete.svg", class: "outline" %>
+                <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
+              <% end %>
             </div>
           </td>
         </tr>

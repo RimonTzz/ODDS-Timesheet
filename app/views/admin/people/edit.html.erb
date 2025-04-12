@@ -21,7 +21,13 @@
   <% @user_projects.each do |up| %>
     <li>
       <%= up.project.project_name %>
-      <%= button_to "Unassign", unassign_project_admin_person_path(@user, project_id: up.project.id), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+      <%= button_to unassign_project_admin_person_path(@user, project_id: up.project.id),
+          method: :delete,
+          class: "action-link delete",
+          data: { confirm: "Are you sure?" } do %>
+        <%= image_tag "icon/Delete.svg", class: "outline" %>
+        <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
+      <% end %>
     </li>
     
   <% end %>

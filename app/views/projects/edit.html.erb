@@ -8,7 +8,10 @@
   <%= render "form", project: @project %>
 
   <div class="form-actions">
-    <%= link_to "ดูรายละเอียด", @project, class: "action-link show" %>
+    <div class="action-link show" onclick="window.location.href='<%= project_path(@project) %>'">
+      <%= image_tag "icon/Show.svg", class: "outline" %>
+      <%= image_tag "icon/Show_solid.svg", class: "solid" %>
+    </div>
     <%= link_to "กลับไปหน้าหลัก", projects_path, class: "cancel-button" %>
   </div>
 </div>

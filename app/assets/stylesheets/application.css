@@ -6,6 +6,7 @@
 .table-actions {
     display: flex;
     gap: 0.5rem;
+    height: 24px;
 }
 
 .timesheet-actions {
@@ -294,32 +295,102 @@ button.new-button:hover::before {
 }
 
 .action-link.show {
-    background: #007bff;
-    color: white;
+    background: none;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    flex: 0 0 24px; /* เพิ่ม flex-shrink และ flex-basis */
 }
 
-.action-link.show:hover {
-    background: #0056b3;
+.action-link.show img {
+    width: 24px; /* กำหนดขนาดแน่นอน */
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.3s ease;
+    max-width: 24px; /* จำกัดขนาดสูงสุด */
+    max-height: 24px;
+}
+
+.action-link.show img.solid {
+    opacity: 0;
+}
+
+.action-link.show:hover img.solid {
+    opacity: 1;
+}
+
+.action-link.show:hover img.outline {
+    opacity: 0;
 }
 
 .action-link.edit {
-    background: #ffc107;
-    color: #000;
+    background: none;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    flex: 0 0 24px;
 }
 
-.action-link.edit:hover {
-    background: #e0a800;
+.action-link.edit img {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.3s ease;
+    max-width: 24px;
+    max-height: 24px;
+}
+
+.action-link.edit img.solid {
+    opacity: 0;
+}
+
+.action-link.edit:hover img.solid {
+    opacity: 1;
+}
+
+.action-link.edit:hover img.outline {
+    opacity: 0;
 }
 
 .action-link.delete {
-    background: red;
-    color: white;
+    background: none;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    flex: 0 0 24px;
     border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
-.action-link.delete:hover {
-    background: darkred;
-    border: none;
+.action-link.delete img {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.3s ease;
+    max-width: 24px;
+    max-height: 24px;
+}
+
+.action-link.delete img.solid {
+    opacity: 0;
+}
+
+.action-link.delete:hover img.solid {
+    opacity: 1;
+}
+
+.action-link.delete:hover img.outline {
+    opacity: 0;
 }
 
 .back-link {
