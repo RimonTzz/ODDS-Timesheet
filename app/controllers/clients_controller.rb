@@ -50,6 +50,8 @@ class ClientsController < ApplicationController
 
   # DELETE /clients/1 or /clients/1.json
   def destroy
+    # Remove client reference from all related sites before destroying
+    @client.sites.update_all(client_id: nil)
     @client.destroy!
 
     respond_to do |format|
