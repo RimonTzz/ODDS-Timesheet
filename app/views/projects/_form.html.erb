@@ -11,22 +11,22 @@
   <% end %>
 
   <div class="form-group">
-    <%= form.label :project_name, "Project Name", class: "form-label" %>
+    <%= form.label :project_name, "Project Name *", class: "form-label" %>
     <%= form.text_field :project_name, class: "form-input", required: true, placeholder: "Project Name" %>
   </div>
 
   <div class="form-group">
-    <%= form.label :site_id, "Site", class: "form-label" %>
+    <%= form.label :site_id, "Site *", class: "form-label" %>
     <%= form.collection_select :site_id, Site.all, :id, :site_name, { prompt: "Choose Site" }, { class: "form-select", required: true } %>
   </div>
 
   <div class="form-group">
-    <%= form.label :check_in, "Check-in Time", class: "form-label" %>
+    <%= form.label :check_in, "Check-in Time *", class: "form-label" %>
     <%= form.time_field :check_in, class: "form-input", required: true, placeholder: "Check-in Time" %>
   </div>
 
   <div class="form-group">
-    <%= form.label :check_out, "Check-out Time", class: "form-label" %>
+    <%= form.label :check_out, "Check-out Time *", class: "form-label" %>
     <%= form.time_field :check_out, class: "form-input", required: true, placeholder: "Check-out Time" %>
   </div>
 
