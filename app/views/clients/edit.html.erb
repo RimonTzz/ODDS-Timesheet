@@ -1,11 +1,16 @@
 <% content_for :title, "Editing client" %>
 
-<h1>แก้ไขข้อมูลลูกค้า</h1>
+<div class="page-container">
+  <div>
+  <%= link_to "Back to clients", clients_path, class: "back-button" %>
+</div>
+  <div class="page-header">
+    <h1 class="page-title">Edit Client</h1>
+  </div>
 
 <%= render "form", client: @client %>
 
 <br>
 
-<div>
-  <%= link_to "กลับไปหน้าหลัก", clients_path %>
+
 </div>

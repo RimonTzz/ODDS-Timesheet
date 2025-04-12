@@ -1,6 +1,19 @@
+/* Global styles */
+body:not(.pdf-content) {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 /* Form styles */
 .form-group {
   margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(107 114 128);
+  margin-bottom: 0.5rem;
 }
 
 .table-actions {
@@ -24,7 +37,6 @@
   font-weight: 500;
   color: rgb(17 24 39);
   margin-bottom: 0.5rem;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .form-input {
@@ -109,7 +121,6 @@ button.new-button,button.save-button{
     border-radius: 3rem;
     overflow: hidden;
     transition: color 0.4s ease, border-color 0.4s ease;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     height: auto;
     line-height: normal;
     display: inline-block;
@@ -156,7 +167,6 @@ button.new-button:hover::before {
     border-radius: 3rem;
     overflow: hidden;
     transition: color 0.4s ease, border-color 0.4s ease;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     height: auto;
     line-height: normal;
     display: inline-block;
@@ -404,7 +414,6 @@ button.new-button:hover::before {
   background-color: #000;
   color: #fff;
   text-decoration: none;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   border-radius: 9999px;
   width: 40px;
   height: 40px;
@@ -532,7 +541,6 @@ button.new-button:hover::before {
   font-size: 0.875rem;
   font-weight: 800;
   color: #333;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   position: relative;
   transition: all 0.3s ease-in-out;
   border-radius: 2rem;
@@ -586,7 +594,6 @@ button.new-button:hover::before {
   font-size: 0.875rem;
   font-weight: 800;
   color: black;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
 .nav-logout:hover {
@@ -622,8 +629,6 @@ fill: #fff;
 .page-title {
   margin: 0;
   color: black;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
-
 }
 /* End Page styles */
 
@@ -635,7 +640,6 @@ fill: #fff;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .table th {
