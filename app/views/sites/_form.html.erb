@@ -1,31 +1,32 @@
-<%= form_with(model: site, data: { turbo: true }, html: { id: "newSiteForm" }) do |form| %>
+<%= form_with(model: site, local: true) do |form| %>
   <% if site.errors.any? %>
-    <div class="error-container">
-      <h2 class="error-title"><%= pluralize(site.errors.count, "error") %> prohibited this site from being saved:</h2>
-      <ul class="error-list">
-        <% site.errors.each do |error| %>
-          <li class="error-item"><%= error.full_message %></li>
+    <div class="error-messages">
+      <h2><%= pluralize(site.errors.count, "error") %> prohibited this site from being saved:</h2>
+      <ul>
+        <% site.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="site-form-group">
-    <%= form.label :site_name, "Site name *", class: "site-form-label" %>
-    <%= form.text_field :site_name, class: "site-form-input", required: true %>
+  <div class="form-group">
+    <%= form.label :site_name, "Site Name", class: "form-label" %>
+    <%= form.text_field :site_name, class: "form-input", required: true %>
   </div>
 
-  <div class="site-form-group">
-    <%= form.label :location, "Location *", class: "site-form-label" %>
-    <%= form.text_field :location, class: "site-form-input", required: true %>
+  <div class="form-group">
+    <%= form.label :location, "Location", class: "form-label" %>
+    <%= form.text_field :location, class: "form-input", required: true %>
   </div>
 
-  <div class="site-form-group">
-    <%= form.label :client_id, "Client", class: "site-form-label" %>
-    <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "เลือก Client" }, class: "site-form-select" %>
+  <div class="form-group">
+    <%= form.label :client_id, "Client", class: "form-label" %>
+    <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "เลือก Client" }, { class: "form-select" } %>
   </div>
+
   <div class="form-actions">
-  <%= form.submit "Save", class: "save-button" %>
-  <%= link_to "Cancel", sites_path, class: "cancel-button" %>
-</div>
+    <%= form.submit "Save", class: "minimal-button primary" %>
+    <%= link_to "Cancel", sites_path, class: "minimal-button secondary" %>
+  </div>
 <% end %>

@@ -2,11 +2,14 @@
 
 <div class="page-container">
   <div class="back-link">
-    <%= link_to "Back to Site", @site, class: "back-button" %>
+    <%= link_to "Back to Sites", sites_path, class: "back-button" %>
   </div>
+
   <div class="page-header">
     <h1 class="page-title">Edit Site</h1>
   </div>
 
-  <%= render "form", site: @site %>
+  <div class="minimal-form">
+    <%= render "form", site: @site %>
+  </div>
 </div>
