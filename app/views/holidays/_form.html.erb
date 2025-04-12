@@ -11,7 +11,7 @@
   <% end %>
 
   <div class="form-group">
-    <%= form.label :name, "ชื่อวันหยุด *", class: "form-label" %>
+    <%= form.label :name, "Name holiday *", class: "form-label" %>
     <div class="form-input-container">
       <%= form.text_field :name, class: "form-input", required: true, placeholder: "ชื่อวันหยุด" %>
       <div class="error-message" data-form-validation-target="nameError"></div>
@@ -19,7 +19,7 @@
   </div>
 
   <div class="form-group">
-    <%= form.label :date, "วันที่ *", class: "form-label" %>
+    <%= form.label :date, "Date *", class: "form-label" %>
     <div class="form-input-container">
       <%= form.date_field :date, class: "form-input", required: true %>
       <div class="error-message" data-form-validation-target="dateError"></div>
@@ -27,24 +27,24 @@
   </div>
 
   <div class="form-group">
-    <%= form.label :is_bank_holiday, "เป็นวันหยุดธนาคาร" %>
+    <%= form.label :is_bank_holiday, "Bank holiday" %>
     <%= form.check_box :is_bank_holiday %>
   </div>
 
   <div class="form-group">
-    <%= form.label :is_exception, "ยกเว้น" %>
+    <%= form.label :is_exception, "Exception" %>
     <%= form.check_box :is_exception %>
-    <small class="form-text text-muted">เลือกถ้าต้องการให้วันนี้เป็นวันทำงาน แม้จะเป็นวันหยุด</small>
+    <small class="form-text text-muted">Select if you want this day to be a working day even if it is a holiday</small>
   </div>
 
   <div class="form-group">
-    <%= form.label :description, "รายละเอียด" %>
+    <%= form.label :description, "Description" %>
     <%= form.text_area :description, class: "form-control" %>
   </div>
 
   <div class="form-actions">
-    <%= form.submit class: "submit-button", data: { disable_with: "กำลังบันทึก..." } %>
-    <%= link_to "ยกเลิก", holidays_path, class: "cancel-button" %>
+    <%= form.submit class: "submit-button", data: { disable_with: "Saving..." } %>
+    <%= link_to "Cancel", holidays_path, class: "cancel-button" %>
   </div>
 <% end %>
 

@@ -7,12 +7,12 @@
   </div>
 
 <%= form_with model: @user, url: admin_person_path(@user), method: :patch do |f| %>
-  <div class="field">
-    <%= f.label :role %>
-    <%= f.select :role, @roles, { prompt: "Select Role" } %>
+  <div class="form-group">
+    <%= f.label :role, class: "form-label" %>
+    <%= f.select :role, @roles, { prompt: "Select Role" }, class: "form-input" %>
   </div>
 
-  <div>
+  <div class="form-actions">
     <%= f.submit "Update User", class: "btn btn-primary" %>
   </div>
 <% end %>

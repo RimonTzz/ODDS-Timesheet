@@ -22,12 +22,12 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :position, "Position:" %>
-    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "Select Position" } %>
+  <div class="form-group">
+    <%= form.label :position, "Position *", class: "form-label" %>
+    <%= form.select :position, UserProject.positions.keys.map { |key| [key.titleize, key] }, { prompt: "Select Position" }, class: "form-input" %>
   </div>
 
-  <div>
+  <div class="form-actions">
     <%= form.submit "Update Position", class: "btn btn-primary" %>
   </div>
 <% end %>

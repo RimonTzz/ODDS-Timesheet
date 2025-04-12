@@ -1,4 +1,4 @@
-<%= form_with(model: site) do |form| %>
+<%= form_with(model: site, data: { turbo: true }, html: { id: "newSiteForm" }) do |form| %>
   <% if site.errors.any? %>
     <div class="error-container">
       <h2 class="error-title"><%= pluralize(site.errors.count, "error") %> prohibited this site from being saved:</h2>
@@ -11,13 +11,13 @@
   <% end %>
 
   <div class="site-form-group">
-    <%= form.label :site_name, "Site name", class: "site-form-label" %>
-    <%= form.text_field :site_name, class: "site-form-input" %>
+    <%= form.label :site_name, "Site name *", class: "site-form-label" %>
+    <%= form.text_field :site_name, class: "site-form-input", required: true %>
   </div>
 
   <div class="site-form-group">
-    <%= form.label :location, "Location", class: "site-form-label" %>
-    <%= form.text_field :location, class: "site-form-input" %>
+    <%= form.label :location, "Location *", class: "site-form-label" %>
+    <%= form.text_field :location, class: "site-form-input", required: true %>
   </div>
 
   <div class="site-form-group">

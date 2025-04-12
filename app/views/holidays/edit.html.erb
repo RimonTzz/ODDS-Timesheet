@@ -1,3 +1,9 @@
-<h1>แก้ไขวันหยุด</h1>
+<div class="page-container">
+  <div class="back-link">
+    <%= link_to "Back to Holidays", holidays_path, class: "back-button" %>
+  </div>
+  <div class="page-header">
+    <h1 class="page-title">Edit holiday</h1>
+  </div>
 
 <%= render "form", holiday: @holiday %> 

@@ -1,4 +1,14 @@
 <%= form_with(model: client, data: { turbo: true }, html: { id: "newClientForm" }) do |form| %>
+  <% if client.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(client.errors.count, "error") %> prohibited this client from being saved:</h2>
+      <ul>
+        <% client.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <div class="form-group">
     <%= form.label :client_name, "Client name *", class: "form-label" %>
