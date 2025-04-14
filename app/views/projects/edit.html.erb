@@ -1,17 +1,14 @@
-<% content_for :title, "แก้ไขโปรเจค" %>
+<% content_for :title, "Edit Project" %>
 
 <div class="page-container">
-  <div class="form-header">
-    <h1 class="form-title">แก้ไขโปรเจค</h1>
+  <div class="back-link">
+    <%= link_to "Back to Projects", projects_path, class: "back-button" %>
+  </div>
+  <div class="page-header">
+    <h1 class="page-title">Edit Project</h1>
   </div>
 
-  <%= render "form", project: @project %>
-
-  <div class="form-actions">
-    <div class="action-link show" onclick="window.location.href='<%= project_path(@project) %>'">
-      <%= image_tag "icon/Show.svg", class: "outline" %>
-      <%= image_tag "icon/Show_solid.svg", class: "solid" %>
-    </div>
-    <%= link_to "กลับไปหน้าหลัก", projects_path, class: "cancel-button" %>
+  <div class="minimal-form">
+    <%= render "form", project: @project %>
   </div>
 </div>
