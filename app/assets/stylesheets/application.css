@@ -3,6 +3,11 @@ body:not(.pdf-content) {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+.shadow{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
 /* Form styles */
 .form-group {
   margin-bottom: 1.5rem;
