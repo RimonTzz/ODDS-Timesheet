@@ -25,27 +25,20 @@ class SitesController < ApplicationController
   def create
     @site = Site.new(site_params)
 
-    respond_to do |format|
-      if @site.save
-        format.html { redirect_to @site, notice: "Site was successfully created." }
-        format.json { render :show, status: :created, location: @site }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @site.errors, status: :unprocessable_entity }
-      end
+    if @site.save
+      redirect_to sites_path
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /sites/1 or /sites/1.json
   def update
-    respond_to do |format|
-      if @site.update(site_params)
-        format.html { redirect_to @site, notice: "Site was successfully updated." }
-        format.json { render :show, status: :ok, location: @site }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @site.errors, status: :unprocessable_entity }
-      end
+    @site = Site.find(params[:id])
+    if @site.update(site_params)
+      redirect_to sites_path
+    else
+      render :edit
     end
   end
 

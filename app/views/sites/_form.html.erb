@@ -22,7 +22,7 @@
 
   <div class="form-group">
     <%= form.label :client_id, "Client", class: "form-label" %>
-    <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "เลือก Client" }, { class: "form-select" } %>
+    <%= form.collection_select :client_id, Client.all, :id, :client_name, { prompt: "Choose Client" }, { class: "form-select" } %>
   </div>
 
   <div class="form-actions">
