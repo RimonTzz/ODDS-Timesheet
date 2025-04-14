@@ -1,7 +1,6 @@
 <div class="page-container">
   <div class="page-header">
     <h1 class="page-title">Time Log</h1>
-    
   </div>
 
   <% if @user_projects.any? %>
@@ -11,32 +10,32 @@
     <% @selected_month = params[:month] || default_month %>
     <% @user_project = UserProject.find(@selected_user_project_id) %>
     
-    <div class="timesheet-form">
-      <%= form_with(url: timesheets_path, method: :post) do |form| %>
-        <div class="export-form"> 
-          <div class="timesheet-form-group">
+    <div class="minimal-form timesheet-form">
+      <%= form_with(url: timesheets_path, method: :post, local: true) do |form| %>
+        <div class="form-filters">
+          <div class="form-group">
             <%= form.label :user_project_id, "Project", class: "form-label" %>
             <%= form.select :user_project_id,
-                            @user_projects.map { |up| [up.project.project_name, up.id] },
-                            { selected: @selected_user_project_id },
-                            { class: "form-input" } %>
+                          @user_projects.map { |up| [up.project.project_name, up.id] },
+                          { selected: @selected_user_project_id },
+                          { class: "form-select" } %>
           </div>
 
-          <div class="timesheet-form-group">
+          <div class="form-group">
             <%= form.label :month, "Month", class: "form-label" %>
             <%= form.select :month,
-                            @months,
-                            { selected: @selected_month },
-                            { class: "form-input" } %>
+                          @months,
+                          { selected: @selected_month },
+                          { class: "form-select" } %>
           </div>
-          <% if @user_project %>
-              <%= link_to export_pdf_timesheets_path(format: :pdf, user_project_id: @user_project.id, month: @selected_month), 
-                  class: "export-button", 
-                  target: "_blank" do %>
-                Export PDF
-              <% end %>
-          <% end %>
 
+          <% if @user_project %>
+            <%= link_to export_pdf_timesheets_path(format: :pdf, user_project_id: @user_project.id, month: @selected_month), 
+                  class: "export-button", 
+                target: "_blank" do %>
+                Export PDF
+            <% end %>
+          <% end %>
         </div>
 
         <% if @timesheet_days.present? %>
@@ -62,33 +61,33 @@
                     <td><%= date.strftime("%d/%m/%Y") %></td>
                     <td>
                       <%= form.time_field "timesheet[#{date.day}][check_in]", 
-                                        value: existing_timesheet&.check_in&.strftime("%H:%M"),
-                                        disabled: is_holiday,
+                                      value: existing_timesheet&.check_in&.strftime("%H:%M"),
+                                      disabled: is_holiday,
                                         readonly: true,
                                         class: "form-input readonly" %>
                     </td>
                     <td>
                       <%= form.time_field "timesheet[#{date.day}][check_out]",
-                                        value: existing_timesheet&.check_out&.strftime("%H:%M"),
-                                        disabled: is_holiday,
+                                      value: existing_timesheet&.check_out&.strftime("%H:%M"),
+                                      disabled: is_holiday,
                                         readonly: true,
                                         class: "form-input readonly" %>
                     </td>
                     <td>
                       <%= form.select "timesheet[#{date.day}][work_status]",
-                                    Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
+                                  Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
                                     { selected: existing_timesheet&.work_status, include_blank: "Choose Status" },
-                                    { disabled: is_holiday,
+                                  { disabled: is_holiday,
                                       class: "form-input",
-                                      data: {
-                                        project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
-                                        project_check_out: @user_project.project.check_out&.strftime('%H:%M')
-                                      } } %>
+                                    data: {
+                                      project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
+                                      project_check_out: @user_project.project.check_out&.strftime('%H:%M')
+                                    } } %>
                     </td>
                     <td>
                       <%= form.text_area "timesheet[#{date.day}][description]",
-                                        value: existing_timesheet&.work_description,
-                                        disabled: is_holiday,
+                                      value: existing_timesheet&.work_description,
+                                      disabled: is_holiday,
                                         class: "form-input" %>
                     </td>
                   </tr>
@@ -105,7 +104,7 @@
     </div>
   <% else %>
     <div class="no-projects-message">
-      <p>กรุณาเพิ่มโปรเจ็คก่อนใช้งาน</p>
+      <p>You are not assigned to any projects yet.</p>
     </div>
   <% end %>
 </div>
