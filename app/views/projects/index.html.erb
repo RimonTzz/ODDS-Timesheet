@@ -2,6 +2,13 @@
   <p class="notice"><%= notice %></p>
 <% end %>
 
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
+<% if flash[:alert] %>
+  <div class="alert alert-danger"><%= flash[:alert] %></div>
+<% end %>
+
 <% content_for :title, "Projects" %>
 
 <div class="page-container">
@@ -30,7 +37,6 @@
           <td ><%= project.user_projects.count %> </td>
           <td>
             <div class="table-actions">
-              <%# <%= image_tag "icon/Show.svg", class: "action-link show", onclick: "window.location.href='#{project_path(project)}'" %> 
               <div class="action-link show" onclick="window.location.href='<%= project_users_path(project_id: project.id) %>'">
                 <%= image_tag "icon/Show.svg", class: "outline" %>
                 <%= image_tag "icon/Show_solid.svg", class: "solid" %>
@@ -38,6 +44,17 @@
               <div class="action-link edit" onclick="window.location.href='<%= edit_project_path(project) %>'">
                 <%= image_tag "icon/Edit.svg", class: "outline" %>
                 <%= image_tag "icon/Edit_solid.svg", class: "solid" %>
+              </div>
+              <div>
+                <%= button_to project_path(project), 
+                method: :delete, 
+                class: "action-link delete",
+                form: { data: { 
+                  turbo_confirm: "This project has #{project.user_projects.count} employees:\n\nAre you sure you want to delete this project?"
+                } } do %>
+                  <%= image_tag "icon/Delete.svg", class: "outline" %>
+                  <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
+                <% end %>
               </div>
             </div>
           </td>
