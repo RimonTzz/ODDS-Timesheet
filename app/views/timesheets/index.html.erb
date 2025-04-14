@@ -2,7 +2,7 @@
   <div class="page-header">
     <h1 class="page-title">Time Log</h1>
   </div>
-
+    
   <% if @user_projects.any? %>
     <% default_project = @user_projects.order(:id).first %>
     <% default_month = Time.current.strftime("%Y-%m") %>
@@ -38,8 +38,8 @@
           <% end %>
         </div>
 
-        <% if @timesheet_days.present? %>
-          <%= form.hidden_field :user_project_id, value: @selected_user_project_id %>
+        <% if @user_project && @timesheet_days %>
+          <%= hidden_field_tag :user_project_id, @selected_user_project_id %>
           <%= hidden_field_tag :month, @selected_month %>
 
           <div class="table-container">
@@ -76,19 +76,20 @@
                     <td>
                       <%= form.select "timesheet[#{date.day}][work_status]",
                                   Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
-                                    { selected: existing_timesheet&.work_status, include_blank: "Choose Status" },
+                                  { selected: existing_timesheet&.work_status, include_blank: "Choose Status" },
                                   { disabled: is_holiday,
                                       class: "form-input form-select",
-                                      data: {
-                                        project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
-                                        project_check_out: @user_project.project.check_out&.strftime('%H:%M')
-                                      } } %>
+                                    data: {
+                                      project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
+                                      project_check_out: @user_project.project.check_out&.strftime('%H:%M')
+                                    } } %>
                     </td>
                     <td>
                       <%= form.text_area "timesheet[#{date.day}][description]",
                                       value: existing_timesheet&.work_description,
                                       disabled: is_holiday,
-                                        class: "form-input" %>
+                                      class: "form-input",
+                                      placeholder: "Enter activity description" %>
                     </td>
                   </tr>
                 <% end %>
@@ -97,7 +98,7 @@
           </div>
 
           <div class="timesheet-actions">
-            <%= form.submit "Save", class: "export-button" %>
+            <%= form.submit "Save", class: "minimal-button primary" %>
           </div>
         <% end %>
       <% end %>
@@ -133,9 +134,9 @@
         const row = this.closest('tr');
         const checkInField = row.querySelector('input[name*="[check_in]"]');
         const checkOutField = row.querySelector('input[name*="[check_out]"]');
-        const projectCheckIn = this.dataset.projectCheckIn;
-        const projectCheckOut = this.dataset.projectCheckOut;
-        
+          const projectCheckIn = this.dataset.projectCheckIn;
+          const projectCheckOut = this.dataset.projectCheckOut;
+          
         switch(this.value) {
           case 'full day':
             checkInField.value = projectCheckIn;
@@ -155,8 +156,8 @@
             checkOutField.value = '-';
             break;
           default:
-            checkInField.value = '';
-            checkOutField.value = '';
+          checkInField.value = '';
+          checkOutField.value = '';
         }
       });
     });

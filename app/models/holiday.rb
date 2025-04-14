@@ -9,8 +9,8 @@ class Holiday < ApplicationRecord
   scope :active, -> { where("date >= ?", Date.current.beginning_of_year) }
 
   def self.is_holiday?(date)
-    return true if date.saturday? || date.sunday?
-    return false if exceptions.exists?(date: date)
-    bank_holidays.exists?(date: date)
+    holiday = find_by(date: date)
+    return false if holiday&.is_exception?
+    holiday.present?
   end
 end
