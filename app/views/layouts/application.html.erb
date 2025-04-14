@@ -226,6 +226,50 @@
         // ... existing code ...
       }
 
+      .nav-logo {
+        margin-right: 1rem;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        justify-content: center;
+      }
+
+      .nav-toggle div {
+        width: 30px;
+        height: 3px;
+        background-color: rgb(17 24 39);
+        margin: 4px 0;
+        transition: 0.4s;
+      }
+
+      .nav-toggle img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: row;
+      }
+
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .nav-links.active {
+          display: flex;
+        }
+
+        .nav-toggle {
+          display: flex;
+        }
+      }
     </style>
   </head>
 
@@ -240,7 +284,10 @@
                   <%= image_tag "icon/timesheet.svg", alt: "Timesheet App", class: "nav-logo-image" %>
                 <% end %>
               </div>
-              <div class="nav-links">
+              <div class="nav-toggle" id="navToggle">
+                <%= image_tag "icon/bar.svg", alt: "Menu", class: "nav-icon" %>
+              </div>
+              <div class="nav-links" id="navLinks">
                 <% if current_user.admin? || current_user.super_admin? %>
                   <%= link_to "Client M", clients_path, class: "nav-link #{current_page?(clients_path) ? 'active' : ''}" %>
                   <%= link_to "Site M", sites_path, class: "nav-link #{current_page?(sites_path) ? 'active' : ''}" %>
@@ -299,5 +346,14 @@
     <main class="main-container">
       <%= yield %>
     </main>
+
+    <script>
+      const navToggle = document.getElementById('navToggle');
+      const navLinks = document.getElementById('navLinks');
+
+      navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+      });
+    </script>
   </body>
 </html>
