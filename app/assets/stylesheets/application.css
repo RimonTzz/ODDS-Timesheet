@@ -71,6 +71,7 @@ body:not(.pdf-content) {
   background-color: #f3f4f6; /* gray-100 */
   color: #6b7280;            /* gray-500 */
   cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .error-message {
@@ -753,6 +754,8 @@ fill: #fff;
 .holidays-list {
   display: grid;
   gap: 1rem;
+  opacity: 0.1;
+  background-color: #495057;
 }
 
 .holiday-card {

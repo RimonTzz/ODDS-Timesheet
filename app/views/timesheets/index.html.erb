@@ -78,11 +78,11 @@
                                   Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
                                     { selected: existing_timesheet&.work_status, include_blank: "Choose Status" },
                                   { disabled: is_holiday,
-                                      class: "form-input",
-                                    data: {
-                                      project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
-                                      project_check_out: @user_project.project.check_out&.strftime('%H:%M')
-                                    } } %>
+                                      class: "form-input form-select",
+                                      data: {
+                                        project_check_in: @user_project.project.check_in&.strftime('%H:%M'),
+                                        project_check_out: @user_project.project.check_out&.strftime('%H:%M')
+                                      } } %>
                     </td>
                     <td>
                       <%= form.text_area "timesheet[#{date.day}][description]",
