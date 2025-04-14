@@ -1,69 +1,73 @@
 <div class="auth-container">
-  <div class="auth-header">
-    <h2 class="auth-title">สมัครสมาชิก</h2>
+    <div class="logo">
+    <%= image_tag "icon/timesheet.svg", width: 200 %>
   </div>
+  <div class="auth-header">
+    <h2 class="auth-title">Register</h2>
+  </div>
+
 
   <div class="auth-form-container">
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="form-group">
-        <%= f.label :first_name, "ชื่อ *", class: "form-label" %>
+        <%= f.label :first_name, "First name *", class: "form-label" %>
         <div class="form-input-container">
-          <%= f.text_field :first_name, class: "form-input", required: true, placeholder: "ชื่อ", data: { action: "blur->form-validation#validate" } %>
+          <%= f.text_field :first_name, class: "form-input", required: true, placeholder: "First name", data: { action: "blur->form-validation#validate" } %>
           <div class="error-message" data-form-validation-target="firstNameError"></div>
         </div>
       </div>
 
       <div class="form-group">
-        <%= f.label :last_name, "นามสกุล *", class: "form-label" %>
+        <%= f.label :last_name, "Last name *", class: "form-label" %>
         <div class="form-input-container">
-          <%= f.text_field :last_name, class: "form-input", required: true, placeholder: "นามสกุล", data: { action: "blur->form-validation#validate" } %>
+          <%= f.text_field :last_name, class: "form-input", required: true, placeholder: "Last name", data: { action: "blur->form-validation#validate" } %>
           <div class="error-message" data-form-validation-target="lastNameError"></div>
         </div>
       </div>
 
       <div class="form-group">
-        <%= f.label :phone_number, "เบอร์โทรศัพท์ *", class: "form-label" %>
+        <%= f.label :phone_number, "Telephone number *", class: "form-label" %>
         <div class="form-input-container">
-          <%= f.telephone_field :phone_number, class: "form-input", required: true, placeholder: "0812345678", pattern: "[0-9]{10}", data: { action: "blur->form-validation#validate" } %>
-          <div class="hint-message">กรอกเบอร์โทรศัพท์ 10 หลัก เช่น 0812345678</div>
+          <%= f.telephone_field :phone_number, class: "form-input", required: true, placeholder: "0XXXXXXXXX", pattern: "[0-9]{10}", data: { action: "blur->form-validation#validate" } %>
+          <div class="hint-message">Please enter a valid 10-digit phone number</div>
           <div class="error-message" data-form-validation-target="phoneError"></div>
         </div>
       </div>
 
       <div class="form-group">
-        <%= f.label :email, "อีเมล *", class: "form-label" %>
+        <%= f.label :email, "Email *", class: "form-label" %>
         <div class="form-input-container">
           <%= f.email_field :email, class: "form-input", required: true, placeholder: "example@odds.team", data: { action: "blur->form-validation#validate" } %>
-          <div class="hint-message">กรอกอีเมล @odds.team เท่านั้น</div>
+          <div class="hint-message">Please enter an email address ending with @odds.team</div>
           <div class="error-message" data-form-validation-target="emailError"></div>
         </div>
       </div>
 
       <div class="form-group">
-        <%= f.label :password, "รหัสผ่าน *", class: "form-label" %>
+        <%= f.label :password, "Password *", class: "form-label" %>
         <div class="form-input-container">
-          <%= f.password_field :password, class: "form-input", required: true, placeholder: "รหัสผ่าน", data: { action: "blur->form-validation#validate" } %>
-          <div class="hint-message">ต้องมีอย่างน้อย 8 ตัวอักษร, ตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก และตัวเลข</div>
+          <%= f.password_field :password, class: "form-input", required: true, placeholder: "Password", data: { action: "blur->form-validation#validate" } %>
+          <div class="hint-message">Must contain at least 8 characters, one uppercase, one lowercase, and one number</div>
           <div class="error-message" data-form-validation-target="passwordError"></div>
         </div>
       </div>
 
       <div class="form-group">
-        <%= f.label :password_confirmation, "ยืนยันรหัสผ่าน *", class: "form-label" %>
+        <%= f.label :password_confirmation, "Confirm Password *", class: "form-label" %>
         <div class="form-input-container">
-          <%= f.password_field :password_confirmation, class: "form-input", required: true, placeholder: "ยืนยันรหัสผ่าน", data: { action: "blur->form-validation#validate" } %>
-          <div class="hint-message">กรอกรหัสผ่านอีกครั้งเพื่อยืนยัน</div>
+          <%= f.password_field :password_confirmation, class: "form-input", required: true, placeholder: "Confirm Password", data: { action: "blur->form-validation#validate" } %>
+          <div class="hint-message">Please enter the password again to confirm</div>
           <div class="error-message" data-form-validation-target="passwordConfirmationError"></div>
         </div>
       </div>
 
-      <%= f.submit "สมัครสมาชิก", class: "submit-button", data: { disable_with: "กำลังสมัครสมาชิก..." } %>
+      <%= f.submit "Register", class: "submit-button", data: { disable_with: "Registering..." } %>
     <% end %>
 
     <div class="auth-link-container">
-      มีบัญชีอยู่แล้ว? <%= link_to "เข้าสู่ระบบ", new_session_path(resource_name), class: "auth-link" %>
+      Have an account ? <%= link_to "Login", new_session_path(resource_name), class: "auth-link" %>
     </div>
   </div>
 </div>
@@ -82,12 +86,12 @@
       const emailError = form.querySelector('[data-form-validation-target="emailError"]');
 
       if (!email) {
-        emailError.textContent = 'กรุณากรอกอีเมล';
+        emailError.textContent = 'Please enter an email address';
         return;
       }
 
       if (!email.endsWith('@odds.team')) {
-        emailError.textContent = 'กรุณากรอกอีเมล @odds.team เท่านั้น';
+        emailError.textContent = 'Please enter an email address ending with @odds.team';
         return;
       }
 
@@ -103,12 +107,12 @@
       const phoneError = form.querySelector('[data-form-validation-target="phoneError"]');
       
       if (!phone) {
-        phoneError.textContent = 'กรุณากรอกเบอร์โทรศัพท์';
+        phoneError.textContent = 'Please enter a phone number';
         return;
       }
 
       if (!/^[0-9]{10}$/.test(phone)) {
-        phoneError.textContent = 'กรุณากรอกเบอร์โทรศัพท์ 10 หลัก';
+        phoneError.textContent = 'Please enter a 10-digit phone number';
       } else {
         phoneError.textContent = '';
       }
@@ -120,18 +124,18 @@
       const passwordError = form.querySelector('[data-form-validation-target="passwordError"]');
       
       if (!password) {
-        passwordError.textContent = 'กรุณากรอกรหัสผ่าน';
+        passwordError.textContent = 'Please enter a password';
         return;
       }
 
       if (password.length < 8) {
-        passwordError.textContent = 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
+        passwordError.textContent = 'Password must be at least 8 characters';
       } else if (!/[A-Z]/.test(password)) {
-        passwordError.textContent = 'รหัสผ่านต้องมีตัวพิมพ์ใหญ่อย่างน้อย 1 ตัว';
+        passwordError.textContent = 'Password must contain at least one uppercase letter';
       } else if (!/[a-z]/.test(password)) {
-        passwordError.textContent = 'รหัสผ่านต้องมีตัวพิมพ์เล็กอย่างน้อย 1 ตัว';
+        passwordError.textContent = 'Password must contain at least one lowercase letter';
       } else if (!/[0-9]/.test(password)) {
-        passwordError.textContent = 'รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว';
+        passwordError.textContent = 'Password must contain at least one number';
       } else {
         passwordError.textContent = '';
       }
@@ -144,12 +148,12 @@
       const confirmationError = form.querySelector('[data-form-validation-target="passwordConfirmationError"]');
       
       if (!confirmation) {
-        confirmationError.textContent = 'กรุณายืนยันรหัสผ่าน';
+        confirmationError.textContent = 'Please confirm the password';
         return;
       }
 
       if (password !== confirmation) {
-        confirmationError.textContent = 'รหัสผ่านไม่ตรงกัน';
+        confirmationError.textContent = 'Passwords do not match';
       } else {
         confirmationError.textContent = '';
       }
