@@ -1,13 +1,13 @@
 class Admin::PeopleController < ApplicationController
   before_action :authenticate_user!
   before_action :current_user_is_super_admin?
+  before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
     @users = User.all
   end
 
   def edit
-    @user = User.find(params[:id])
     @sites = Site.all # ดึงรายชื่อ Sites
     @projects = Project.all # ดึงรายชื่อ Projects
     @roles = User.roles.keys # ดึงรายชื่อ Roles จาก Enum (ถ้ามี)
@@ -15,7 +15,6 @@ class Admin::PeopleController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
     if @user.update(user_params)
       redirect_to admin_people_path, notice: "อัปเดตข้อมูลผู้ใช้ #{@user.email} แล้ว"
     else
@@ -24,6 +23,14 @@ class Admin::PeopleController < ApplicationController
       @roles = User.roles.keys
       @user_projects = @user.user_projects.includes(:project)
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @user.destroy
+      redirect_to admin_people_path, notice: 'User was successfully deleted.'
+    else
+      redirect_to admin_people_path, alert: 'Could not delete user.'
     end
   end
 
@@ -46,6 +53,10 @@ class Admin::PeopleController < ApplicationController
   end
 
   private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
 
   def user_params
     params.require(:user).permit(:role, :site_id) # อนุญาตให้แก้ไข role และ site_id (ตามต้องการ)

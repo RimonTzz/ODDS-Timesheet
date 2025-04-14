@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :people, only: [ :index, :edit, :update ] do
+    resources :people, only: [ :index, :edit, :update, :destroy ] do
       member do
         post "assign_project"
         delete "unassign_project"
