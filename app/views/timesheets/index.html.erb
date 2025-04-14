@@ -13,7 +13,7 @@
     
     <div class="timesheet-form">
       <%= form_with(url: timesheets_path, method: :post) do |form| %>
-        <div class="form-row"> 
+        <div class="export-form"> 
           <div class="timesheet-form-group">
             <%= form.label :user_project_id, "Project", class: "form-label" %>
             <%= form.select :user_project_id,
@@ -33,7 +33,7 @@
               <%= link_to export_pdf_timesheets_path(format: :pdf, user_project_id: @user_project.id, month: @selected_month), 
                   class: "export-button", 
                   target: "_blank" do %>
-                <i class="fas fa-file-pdf"></i> Export PDF
+                Export PDF
               <% end %>
           <% end %>
 
@@ -64,18 +64,20 @@
                       <%= form.time_field "timesheet[#{date.day}][check_in]", 
                                         value: existing_timesheet&.check_in&.strftime("%H:%M"),
                                         disabled: is_holiday,
-                                        class: "form-input" %>
+                                        readonly: true,
+                                        class: "form-input readonly" %>
                     </td>
                     <td>
                       <%= form.time_field "timesheet[#{date.day}][check_out]",
                                         value: existing_timesheet&.check_out&.strftime("%H:%M"),
                                         disabled: is_holiday,
-                                        class: "form-input" %>
+                                        readonly: true,
+                                        class: "form-input readonly" %>
                     </td>
                     <td>
                       <%= form.select "timesheet[#{date.day}][work_status]",
                                     Timesheet.work_statuses.map { |k, v| [k.humanize, k] },
-                                    { selected: existing_timesheet&.work_status, include_blank: "เลือกสถานะ" },
+                                    { selected: existing_timesheet&.work_status, include_blank: "Choose Status" },
                                     { disabled: is_holiday,
                                       class: "form-input",
                                       data: {
