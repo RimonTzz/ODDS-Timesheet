@@ -40,10 +40,11 @@ class ProjectUsersController < ApplicationController
   end
 
   def destroy
-    @user_project = UserProject.find_by(user_id: params[:id], project_id: @project.id)
+    @user_project = UserProject.find(params[:id]) # <-- ใช้ id ของ user_project
     @user_project.destroy
     redirect_to project_users_path(@project), notice: 'Member was successfully removed.'
   end
+  
 
   private
 

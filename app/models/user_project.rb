@@ -2,7 +2,7 @@ class UserProject < ApplicationRecord
   belongs_to :user
   belongs_to :project
 
-  has_many :timesheets, foreign_key: "user_project_id"
+  has_many :timesheets, foreign_key: "user_project_id", dependent: :destroy
 
   enum :position, {
     'Scrum Master': 0,

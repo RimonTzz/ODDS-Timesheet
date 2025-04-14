@@ -50,13 +50,20 @@
                 <%= image_tag "icon/Edit.svg", class: "outline" %>
                 <%= image_tag "icon/Edit_solid.svg", class: "solid" %>
               </div>
-              <%= button_to project_user_path(@project, user), 
-                  method: :delete, 
-                  class: "action-link delete",
-                  data: { confirm: 'Are you sure you want to remove this user from the project?' } do %>
-                <%= image_tag "icon/Delete.svg", class: "outline" %>
-                <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
-              <% end %>
+              <div>
+  <%= button_to project_user_path(@project, user_project),
+    method: :delete,
+    class: "action-link delete",
+    form: { data: {
+      turbo_confirm: user_project.timesheets.any? ?
+        "This member has timesheet.\n\nDeleting it will remove all timesheet associated links.\nAre you sure?" :
+        "Are you sure you want to remove this member?"
+    } } do %>
+      <%= image_tag "icon/Delete.svg", class: "outline" %>
+      <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
+  <% end %>
+</div>
+
             </div>
           </td>
         </tr>
