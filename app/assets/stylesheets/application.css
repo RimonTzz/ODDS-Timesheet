@@ -674,16 +674,29 @@ fill: #fff;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #e5e7eb;
   color: #4b5563;
+  border: none; /* ลบเส้นขอบ */
 }
 
-.table tr:last-child td {
+/* เพิ่มเส้นคั่นแนวนอนระหว่างแถวแทน */
+.table tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ลบเส้นคั่นของแถวสุดท้าย */
+.table tr:last-child {
   border-bottom: none;
 }
 
 .table tr:hover {
   background-color: #f9fafb;
 }
-/* End Table styles */
+
+/* ปรับ spacing ของ actions column */
+.table-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
 
 /* action button styles */
 
@@ -1731,4 +1744,23 @@ select.form-input:focus {
 .holiday-text {
   color: #9ca3af;
   font-style: italic;
+}
+
+.align-items-start {
+  align-items: flex-start !important;
+}
+
+.form-group.align-items-start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ปรับแต่ง Timesheet Table Styles */
+.table .form-group {
+  margin: 0; /* ลบ margin ของ form-group */
+}
+
+.table textarea.form-input {
+  margin-top: 0; /* ลบ margin ด้านบนของ textarea */
 }
