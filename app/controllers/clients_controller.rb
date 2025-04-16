@@ -43,7 +43,7 @@ class ClientsController < ApplicationController
   def update
     respond_to do |format|
       if @client.update(client_params)
-        format.turbo_stream { success_turbo_stream("Client was successfully updated.") }
+        format.turbo_stream { success_turbo_stream("Client was successfully updated.", clients_path) }
         format.html { redirect_to clients_path, notice: "Client was successfully updated." }
       else
         format.turbo_stream { error_turbo_stream("Failed to update client.") }

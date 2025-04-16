@@ -3,8 +3,8 @@
     <div class="error-messages">
       <h2><%= pluralize(client.errors.count, "error") %> prohibited this client from being saved:</h2>
       <ul>
-        <% client.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% client.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
@@ -17,7 +17,7 @@
 
   <div class="form-group">
     <%= form.label :contact_info, "Contact info", class: "form-label" %>
-    <%= form.text_field :contact_info, class: "form-input", placeholder: "Contact info" %>
+    <%= form.text_area :contact_info, class: "form-input", placeholder: "Contact info" %>
   </div>
 
   <div class="form-actions">
