@@ -27,11 +27,15 @@ class ClientsController < ApplicationController
   # POST /clients or /clients.json
   def create
     @client = Client.new(client_params)
-
-    if @client.save
-      redirect_to clients_path, notice: "Client was successfully created."
-    else
-      render :new, status: :unprocessable_entity
+    
+    respond_to do |format|
+      if @client.save
+        format.turbo_stream { success_turbo_stream("Client was successfully created.", clients_path) }
+        format.html { redirect_to clients_path, notice: "Client was successfully created." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to create client.") }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -39,11 +43,11 @@ class ClientsController < ApplicationController
   def update
     respond_to do |format|
       if @client.update(client_params)
+        format.turbo_stream { success_turbo_stream("Client was successfully updated.") }
         format.html { redirect_to clients_path, notice: "Client was successfully updated." }
-        format.json { render :show, status: :ok, location: @client }
       else
+        format.turbo_stream { error_turbo_stream("Failed to update client.") }
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @client.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -52,11 +56,14 @@ class ClientsController < ApplicationController
   def destroy
     # Remove client reference from all related sites before destroying
     @client.sites.update_all(client_id: nil)
-    @client.destroy!
-
     respond_to do |format|
-      format.html { redirect_to clients_path, status: :see_other, notice: "Client was successfully destroyed." }
-      format.json { head :no_content }
+      if @client.destroy
+        format.turbo_stream { success_turbo_stream("Client was successfully deleted.") }
+        format.html { redirect_to clients_path, notice: "Client was successfully deleted." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to delete client.") }
+        format.html { redirect_to clients_path, alert: "Failed to delete client." }
+      end
     end
   end
 

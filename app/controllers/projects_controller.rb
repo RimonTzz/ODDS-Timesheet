@@ -24,11 +24,15 @@ class ProjectsController < ApplicationController
   # POST /projects or /projects.json
   def create
     @project = Project.new(project_params)
-
-    if @project.save
-      redirect_to projects_path
-    else
-      render :new
+    
+    respond_to do |format|
+      if @project.save
+        format.turbo_stream { success_turbo_stream("Project was successfully created.", projects_path) }
+        format.html { redirect_to projects_path, notice: "Project was successfully created." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to create project.") }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 

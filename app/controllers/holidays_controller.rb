@@ -19,11 +19,15 @@ class HolidaysController < ApplicationController
 
   def create
     @holiday = Holiday.new(holiday_params)
-
-    if @holiday.save
-      redirect_to holidays_path, notice: "วันหยุดถูกเพิ่มเรียบร้อยแล้ว"
-    else
-      render :new, status: :unprocessable_entity
+    
+    respond_to do |format|
+      if @holiday.save
+        format.turbo_stream { success_turbo_stream("Holiday was successfully created.", holidays_path) }
+        format.html { redirect_to holidays_path, notice: "Holiday was successfully created." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to create holiday.") }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 

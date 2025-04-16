@@ -24,11 +24,15 @@ class SitesController < ApplicationController
   # POST /sites or /sites.json
   def create
     @site = Site.new(site_params)
-
-    if @site.save
-      redirect_to sites_path
-    else
-      render :new
+    
+    respond_to do |format|
+      if @site.save
+        format.turbo_stream { success_turbo_stream("Site was successfully created.", sites_path) }
+        format.html { redirect_to sites_path, notice: "Site was successfully created." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to create site.") }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
