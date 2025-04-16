@@ -292,15 +292,20 @@
               </div>
               <div class="nav-links" id="navLinks">
                 <% if current_user.admin? || current_user.super_admin? %>
-                  <%= link_to "Client M", clients_path, class: "nav-link #{current_page?(clients_path) ? 'active' : ''}" %>
-                  <%= link_to "Site M", sites_path, class: "nav-link #{current_page?(sites_path) ? 'active' : ''}" %>
-                  <%= link_to "Project M", projects_path, class: "nav-link #{current_page?(projects_path) ? 'active' : ''}" %>
+                  <%= link_to "Clients", clients_path, 
+                      class: "nav-link #{request.path.start_with?('/clients') ? 'active' : ''}" %>
+                  <%= link_to "Sites", sites_path, 
+                      class: "nav-link #{request.path.start_with?('/sites') ? 'active' : ''}" %>
+                  <%= link_to "Projects", projects_path, 
+                      class: "nav-link #{request.path.start_with?('/projects') ? 'active' : ''}" %>
                   <% if current_user.super_admin? %>
                     <%= link_to "People Management", admin_people_path, class: "nav-link #{current_page?(admin_people_path) ? 'active' : ''}" %>
                   <% end %>
-                  <%= link_to "Holiday M", holidays_path, class: "nav-link #{current_page?(holidays_path) ? 'active' : ''}" %>
+                  <%= link_to "Holidays", holidays_path, 
+                      class: "nav-link #{request.path.start_with?('/holidays') ? 'active' : ''}" %>
                 <% end %>
-                <%= link_to "Timesheet", timesheets_path, class: "nav-link #{current_page?(timesheets_path) || current_page?(root_path) ? 'active' : ''}" %>
+                <%= link_to "Time Sheet", timesheets_path, 
+                    class: "nav-link #{request.path.start_with?('/timesheets') ? 'active' : ''}" %>
               </div>
             </div>
             <div class="nav-right">
