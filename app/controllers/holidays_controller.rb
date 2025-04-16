@@ -32,16 +32,27 @@ class HolidaysController < ApplicationController
   end
 
   def update
-    if @holiday.update(holiday_params)
-      redirect_to holidays_path, notice: "วันหยุดถูกอัพเดทเรียบร้อยแล้ว"
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      if @holiday.update(holiday_params)
+        format.turbo_stream { success_turbo_stream("Holiday was successfully updated.", holidays_path) }
+        format.html { redirect_to holidays_path, notice: "วันหยุดถูกอัพเดทเรียบร้อยแล้ว" }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to update holiday.") }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
-    @holiday.destroy
-    redirect_to holidays_path, notice: "วันหยุดถูกลบเรียบร้อยแล้ว"
+    respond_to do |format|
+      if @holiday.destroy
+        format.turbo_stream { success_turbo_stream("Holiday was successfully deleted.", holidays_path) }
+        format.html { redirect_to holidays_path, notice: "วันหยุดถูกลบเรียบร้อยแล้ว" }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to delete holiday.", holidays_path) }
+        format.html { redirect_to holidays_path, alert: "Failed to delete holiday." }
+      end
+    end
   end
 
   private

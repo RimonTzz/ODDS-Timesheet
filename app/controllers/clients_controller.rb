@@ -58,10 +58,10 @@ class ClientsController < ApplicationController
     @client.sites.update_all(client_id: nil)
     respond_to do |format|
       if @client.destroy
-        format.turbo_stream { success_turbo_stream("Client was successfully deleted.") }
+        format.turbo_stream { success_turbo_stream("Client was successfully deleted.", clients_path) }
         format.html { redirect_to clients_path, notice: "Client was successfully deleted." }
       else
-        format.turbo_stream { error_turbo_stream("Failed to delete client.") }
+        format.turbo_stream { error_turbo_stream("Failed to delete client.", clients_path) }
         format.html { redirect_to clients_path, alert: "Failed to delete client." }
       end
     end

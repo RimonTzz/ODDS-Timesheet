@@ -38,21 +38,27 @@ class SitesController < ApplicationController
 
   # PATCH/PUT /sites/1 or /sites/1.json
   def update
-    @site = Site.find(params[:id])
-    if @site.update(site_params)
-      redirect_to sites_path
-    else
-      render :edit
+    respond_to do |format|
+      if @site.update(site_params)
+        format.turbo_stream { success_turbo_stream("Site was successfully updated.", sites_path) }
+        format.html { redirect_to sites_path, notice: "Site was successfully updated." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to update site.") }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /sites/1 or /sites/1.json
   def destroy
-    @site.destroy!
-
     respond_to do |format|
-      format.html { redirect_to sites_path, status: :see_other, notice: "Site was successfully destroyed." }
-      format.json { head :no_content }
+      if @site.destroy
+        format.turbo_stream { success_turbo_stream("Site was successfully deleted.", sites_path) }
+        format.html { redirect_to sites_path, notice: "Site was successfully deleted." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to delete site.", sites_path) }
+        format.html { redirect_to sites_path, alert: "Failed to delete site." }
+      end
     end
   end
 

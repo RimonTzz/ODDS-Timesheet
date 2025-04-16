@@ -38,11 +38,14 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1 or /projects/1.json
   def update
-    @project = Project.find(params[:id])
-    if @project.update(project_params)
-      redirect_to projects_path
-    else
-      render :edit
+    respond_to do |format|
+      if @project.update(project_params)
+        format.turbo_stream { success_turbo_stream("Project was successfully updated.", projects_path) }
+        format.html { redirect_to projects_path, notice: "Project was successfully updated." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to update project.") }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -52,20 +55,20 @@ class ProjectsController < ApplicationController
       if @project.timesheets.any?
         @project.destroy_with_timesheets
         respond_to do |format|
-          format.html { redirect_to projects_path, status: :see_other, notice: "ลบโปรเจคและข้อมูล timesheets ที่เกี่ยวข้องสำเร็จ" }
-          format.json { head :no_content }
+          format.turbo_stream { success_turbo_stream("Project and related timesheets were successfully deleted.", projects_path) }
+          format.html { redirect_to projects_path, notice: "ลบโปรเจคและข้อมูล timesheets ที่เกี่ยวข้องสำเร็จ" }
         end
       else
         @project.destroy!
         respond_to do |format|
-          format.html { redirect_to projects_path, status: :see_other, notice: "ลบโปรเจคสำเร็จ" }
-          format.json { head :no_content }
+          format.turbo_stream { success_turbo_stream("Project was successfully deleted.", projects_path) }
+          format.html { redirect_to projects_path, notice: "ลบโปรเจคสำเร็จ" }
         end
       end
     rescue ActiveRecord::RecordNotDestroyed => e
       respond_to do |format|
+        format.turbo_stream { error_turbo_stream("Failed to delete project: #{e.message}", projects_path) }
         format.html { redirect_to projects_path, alert: "ไม่สามารถลบโปรเจคได้: #{e.message}" }
-        format.json { render json: { error: e.message }, status: :unprocessable_entity }
       end
     end
   end
