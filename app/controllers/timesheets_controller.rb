@@ -160,52 +160,6 @@ class TimesheetsController < ApplicationController
         format.turbo_stream do
           if success
             render turbo_stream: turbo_stream.update("flash", <<-HTML.strip_heredoc)
-              <style>
-                .alert-sticky {
-                  position: fixed;
-                  top: 20px;
-                  left: 50%;
-                  transform: translateX(-50%);
-                  z-index: 9999;
-                  width: auto;
-                  min-width: 300px;
-                  animation: slideDown 0.5s ease-in-out;
-                  opacity: 1;
-                  transition: opacity 0.5s ease-in-out;
-                }
-                .alert-sticky.fade-out {
-                  opacity: 0;
-                }
-                @keyframes slideDown {
-                  0% {
-                    transform: translate(-50%, -100%);
-                  }
-                  100% {
-                    transform: translate(-50%, 0);
-                  }
-                }
-                .alert-container {
-                  padding: 1rem;
-                  border-radius: 0.5rem;
-                  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                }
-                .alert-success {
-                  background-color: #DEF7EC;
-                  border: 1px solid #31C48D;
-                }
-                .alert-flex {
-                  display: flex;
-                  align-items: center;
-                  gap: 0.5rem;
-                }
-                .alert-icon {
-                  width: 24px;
-                  height: 24px;
-                }
-                .alert-icon-success {
-                  color: #31C48D;
-                }
-              </style>
               <div class="alert-sticky" id="alert-message">
                 <div class="alert-container alert-success">
                   <div class="alert-flex">
@@ -236,52 +190,6 @@ class TimesheetsController < ApplicationController
             HTML
           else
             render turbo_stream: turbo_stream.update("flash", <<-HTML.strip_heredoc)
-              <style>
-                .alert-sticky {
-                  position: fixed;
-                  top: 20px;
-                  left: 50%;
-                  transform: translateX(-50%);
-                  z-index: 9999;
-                  width: auto;
-                  min-width: 300px;
-                  animation: slideDown 0.5s ease-in-out;
-                  opacity: 1;
-                  transition: opacity 0.5s ease-in-out;
-                }
-                .alert-sticky.fade-out {
-                  opacity: 0;
-                }
-                @keyframes slideDown {
-                  0% {
-                    transform: translate(-50%, -100%);
-                  }
-                  100% {
-                    transform: translate(-50%, 0);
-                  }
-                }
-                .alert-container {
-                  padding: 1rem;
-                  border-radius: 0.5rem;
-                  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                }
-                .alert-error {
-                  background-color: #FDE8E8;
-                  border: 1px solid #F98080;
-                }
-                .alert-flex {
-                  display: flex;
-                  align-items: center;
-                  gap: 0.5rem;
-                }
-                .alert-icon {
-                  width: 24px;
-                  height: 24px;
-                }
-                .alert-icon-error {
-                  color: #F98080;
-                }
-              </style>
               <div class="alert-sticky" id="alert-message">
                 <div class="alert-container alert-error">
                   <div class="alert-flex">
