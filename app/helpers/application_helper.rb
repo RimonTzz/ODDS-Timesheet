@@ -6,4 +6,14 @@ module ApplicationHelper
       [ name, "#{current_year}-#{month_num.to_s.rjust(2, '0')}" ]
     end
   end
+
+  def work_status_options
+    [
+      ['Full Day', 'full day'],
+      ['Morning Leave', 'morning leave'],
+      ['Afternoon Leave', 'afternoon leave'],
+      ['Sick Leave', 'sick leave'],
+      ['Day Off', 'day off']
+    ]
+  end
 end

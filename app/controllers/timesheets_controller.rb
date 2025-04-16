@@ -117,31 +117,25 @@ class TimesheetsController < ApplicationController
     @selected_month = params[:month]
     @months = month_options
 
-    # สร้าง array ของวันที่ในเดือนที่เลือก
     year, month = @selected_month.split("-").map(&:to_i)
     @timesheet_days = (Date.new(year, month, 1)..Date.new(year, month, -1)).to_a
 
-    # ดึงข้อมูล timesheet ที่มีอยู่แล้ว
     @existing_timesheets = @user_project.timesheets
                                     .where(date: @timesheet_days)
                                     .index_by(&:date)
 
     if params[:timesheet].present?
       success = true
+      error_message = nil
+      
       @user_project.transaction do
         params[:timesheet].each do |day, data|
           next if data[:check_in].blank? && data[:check_out].blank? && 
                  data[:work_status].to_s.empty? && data[:description].blank?
 
           date = Date.new(year, month, day.to_i)
-
-          if Holiday.is_holiday?(date)
-            flash.now[:alert] = "ไม่สามารถบันทึกข้อมูลในวันหยุดได้"
-            success = false
-            break
-          end
-
           timesheet = @user_project.timesheets.find_or_initialize_by(date: date)
+          
           timesheet.assign_attributes(
             check_in: data[:check_in],
             check_out: data[:check_out],
@@ -151,6 +145,7 @@ class TimesheetsController < ApplicationController
 
           unless timesheet.save
             success = false
+            error_message = timesheet.errors.full_messages.join(", ")
             break
           end
         end
@@ -199,7 +194,7 @@ class TimesheetsController < ApplicationController
                       </svg>
                     </div>
                     <div class="alert-content">
-                      <p class="alert-text alert-text-error">Have error your time sheet not save</p>
+                      <p class="alert-text alert-text-error">#{error_message || 'Have error your time sheet not save'}</p>
                     </div>
                   </div>
                 </div>
@@ -222,10 +217,9 @@ class TimesheetsController < ApplicationController
         end
         format.html do
           if success
-            flash[:success] = "Save time sheet done!"
-            redirect_to timesheets_path(user_project_id: @user_project.id, month: @selected_month)
+            redirect_to timesheets_path(user_project_id: @user_project.id, month: @selected_month), 
+              notice: "Save time sheet done!"
           else
-            flash[:error] = "Have error your time sheet not save"
             render :index, status: :unprocessable_entity
           end
         end
