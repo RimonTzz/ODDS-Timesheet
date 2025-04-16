@@ -274,6 +274,9 @@
   </head>
 
   <body class="h-full">
+    <div id="flash" data-controller="flash">
+      <%= render "shared/flash" if flash.any? %>
+    </div>
     <% if user_signed_in? %>
       <nav class="nav-container">
         <div class="nav-content">

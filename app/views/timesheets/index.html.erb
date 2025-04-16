@@ -11,7 +11,7 @@
     <% @user_project = UserProject.find(@selected_user_project_id) %>
     
     <div class="minimal-form timesheet-form">
-      <%= form_with(url: timesheets_path, method: :post, local: true) do |form| %>
+      <%= form_with(url: timesheets_path, method: :post, local: true, data: { turbo: true }) do |form| %>
         <div class="form-filters">
           <div class="form-group">
             <%= form.label :user_project_id, "Project", class: "form-label" %>

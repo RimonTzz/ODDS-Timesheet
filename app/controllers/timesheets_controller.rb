@@ -115,6 +115,7 @@ class TimesheetsController < ApplicationController
   def create
     @user_project = UserProject.find(params[:user_project_id])
     @selected_month = params[:month]
+    @months = month_options
 
     # สร้าง array ของวันที่ในเดือนที่เลือก
     year, month = @selected_month.split("-").map(&:to_i)
@@ -125,16 +126,15 @@ class TimesheetsController < ApplicationController
                                     .where(date: @timesheet_days)
                                     .index_by(&:date)
 
-    # ตรวจสอบว่ามีการส่งข้อมูลมาหรือไม่
     if params[:timesheet].present?
       success = true
       @user_project.transaction do
         params[:timesheet].each do |day, data|
-          next if data[:check_in].blank? && data[:check_out].blank? && data[:work_status].blank? && data[:description].blank?
+          next if data[:check_in].blank? && data[:check_out].blank? && 
+                 data[:work_status].to_s.empty? && data[:description].blank?
 
           date = Date.new(year, month, day.to_i)
 
-          # ตรวจสอบว่าเป็นวันหยุดหรือไม่
           if Holiday.is_holiday?(date)
             flash.now[:alert] = "ไม่สามารถบันทึกข้อมูลในวันหยุดได้"
             success = false
@@ -145,7 +145,7 @@ class TimesheetsController < ApplicationController
           timesheet.assign_attributes(
             check_in: data[:check_in],
             check_out: data[:check_out],
-            work_status: data[:work_status],
+            work_status: data[:work_status].presence,
             work_description: data[:description]
           )
 
@@ -156,10 +156,171 @@ class TimesheetsController < ApplicationController
         end
       end
 
-      if success
-        redirect_to timesheets_path(user_project_id: @user_project.id, month: @selected_month), notice: "บันทึกข้อมูลสำเร็จ"
-      else
-        render :index, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream do
+          if success
+            render turbo_stream: turbo_stream.update("flash", <<-HTML.strip_heredoc)
+              <style>
+                .alert-sticky {
+                  position: fixed;
+                  top: 20px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  z-index: 9999;
+                  width: auto;
+                  min-width: 300px;
+                  animation: slideDown 0.5s ease-in-out;
+                  opacity: 1;
+                  transition: opacity 0.5s ease-in-out;
+                }
+                .alert-sticky.fade-out {
+                  opacity: 0;
+                }
+                @keyframes slideDown {
+                  0% {
+                    transform: translate(-50%, -100%);
+                  }
+                  100% {
+                    transform: translate(-50%, 0);
+                  }
+                }
+                .alert-container {
+                  padding: 1rem;
+                  border-radius: 0.5rem;
+                  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                }
+                .alert-success {
+                  background-color: #DEF7EC;
+                  border: 1px solid #31C48D;
+                }
+                .alert-flex {
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                }
+                .alert-icon {
+                  width: 24px;
+                  height: 24px;
+                }
+                .alert-icon-success {
+                  color: #31C48D;
+                }
+              </style>
+              <div class="alert-sticky" id="alert-message">
+                <div class="alert-container alert-success">
+                  <div class="alert-flex">
+                    <div class="alert-icon alert-icon-success">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                    <div class="alert-content">
+                      <p class="alert-text alert-text-success">Save time sheet done!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <script>
+                (() => {
+                  const alert = document.getElementById('alert-message');
+                  if (alert) {
+                    setTimeout(() => {
+                      alert.classList.add('fade-out');
+                      setTimeout(() => {
+                        alert.remove();
+                      }, 500);
+                    }, 3000);
+                  }
+                })();
+              </script>
+            HTML
+          else
+            render turbo_stream: turbo_stream.update("flash", <<-HTML.strip_heredoc)
+              <style>
+                .alert-sticky {
+                  position: fixed;
+                  top: 20px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  z-index: 9999;
+                  width: auto;
+                  min-width: 300px;
+                  animation: slideDown 0.5s ease-in-out;
+                  opacity: 1;
+                  transition: opacity 0.5s ease-in-out;
+                }
+                .alert-sticky.fade-out {
+                  opacity: 0;
+                }
+                @keyframes slideDown {
+                  0% {
+                    transform: translate(-50%, -100%);
+                  }
+                  100% {
+                    transform: translate(-50%, 0);
+                  }
+                }
+                .alert-container {
+                  padding: 1rem;
+                  border-radius: 0.5rem;
+                  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                }
+                .alert-error {
+                  background-color: #FDE8E8;
+                  border: 1px solid #F98080;
+                }
+                .alert-flex {
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                }
+                .alert-icon {
+                  width: 24px;
+                  height: 24px;
+                }
+                .alert-icon-error {
+                  color: #F98080;
+                }
+              </style>
+              <div class="alert-sticky" id="alert-message">
+                <div class="alert-container alert-error">
+                  <div class="alert-flex">
+                    <div class="alert-icon alert-icon-error">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                    <div class="alert-content">
+                      <p class="alert-text alert-text-error">Have error your time sheet not save</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <script>
+                (() => {
+                  const alert = document.getElementById('alert-message');
+                  if (alert) {
+                    setTimeout(() => {
+                      alert.classList.add('fade-out');
+                      setTimeout(() => {
+                        alert.remove();
+                      }, 500);
+                    }, 3000);
+                  }
+                })();
+              </script>
+            HTML
+          end
+        end
+        format.html do
+          if success
+            flash[:success] = "Save time sheet done!"
+            redirect_to timesheets_path(user_project_id: @user_project.id, month: @selected_month)
+          else
+            flash[:error] = "Have error your time sheet not save"
+            render :index, status: :unprocessable_entity
+          end
+        end
       end
     else
       flash.now[:alert] = "กรุณากรอกข้อมูลอย่างน้อย 1 วัน"
