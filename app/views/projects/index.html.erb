@@ -50,7 +50,7 @@
                 method: :delete, 
                 class: "action-link delete",
                 form: { data: { 
-                  turbo_confirm: "This project has #{project.user_projects.count} employees:\n\nAre you sure you want to delete this project?"
+                  turbo_confirm: "This project has #{project.user_projects.count} employees and has timesheets #{project.timesheets.count}\n\nAre you sure you want to delete this project?"
                 } } do %>
                   <%= image_tag "icon/Delete.svg", class: "outline" %>
                   <%= image_tag "icon/Delete_solid.svg", class: "solid" %>
