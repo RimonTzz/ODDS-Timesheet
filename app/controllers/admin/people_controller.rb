@@ -15,16 +15,30 @@ class Admin::PeopleController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-      redirect_to admin_people_path, notice: "อัปเดตข้อมูลผู้ใช้ #{@user.email} แล้ว"
-    else
-      @sites = Site.all
-      @projects = Project.all
-      @roles = User.roles.keys
-      @user_projects = @user.user_projects.includes(:project)
-      render :edit, status: :unprocessable_entity
+    old_role = @user.role
+  
+    respond_to do |format|
+      if @user.update(user_params)
+        message = "User #{@user.first_name} was successfully updated."
+        if old_role != @user.role
+          message += " Role changed from #{old_role.titleize} to #{@user.role.titleize}."
+        end
+  
+        format.turbo_stream { success_turbo_stream(message, admin_people_path) }
+        format.html { redirect_to admin_people_path, notice: message }
+      else
+        @sites = Site.all
+        @projects = Project.all
+        @roles = User.roles.keys
+        @user_projects = @user.user_projects.includes(:project)
+  
+        format.turbo_stream { error_turbo_stream("Failed to update user.") }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
+  
+  
 
   def destroy
     if @user.destroy
@@ -39,9 +53,9 @@ class Admin::PeopleController < ApplicationController
     project = Project.find(params[:project_id])
     unless @user.projects.include?(project)
       @user.projects << project
-      redirect_to edit_admin_person_path(@user), notice: "เพิ่ม #{@user.email} เข้าสู่โปรเจ็ค #{project.project_name} แล้ว"
+      redirect_to edit_admin_person_path(@user), notice: "add #{@user.email} to  #{project.project_name} "
     else
-      redirect_to edit_admin_person_path(@user), alert: "#{@user.email} อยู่ในโปรเจ็ค #{project.project_name} แล้ว"
+      redirect_to edit_admin_person_path(@user), alert: "#{@user.email} has in this #{project.project_name} already"
     end
   end
 
@@ -49,7 +63,7 @@ class Admin::PeopleController < ApplicationController
     @user = User.find(params[:id])
     project = Project.find(params[:project_id])
     @user.projects.delete(project)
-    redirect_to edit_admin_person_path(@user), alert: "ลบ #{@user.email} ออกจากโปรเจ็ค #{project.project_name} แล้ว"
+    redirect_to edit_admin_person_path(@user), alert: "delete #{@user.email} from #{project.project_name} successfully"
   end
 
   private
