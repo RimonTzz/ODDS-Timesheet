@@ -41,12 +41,19 @@ class Admin::PeopleController < ApplicationController
   
 
   def destroy
-    if @user.destroy
-      redirect_to admin_people_path, notice: 'User was successfully deleted.'
-    else
-      redirect_to admin_people_path, alert: 'Could not delete user.'
+    respond_to do |format|
+      if @user.destroy
+        message = "User #{@user.email} was successfully deleted."
+        format.turbo_stream { success_turbo_stream(message, admin_people_path) }
+        format.html { redirect_to admin_people_path, notice: message }
+      else
+        message = "Could not delete user #{@user.email}."
+        format.turbo_stream { error_turbo_stream(message) }
+        format.html { redirect_to admin_people_path, alert: message }
+      end
     end
   end
+  
 
   def assign_project
     @user = User.find(params[:id])
