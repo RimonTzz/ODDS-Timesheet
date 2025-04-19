@@ -11,7 +11,7 @@ test.describe('Client Management', () => {
     await page.getByRole('button', { name: 'Login' }).click();
   });
 
-  test('client created', async ({ page }) => {
+  test('superadmin can create client', async ({ page }) => {
     await page.getByRole('link', { name: 'Clients' }).click();
     await page.getByRole('link', { name: 'New Client' }).click();
     await page.getByRole('textbox', { name: 'Client name *' }).click();
