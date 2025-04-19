@@ -19,10 +19,14 @@ class ProjectUsersController < ApplicationController
       position: params[:position]
     )
 
-    if @user_project.save
-      redirect_to project_users_path(@project), notice: 'Member was successfully added.'
-    else
-      render :new
+    respond_to do |format|
+      if @user_project.save
+        format.turbo_stream { success_turbo_stream("Member was successfully added.", project_users_path(@project)) }
+        format.html { redirect_to project_users_path(@project), notice: 'Member was successfully added.' }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to add member.") }
+        format.html { render :new }
+      end
     end
   end
 
@@ -32,12 +36,19 @@ class ProjectUsersController < ApplicationController
 
   def update
     @user_project = UserProject.find_by(user_id: params[:id], project_id: @project.id)
-    if @user_project.update(position: params[:position])
-      redirect_to project_users_path(@project), notice: 'Member was successfully updated.'
-    else
-      render :edit
+  
+    respond_to do |format|
+      if @user_project.update(user_project_params)
+        format.turbo_stream { success_turbo_stream("Member was successfully updated.", project_users_path(@project)) }
+        format.html { redirect_to project_users_path(@project), notice: "Member was successfully updated." }
+      else
+        format.turbo_stream { error_turbo_stream("Failed to update member.") }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
+  
+  
 
   def destroy
     @user_project = UserProject.find(params[:id]) # <-- ใช้ id ของ user_project
@@ -50,5 +61,9 @@ class ProjectUsersController < ApplicationController
 
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  def user_project_params
+    params.require(:user_project).permit(:position)
   end
 end
