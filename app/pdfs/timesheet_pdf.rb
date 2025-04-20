@@ -48,10 +48,10 @@ class TimesheetPdf < Prawn::Document
         ], size: 10
       end
 
-      logo_path = Rails.root.join("app/assets/images/icon/ODT_logo.png")
-      if File.exist?(logo_path)
+      logo_path = pdf_asset_path("icon/ODT_logo.png")
+      if logo_path && File.exist?(logo_path)
         bounding_box([bounds.right - 80, cursor + 75], width: 150) do
-          image logo_path, width: 75
+          image logo_path.to_s, width: 75
         end
       end
     end
@@ -204,5 +204,21 @@ class TimesheetPdf < Prawn::Document
     return 0.0 if hours.nil? || hours <= 0
     (hours / 8.0).round(3)
   end  
+
+  def pdf_asset_path(filename)
+    if Rails.env.production?
+      manifest = Rails.application.assets_manifest
+      logical_path = filename.start_with?("icon/") ? "icon/#{File.basename(filename)}" : filename
   
+      if manifest && manifest.assets[logical_path]
+        Rails.root.join("public/assets", manifest.assets[logical_path])
+      else
+        Rails.logger.warn("[PDF] Asset not found in manifest: #{logical_path}")
+        nil
+      end
+    else
+      path = Rails.root.join("app/assets/images", filename)
+      File.exist?(path) ? path : nil
+    end
+  end
 end
