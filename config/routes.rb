@@ -37,7 +37,9 @@ Rails.application.routes.draw do
 
   get "users/check_email", to: "users#check_email"
 
-  root "timesheets#index"
+  devise_scope :user do
+    root to: "devise/sessions#new"
+  end
 
   get "/people_management", to: "people_management#index", as: "people_management"
   get "/project_management", to: "project_management#index", as: "project_management"
