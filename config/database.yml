@@ -81,8 +81,8 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: odds_timesheet
-    username: odds_timesheet_user
+    database: ODDS-timesheet-db
+    username: odds_timesheet_db_user
     password: <%= ENV["TIMESHEET_APP_DATABASE_PASSWORD"] %>
     host: <%= ENV["TIMESHEET_APP_DATABASE_HOST"] %>
     port: 5432
